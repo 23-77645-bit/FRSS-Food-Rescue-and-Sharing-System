@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="../img/logo.png">
+<link rel="apple-touch-icon" href="../img/logo.png">
+<title>Food being claimed — FRSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+<script src="../js/vendor/feather.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../js/config.js"></script>
+<style>
+.history-page{max-width:900px;margin:0 auto;padding-bottom:70px}.history-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin:20px 0 24px}.history-head h1{margin:5px 0 8px;font-size:clamp(32px,5vw,48px);letter-spacing:-.045em}.history-head p{margin:0;color:var(--muted);font-size:13px}.history-head .section-count{white-space:nowrap}.history-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.history-toolbar select{min-width:180px}.history-list{display:grid;gap:11px}.history-card{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border);border-radius:17px;background:var(--surface);box-shadow:0 7px 22px rgba(20,20,20,.035)}.history-icon{width:42px;height:42px;flex:0 0 42px;border-radius:13px;display:grid;place-items:center;background:var(--red-soft);color:var(--red)}.history-icon svg{width:18px}.history-main{min-width:0;flex:1}.history-title-row{display:flex;align-items:center;gap:9px;justify-content:space-between}.history-main strong{font-size:13px}.history-main p{margin:4px 0;color:var(--muted);font-size:11px}.history-main small{display:block;color:var(--muted);font-size:9px}.history-badge{display:inline-flex;align-items:center;padding:5px 8px;border:1px solid var(--border);border-radius:999px;background:var(--surface-2);font-size:9px;font-weight:800;text-transform:capitalize;white-space:nowrap}.history-badge-expired{color:#b51e2a;background:#fff0f0;border-color:#f2c2c2}.history-badge-reserved{color:#725c18;background:#fff4d6;border-color:#ead7a0}.history-side{display:flex;align-items:center;gap:8px}.history-code{padding:8px 10px;border:1px dashed var(--red);border-radius:10px;background:var(--red-soft);font-size:13px;font-weight:800;letter-spacing:.12em}.history-muted{color:var(--muted);font-size:10px}.history-details{margin-top:9px;padding:9px 11px;border-radius:10px;background:var(--surface-2);color:var(--muted);font-size:10px;line-height:1.5}.history-empty{padding:45px 18px;border:1px dashed var(--border);border-radius:17px;text-align:center;color:var(--muted);background:var(--surface-2);font-size:12px}.history-back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;font-weight:700}.history-back:hover{color:var(--ink)}.history-back svg{width:15px}.dark .history-badge-expired{background:#35191b;border-color:#5b2929;color:#ff9aa1}.dark .history-badge-reserved{background:#382f16;border-color:#5c4e20;color:#ead58c}@media(max-width:650px){.history-page{padding-top:8px}.history-head{align-items:flex-start;flex-direction:column}.history-head .section-count{align-self:flex-start}.history-card{align-items:flex-start}.history-title-row{align-items:flex-start;flex-direction:column;gap:6px}.history-side{margin-left:auto}.history-toolbar{align-items:stretch;flex-direction:column}.history-toolbar select{width:100%}}
+</style>
+</head>
+<body data-history-page="reservations">
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html" aria-label="FRSS home"><span class="brand-mark"><img src="../img/logo.png" alt="" width="36" height="36"></span></a><nav class="main-nav"><a href="dashboard.html">Dashboard</a><a href="find-food.html">Find Food</a><a href="donate.html">Donate Food</a><a class="btn btn-outline" href="#" data-logout>Log out</a></nav></div></header>
+<main class="section container history-page">
+<a class="history-back" href="dashboard.html"><i data-feather="arrow-left"></i> Back to dashboard</a>
+<div class="history-head"><div><span class="eyebrow" id="pageEyebrow">ACTIVE RESERVATIONS</span><h1 id="pageTitle">Food being claimed</h1><p>See your food posts that are currently reserved by a recipient.</p></div><span class="section-count" id="pageCount">—</span></div>
+
+<div class="history-list" id="historyList"><div class="history-empty">Loading…</div></div>
+</main>
+<script src="../js/app.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/user-history-pages.js"></script>
+</body>
+</html>

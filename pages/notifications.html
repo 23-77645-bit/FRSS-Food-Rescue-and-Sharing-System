@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="../img/logo.png">
+<link rel="apple-touch-icon" href="../img/logo.png">
+<title>Notifications — FRSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+<script src="../js/vendor/feather.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../js/config.js"></script>
+<style>
+.notifications-page{max-width:900px;margin:0 auto;padding:28px 0 80px}.notifications-back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:22px}.notifications-back:hover{color:var(--ink)}.notifications-back svg{width:15px}
+.notifications-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:22px}.notifications-hero h1{margin:5px 0 7px;font-size:clamp(34px,5vw,50px);letter-spacing:-.045em}.notifications-hero p{margin:0;color:var(--muted);font-size:12px;line-height:1.55}.notifications-actions{display:flex;gap:8px;align-items:center}.notifications-count{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 9px;border-radius:999px;background:var(--red-soft);color:var(--red);font-size:10px;font-weight:800}.notifications-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;padding:10px 12px;border:1px solid var(--border);border-radius:15px;background:var(--surface-2)}.notifications-toolbar-label{font-size:10px;color:var(--muted);font-weight:700}.notifications-filter{display:flex;gap:5px}.notifications-filter button{border:1px solid transparent;border-radius:9px;background:transparent;color:var(--muted);padding:7px 10px;font:inherit;font-size:9px;font-weight:800;cursor:pointer}.notifications-filter button.active{background:var(--surface);border-color:var(--border);color:var(--ink);box-shadow:0 3px 10px rgba(20,20,20,.04)}.notifications-list{display:grid;gap:10px}.notification-page-item{display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;padding:15px 16px;border:1px solid var(--border);border-radius:17px;background:var(--surface);box-shadow:0 7px 22px rgba(20,20,20,.035);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.notification-page-item:hover{transform:translateY(-1px);box-shadow:0 11px 28px rgba(20,20,20,.07)}.notification-page-item.is-read{opacity:.68}.notification-page-icon{width:43px;height:43px;border-radius:13px;background:var(--red-soft);color:var(--red);display:grid;place-items:center}.notification-page-icon svg{width:19px;height:19px}.notification-page-copy{min-width:0}.notification-page-copy strong{display:block;font-size:13px}.notification-page-copy p{margin:4px 0;color:var(--muted);font-size:11px;line-height:1.5}.notification-page-copy small{color:var(--muted);font-size:9px}.notification-page-actions{display:flex;align-items:center;gap:7px}.notification-page-unread{width:7px;height:7px;border-radius:50%;background:var(--red)}.notification-page-empty{padding:55px 20px;border:1px dashed var(--border);border-radius:18px;background:var(--surface-2);text-align:center;color:var(--muted);font-size:11px}.notification-page-empty svg{width:25px;height:25px;margin-bottom:8px}.notifications-loading{padding:35px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:650px){.notifications-page{padding:22px 0 60px}.notifications-hero{align-items:flex-start;flex-direction:column}.notifications-actions{width:100%;justify-content:space-between}.notifications-toolbar{align-items:flex-start;flex-direction:column}.notification-page-item{grid-template-columns:auto 1fr;align-items:start}.notification-page-actions{grid-column:2;justify-content:flex-start}.notification-page-item .btn{font-size:10px;padding:7px 9px}.notifications-filter{width:100%}.notifications-filter button{flex:1}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="scroll-progress" id="scrollProgress"></div>
+<header class="site-header" id="siteHeader">
+  <div class="container nav-wrap">
+    <a class="brand" href="../index.html" aria-label="FRSS home"><span class="brand-mark"><img src="../img/logo.png" alt="FRSS" width="36" height="36"></span></a>
+    <div class="mobile-header-actions"><div class="mobile-notification-slot" id="mobileNotificationSlot"></div><button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu"><i data-feather="menu"></i><span class="sr-only">Open menu</span></button></div>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-links">
+        <a href="../index.html">Home</a><a href="dashboard.html">Dashboard</a><a href="find-food.html">Find Food</a><a href="donate.html">Donate Food</a>
+      </div>
+      <div class="nav-actions"><a class="btn btn-outline" href="login.html">Log in</a></div>
+    </nav>
+  </div>
+</header>
+<main id="main" class="section container notifications-page">
+  <a class="notifications-back" href="dashboard.html"><i data-feather="arrow-left"></i> Back to dashboard</a>
+  <section class="notifications-hero">
+    <div><span class="eyebrow">YOUR UPDATES</span><h1>Notifications</h1><p>Stay updated about your claims, food posts, pickups, and other account activity.</p></div>
+    <div class="notifications-actions"><span class="notifications-count" id="notificationsCount">0 unread</span><button class="btn btn-outline" id="markAllNotifications" type="button">Mark all read</button></div>
+  </section>
+  <div class="notifications-toolbar"><span class="notifications-toolbar-label">FILTER NOTIFICATIONS</span><div class="notifications-filter" role="tablist" aria-label="Notification filter"><button class="active" data-filter="all" type="button">All</button><button data-filter="unread" type="button">Unread</button><button data-filter="read" type="button">Read</button></div></div>
+  <section class="notifications-list" id="userNotifications"><div class="notifications-loading">Loading notifications…</div></section>
+</main>
+<button class="theme-fab" id="themeFab" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><i data-feather="moon"></i></button>
+<button class="to-top" id="toTop" type="button" aria-label="Scroll to top"><i data-feather="arrow-up"></i></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="../js/app.js"></script>
+<script>
+(async function(){
+  const list=document.getElementById('userNotifications');
+  const count=document.getElementById('notificationsCount');
+  let rows=[];let filter='all';
+  function render(){
+    const filtered=rows.filter(n=>filter==='unread'?!n.is_read:filter==='read'?n.is_read:true);
+    const unread=rows.filter(n=>!n.is_read).length;
+    count.textContent=`${unread} unread`;
+    list.innerHTML=filtered.length?filtered.map(n=>`<article class="notification-page-item ${n.is_read?'is-read':''}" data-id="${escapeHtml(n.id)}"><div class="notification-page-icon"><i data-feather="${escapeHtml(notificationTypeIcon(n.type))}"></i></div><div class="notification-page-copy"><strong>${escapeHtml(n.title||'Notification')}</strong><p>${escapeHtml(n.message||'')}</p><small>${escapeHtml(formatNotificationTime(n.created_at))}</small></div><div class="notification-page-actions">${n.is_read?'':'<span class="notification-page-unread" title="Unread"></span><button class="btn btn-outline mark-one" type="button">Mark read</button>'}</div></article>`).join(''):'<div class="notification-page-empty"><i data-feather="bell-off"></i><div>No notifications match this filter.</div></div>';
+    renderFeatherIcons();
+    list.querySelectorAll('.mark-one').forEach(btn=>btn.addEventListener('click',async()=>{const id=btn.closest('[data-id]')?.dataset.id;if(!id)return;btn.disabled=true;const {error}=await window.sb.from('notifications').update({is_read:true}).eq('id',id);if(error){showToast(error.message||'Could not mark notification as read.');btn.disabled=false;return;}const row=rows.find(n=>String(n.id)===String(id));if(row)row.is_read=true;render();}));
+  }
+  async function load(){
+    const {data,error}=await window.sb.from('notifications').select('id,claim_id,type,title,message,is_read,created_at').eq('user_id',window.currentUserId).order('created_at',{ascending:false}).limit(100);
+    if(error){list.innerHTML='<div class="notification-page-empty"><i data-feather="alert-circle"></i><div>Notifications are unavailable. Run the notification migration in Supabase.</div></div>';renderFeatherIcons();return;}
+    rows=data||[];render();
+  }
+  document.querySelectorAll('[data-filter]').forEach(btn=>btn.addEventListener('click',()=>{filter=btn.dataset.filter;document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('active',b===btn));render();}));
+  document.getElementById('markAllNotifications').addEventListener('click',async()=>{if(!window.currentUserId)return;const {error}=await window.sb.from('notifications').update({is_read:true}).eq('user_id',window.currentUserId).eq('is_read',false);if(error){showToast(error.message||'Could not mark notifications as read.');return;}rows.forEach(n=>n.is_read=true);render();showToast('All notifications marked as read.');});
+  const waitForUser=setInterval(()=>{if(window.currentUserId&&window.sb){clearInterval(waitForUser);load();}},100);
+  setTimeout(()=>clearInterval(waitForUser),10000);
+})();
+</script>
+</body>
+</html>

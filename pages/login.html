@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="icon" type="image/png" href="../img/logo.png">
+    <link rel="apple-touch-icon" href="../img/logo.png">
+    <title>Log in — FRSS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../js/vendor/feather.min.js"></script>
+</head>
+
+<body>
+    <main class="auth-page">
+        <div class="auth-card"><a class="brand" href="../index.html" aria-label="FRSS home"><span
+                    class="brand-mark"><img src="../img/logo.png" alt="" width="34" height="31"></span></a><span
+                class="eyebrow">WELCOME BACK</span>
+            <p class="muted login-subtitle">Please enter your details to login.</p>
+
+            <form id="loginForm">
+                <label>Email<input name="email" type="email" required placeholder="you@example.com"></label>
+                <label>
+                    <span>Password</span>
+                    <div class="password-field"><input id="password" name="password" type="password" required
+                            placeholder="Your password"><button type="button" id="togglePassword" aria-label="Show password" title="Show password"><i data-feather="eye" aria-hidden="true"></i></button></div>
+                </label>
+                <div class="login-options">
+                    <label class="remember-me"><input name="remember" type="checkbox"><span>Remember me</span></label>
+                    <a href="forgotpassword.html">Forgot password?</a>
+                </div>
+                <button class="btn btn-primary btn-lg" type="submit">Log in</button>
+            </form>
+
+            <div class="auth-divider">or</div>
+
+            <button type="button" class="btn btn-google btn-lg google-btn">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+                    <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+                    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+                    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+                </svg>
+                Continue with Google
+            </button>
+
+            <p class="auth-foot">New here? <a href="register.html">Create an account</a></p>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="../js/config.js"></script>
+    <button class="theme-fab" id="themeFab" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><i data-feather="moon" aria-hidden="true"></i></button>
+    <script src="../js/app.js"></script>
+    <script src="../js/auth.js"></script>
+</body>
+
+</html>

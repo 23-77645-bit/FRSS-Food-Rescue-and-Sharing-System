@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="icon" type="image/png" href="../img/logo.png">
+    <link rel="apple-touch-icon" href="../img/logo.png">
+    <title>Donate Food — FRSS</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/donate.css">
+    <link rel="stylesheet" href="../css/donation-controls.css">
+    <script src="../js/vendor/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="../js/config.js"></script>
+
+</head>
+
+<body class="subpage-body donate-page">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <header class="site-header" id="siteHeader">
+        <div class="container nav-wrap">
+            <a class="brand" href="../index.html" aria-label="FRSS home"><span class="brand-mark"><img src="../img/logo.png" alt="FRSS" width="36" height="36"></span></a>
+            <div class="mobile-header-actions"><div class="mobile-notification-slot" id="mobileNotificationSlot"></div><button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu"><i data-feather="menu" aria-hidden="true"></i><span class="sr-only">Open menu</span></button></div>
+            <nav class="main-nav" id="mainNav">
+                <div class="nav-links">
+                    <a href="../index.html">Home</a>
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="find-food.html">Find Food</a>
+                    <a href="donate.html" aria-current="page">Donate Food</a>
+                </div>
+                <div class="nav-actions">
+                    <a class="btn btn-outline" href="login.html">Log in</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main id="main" class="donate-main container">
+      <div class="donate-intro">
+        <a class="donate-back" href="dashboard.html"><span aria-hidden="true">←</span> Dashboard</a>
+        <div class="donate-title-row"><div><p class="donate-eyebrow">SHARE SOMETHING GOOD</p><h1>Donate food.</h1><p>A little extra for you. A meaningful meal for someone else.</p></div><span class="donate-heart" aria-hidden="true">♡</span></div>
+      </div>
+      <div class="donate-workspace">
+        <form class="donation-form" id="donationForm">
+          <div class="donation-progress" id="donationProgress" hidden>
+            <div class="progress-caption"><span id="donationStepStatus" role="status" aria-live="polite">Step 1 of 4</span><span>Your food, shared in a few steps</span></div>
+            <ol class="donation-steps" aria-label="Donation progress"><li aria-current="step"><span>1</span>Food</li><li><span>2</span>Freshness</li><li><span>3</span>Pickup</li><li><span>4</span>Safety</li></ol>
+          </div>
+          <p class="required-note">Fields marked <span aria-hidden="true">*</span> are required.</p>
+          <section class="donate-card" aria-labelledby="foodHeading">
+            <div class="donate-section-heading"><span class="section-number" aria-hidden="true">01</span><div><h2 id="foodHeading">The food you're sharing</h2><p>Give your neighbors a clear picture.</p></div></div>
+            <div class="donate-fields">
+              <div class="donate-field full photo-upload">
+                <label for="foodPhoto">Food photos <span class="field-optional">Optional</span></label>
+                <div class="file-drop" id="foodPhotoDrop">
+                  <input name="foodPhoto" id="foodPhoto" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple aria-describedby="photoHelp">
+                  <div class="file-drop-visual"><span class="file-drop-icon" aria-hidden="true"><i data-feather="camera"></i></span><strong>Add photos of your food</strong><span>Choose photos or drag them here</span><small>Up to 3 photos · 20 MB each</small></div>
+                  <div class="file-drop-selected"><span aria-hidden="true">✓</span> <span id="foodPhotoName"></span><small>Choose more photos to add them</small></div>
+                </div>
+                <p class="field-help" id="photoHelp">Use photos of the actual food. JPG, PNG, WebP or GIF.</p>
+                <div class="photo-preview-grid" id="foodPhotoPreviewGrid"></div>
+              </div>
+              <div class="donate-field"><label for="foodName">Food name <span aria-hidden="true">*</span></label><input id="foodName" name="foodName" required placeholder="e.g. Freshly baked pandesal" maxlength="160"></div>
+              <div class="donate-field"><label for="category">Category <span aria-hidden="true">*</span></label><select id="category" name="category" required><option value="Cooked Meals">Cooked Meals</option><option>Bakery</option><option>Fruits</option><option>Vegetables</option><option>Canned Goods</option><option>Packaged Food</option><option>Other</option></select></div>
+              <div class="donate-field full"><label for="description">Description <span aria-hidden="true">*</span></label><textarea id="description" name="description" required rows="3" placeholder="What are you sharing? Include ingredients, when it was prepared, and how it is packed."></textarea></div>
+            </div>
+          </section>
+          <section class="donate-card" aria-labelledby="availabilityHeading">
+            <div class="donate-section-heading"><span class="section-number" aria-hidden="true">02</span><div><h2 id="availabilityHeading">Quantity & freshness</h2><p>Let people know how much is available and when it expires.</p></div></div>
+            <div class="donate-fields">
+              <div class="donate-field"><label for="quantity">Quantity <span aria-hidden="true">*</span></label><input id="quantity" name="quantity" type="number" min="1" step="1" inputmode="numeric" required placeholder="e.g. 5"></div>
+              <div class="donate-field"><label for="unit">Unit</label><select id="unit" name="unit"><option value="servings">servings</option><option>boxes</option><option>packs</option><option>loaves</option><option>bottles</option></select></div>
+              <div class="donate-field"><label for="expirationDate">Expiration date <span aria-hidden="true">*</span></label><input id="expirationDate" name="expirationDate" type="date" required aria-describedby="expiryHelp"></div>
+              <div class="donate-field"><label for="expirationTime">Expiration time <span aria-hidden="true">*</span></label><input id="expirationTime" name="expirationTime" type="time" required aria-describedby="expiryHelp"></div>
+            </div>
+            <p class="field-help section-help" id="expiryHelp">Choose a future date and time. All times use your device's local timezone.</p>
+          </section>
+          <section class="donate-card" aria-labelledby="pickupHeading">
+            <div class="donate-section-heading"><span class="section-number" aria-hidden="true">03</span><div><h2 id="pickupHeading">Arrange pickup</h2><p>Make the handoff easy to find and easy to plan.</p></div></div>
+            <div class="location-callout"><span class="location-symbol" aria-hidden="true"><i data-feather="map-pin"></i></span><div><strong>Help nearby people find your food</strong><p id="location-status" role="status">Capture your location while at the pickup spot.</p></div><button type="button" class="btn locate-btn" id="locateMe">Use my location</button></div>
+            <div class="donate-fields">
+              <div class="donate-field full"><label for="pickup-location">Pickup address or landmark <span aria-hidden="true">*</span></label><input id="pickup-location" name="pickupLocation" required placeholder="e.g. Barangay hall, main entrance" autocomplete="street-address"><p class="field-help">Add a recognizable place. This will appear on your listing.</p></div>
+              <div class="coordinates-grid full" id="coordinates" hidden><div class="donate-field"><label for="latitude">Latitude</label><input id="latitude" name="latitude" type="text" inputmode="decimal" readonly aria-readonly="true"></div><div class="donate-field"><label for="longitude">Longitude</label><input id="longitude" name="longitude" type="text" inputmode="decimal" readonly aria-readonly="true"></div></div>
+              <div class="donate-field full"><label for="pickupInstructions">Pickup instructions <span aria-hidden="true">*</span></label><textarea id="pickupInstructions" name="pickupInstructions" required rows="2" placeholder="e.g. Ask for Ryan at the front desk. Please bring a reusable bag."></textarea></div>
+              <div class="donate-field"><label for="pickupAvailableFrom">Available from <span class="field-optional">Optional</span></label><input id="pickupAvailableFrom" name="pickupAvailableFrom" type="datetime-local" aria-describedby="pickupHelp"></div>
+              <div class="donate-field"><label for="pickupAvailableUntil">Available until <span class="field-optional">Optional</span></label><input id="pickupAvailableUntil" name="pickupAvailableUntil" type="datetime-local" aria-describedby="pickupHelp"></div>
+            </div>
+            <p class="field-help section-help" id="pickupHelp">Set a pickup window that ends before the food expires.</p>
+          </section>
+          <section class="donate-card" aria-labelledby="safetyHeading">
+            <div class="donate-section-heading"><span class="section-number" aria-hidden="true">04</span><div><h2 id="safetyHeading">A few final details</h2><p>Clear information helps people choose with confidence.</p></div></div>
+            <div class="donate-fields">
+              <div class="donate-field full"><label for="foodCondition">Food condition <span class="field-optional">Optional</span></label><input id="foodCondition" name="foodCondition" maxlength="160" placeholder="e.g. Freshly prepared, sealed, keep refrigerated"></div>
+              <div class="donate-field full"><label for="allergenInfo">Allergen information <span class="field-optional">Optional</span></label><input id="allergenInfo" name="allergenInfo" maxlength="200" placeholder="e.g. Contains wheat, eggs and milk"><p class="field-help">List known allergens. If you are unsure, say so.</p></div>
+            </div>
+            <label class="safety-check-row" for="foodSafetyConfirmed"><input name="foodSafetyConfirmed" id="foodSafetyConfirmed" type="checkbox" required><span><strong>I confirm this food is safe to share. <span aria-hidden="true">*</span></strong><small>The expiration, condition and allergen details are accurate to the best of my knowledge.</small></span></label>
+          </section>
+          <p class="donation-step-error" id="donationStepError" role="alert" hidden></p>
+          <div class="donate-submit"><a class="btn cancel-donation" href="../index.html">Cancel</a><div class="form-actions"><button id="donationBack" class="btn donation-back" type="button" hidden>Back</button><button id="donationNext" class="btn btn-primary" type="button" hidden>Continue <span aria-hidden="true">→</span></button><button id="publishFoodBtn" class="btn btn-primary" type="submit">Publish food</button></div></div>
+        </form>
+      </div>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <button class="theme-fab" id="themeFab" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><i data-feather="moon" aria-hidden="true"></i></button>
+    <button class="to-top" id="toTop" type="button" aria-label="Scroll to top"><i data-feather="arrow-up" aria-hidden="true"></i></button>
+    <script src="../js/app.js"></script>
+
+    <script>
+        const donationForm = document.getElementById('donationForm');
+        const publishFoodBtn = document.getElementById('publishFoodBtn');
+        const foodPhotoInput = document.getElementById('foodPhoto');
+        const foodPhotoDrop = document.getElementById('foodPhotoDrop');
+        const foodPhotoName = document.getElementById('foodPhotoName');
+        const foodPhotoPreviewGrid = document.getElementById('foodPhotoPreviewGrid');
+        const MAX_FOOD_PHOTOS = 3;
+        const MAX_FOOD_PHOTO_SIZE = 20 * 1024 * 1024;
+        let selectedFoodPhotos = [];
+
+        function clearFoodPhoto() {
+            selectedFoodPhotos.forEach(file => {
+                if (file.__previewUrl) URL.revokeObjectURL(file.__previewUrl);
+            });
+            selectedFoodPhotos = [];
+            if (foodPhotoInput) foodPhotoInput.value = '';
+            if (foodPhotoDrop) foodPhotoDrop.classList.remove('has-file');
+            if (foodPhotoName) foodPhotoName.textContent = '';
+            if (foodPhotoPreviewGrid) foodPhotoPreviewGrid.innerHTML = '';
+        }
+
+        function syncFoodPhotoInput() {
+            if (!foodPhotoInput) return;
+            try {
+                const dataTransfer = new DataTransfer();
+                selectedFoodPhotos.forEach(file => dataTransfer.items.add(file));
+                foodPhotoInput.files = dataTransfer.files;
+            } catch (_) {}
+        }
+
+        function renderFoodPhotoPreviews() {
+            if (!foodPhotoPreviewGrid) return;
+            foodPhotoPreviewGrid.innerHTML = '';
+            selectedFoodPhotos.forEach((file, index) => {
+                const card = document.createElement('div');
+                card.className = 'photo-preview-card';
+                const img = document.createElement('img');
+                img.className = 'photo-preview';
+                img.alt = `Selected food photo ${index + 1}`;
+                img.src = file.__previewUrl || URL.createObjectURL(file);
+                file.__previewUrl = img.src;
+                const name = document.createElement('span');
+                name.className = 'photo-preview-name';
+                name.textContent = file.name;
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'photo-preview-remove';
+                removeBtn.innerHTML = '<span aria-hidden="true">&times;</span>';
+                removeBtn.setAttribute('aria-label', `Remove ${file.name}`);
+                removeBtn.addEventListener('click', () => removeFoodPhoto(index));
+                card.append(img, name, removeBtn);
+                foodPhotoPreviewGrid.appendChild(card);
+            });
+            if (foodPhotoDrop) foodPhotoDrop.classList.toggle('has-file', selectedFoodPhotos.length > 0);
+            if (foodPhotoName) foodPhotoName.textContent = selectedFoodPhotos.length ? `${selectedFoodPhotos.length} photo${selectedFoodPhotos.length === 1 ? '' : 's'} selected` : '';
+        }
+
+        function removeFoodPhoto(index) {
+            const removed = selectedFoodPhotos[index];
+            if (removed?.__previewUrl) URL.revokeObjectURL(removed.__previewUrl);
+            selectedFoodPhotos.splice(index, 1);
+            syncFoodPhotoInput();
+            renderFoodPhotoPreviews();
+        }
+
+        function setFoodPhotos(files) {
+            const incoming = Array.from(files || []);
+            if (!incoming.length) return false;
+            if (incoming.length + selectedFoodPhotos.length > MAX_FOOD_PHOTOS) {
+                const remaining = MAX_FOOD_PHOTOS - selectedFoodPhotos.length;
+                if (remaining <= 0) {
+                    showToast('You already selected 3 photos. Remove a photo below before selecting another.');
+                } else {
+                    showToast(`You can add only ${remaining} more photo${remaining === 1 ? '' : 's'}. Remove a photo below if you want to replace one.`);
+                }
+                return false;
+            }
+            const invalid = incoming.find(file => !['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type));
+            if (invalid) {
+                showToast('Choose JPG, PNG, WebP or GIF photos.');
+                return false;
+            }
+            const tooLarge = incoming.find(file => file.size > MAX_FOOD_PHOTO_SIZE);
+            if (tooLarge) {
+                showToast('Each food photo must be 20 MB or smaller.');
+                return false;
+            }
+            const duplicates = incoming.filter(file => selectedFoodPhotos.some(existing => existing.name === file.name && existing.size === file.size && existing.lastModified === file.lastModified));
+            if (duplicates.length) {
+                showToast('That photo is already selected.');
+                return false;
+            }
+            selectedFoodPhotos = [...selectedFoodPhotos, ...incoming];
+            syncFoodPhotoInput();
+            renderFoodPhotoPreviews();
+            return true;
+        }
+
+        foodPhotoInput?.addEventListener('change', () => {
+            setFoodPhotos(foodPhotoInput.files);
+        });
+
+        if (foodPhotoDrop && foodPhotoInput) {
+            ['dragenter', 'dragover'].forEach(evt => foodPhotoDrop.addEventListener(evt, (e) => {
+                e.preventDefault(); foodPhotoDrop.classList.add('drag');
+            }));
+            ['dragleave', 'dragend'].forEach(evt => foodPhotoDrop.addEventListener(evt, () => foodPhotoDrop.classList.remove('drag')));
+            foodPhotoDrop.addEventListener('drop', (e) => {
+                e.preventDefault();
+                foodPhotoDrop.classList.remove('drag');
+                setFoodPhotos(e.dataTransfer?.files);
+            });
+        }
+        donationForm?.addEventListener('reset', () => clearFoodPhoto());
+
+        donationForm?.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (publishFoodBtn.disabled) return;
+            publishFoodBtn.disabled = true;
+            try {
+                if (!window.sb) { showToast('Supabase is not configured.'); return; }
+                const { data, error: authError } = await safeRequest(() => window.sb.auth.getUser());
+                if (authError) { showToast(authError.message || 'Could not verify your session.'); return; }
+                const user = data?.user;
+                if (!user) { window.location.href = 'login.html'; return; }
+
+                const foodName = donationForm.elements.foodName.value.trim();
+                const description = donationForm.elements.description.value.trim();
+                const categoryName = donationForm.elements.category.value;
+                const quantity = Number(donationForm.elements.quantity.value);
+                const unit = donationForm.elements.unit.value;
+                const expirationDate = donationForm.elements.expirationDate.value;
+                const expirationTime = donationForm.elements.expirationTime.value;
+                const pickupLocation = donationForm.elements.pickupLocation.value.trim();
+                const pickupInstructions = donationForm.elements.pickupInstructions.value.trim();
+                const pickupAvailableFrom = donationForm.elements.pickupAvailableFrom.value;
+                const pickupAvailableUntil = donationForm.elements.pickupAvailableUntil.value;
+                const foodCondition = donationForm.elements.foodCondition.value.trim();
+                const allergenInfo = donationForm.elements.allergenInfo.value.trim();
+                const foodPhotos = selectedFoodPhotos.slice(0, MAX_FOOD_PHOTOS);
+                const lat = Number(donationForm.elements.latitude.value);
+                const lng = Number(donationForm.elements.longitude.value);
+
+                if (!foodName || !description || !categoryName || !Number.isFinite(quantity) || quantity <= 0 || !expirationDate || !expirationTime || !pickupLocation || !pickupInstructions) {
+                    showToast('Please complete all required fields.'); return;
+                }
+                if (!donationForm.elements.latitude.value.trim() || !donationForm.elements.longitude.value.trim() || !Number.isFinite(lat) || !Number.isFinite(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+                    showToast('Please capture your pickup location so people can find this food nearby.');
+                    document.getElementById('locateMe').focus(); return;
+                }
+                const expiration = new Date(`${expirationDate}T${expirationTime}`);
+                if (Number.isNaN(expiration.getTime()) || expiration <= new Date()) {
+                    showToast('Expiration must be a future date and time.'); return;
+                }
+                const pickupFrom = pickupAvailableFrom ? new Date(pickupAvailableFrom) : null;
+                const pickupUntil = pickupAvailableUntil ? new Date(pickupAvailableUntil) : null;
+                if ((pickupFrom && Number.isNaN(pickupFrom.getTime())) || (pickupUntil && Number.isNaN(pickupUntil.getTime())) || (pickupFrom && pickupUntil && pickupFrom >= pickupUntil)) {
+                    showToast('Pickup window must have a valid start and end.'); return;
+                }
+                if ((pickupFrom && pickupFrom >= expiration) || (pickupUntil && pickupUntil > expiration)) {
+                    showToast('The pickup window must be before the food expires.'); return;
+                }
+
+                publishFoodBtn.disabled = true;
+                publishFoodBtn.textContent = 'Publishing…';
+                let uploadedPaths = [];
+                try {
+                    const { data: category, error: categoryError } = await window.sb.from('categories').select('id').eq('name', categoryName).eq('is_active', true).single();
+                    if (categoryError) throw categoryError;
+                    const imageUrls = [];
+                    for (const foodPhoto of foodPhotos) {
+                        if (!foodPhoto.type.startsWith('image/')) throw new Error('Please choose image files for the food photos.');
+                        if (foodPhoto.size > MAX_FOOD_PHOTO_SIZE) throw new Error('Each food photo must be 20 MB or smaller.');
+                        const extension = (foodPhoto.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+                        const uploadedPath = `${user.id}/${crypto.randomUUID()}.${extension}`;
+                        const { error: uploadError } = await window.sb.storage.from('food-images').upload(uploadedPath, foodPhoto, {
+                            cacheControl: '3600', upsert: false, contentType: foodPhoto.type
+                        });
+                        if (uploadError) throw uploadError;
+                        uploadedPaths.push(uploadedPath);
+                        const { data: publicData } = window.sb.storage.from('food-images').getPublicUrl(uploadedPath);
+                        if (publicData?.publicUrl) imageUrls.push(publicData.publicUrl);
+                    }
+                    const { data: createdPost, error } = await window.sb.from('food_posts').insert({
+                        donor_id: user.id, category_id: category.id, food_name: foodName, description,
+                        quantity, remaining_quantity: quantity, unit, expiration_at: expiration.toISOString(),
+                        pickup_location: pickupLocation, pickup_instructions: pickupInstructions, latitude: lat, longitude: lng,
+                        image_url: imageUrls[0] || null,
+                        image_urls: imageUrls,
+                        pickup_available_from: pickupFrom ? pickupFrom.toISOString() : null, pickup_available_until: pickupUntil ? pickupUntil.toISOString() : null,
+                        food_condition: foodCondition || null, allergen_info: allergenInfo || null,
+                        food_safety_confirmed: document.getElementById('foodSafetyConfirmed')?.checked === true,
+                        status: 'available', published_at: new Date().toISOString()
+                    }).select('id,status,moderation_status').single();
+                    if (error) throw error;
+                    donationForm.reset();
+                    document.getElementById('coordinates')?.setAttribute('hidden', '');
+                    const pendingModeration = createdPost?.status === 'draft' || createdPost?.moderation_status === 'pending';
+                    document.getElementById('location-status').textContent = pendingModeration ? 'Food submitted for admin review.' : 'Food published successfully.';
+                    showToast(pendingModeration ? 'Food submitted for admin review.' : 'Food published successfully.');
+                    setTimeout(() => { window.location.href = 'find-food.html'; }, 900);
+                } catch (error) {
+                    console.error(error);
+                    if (uploadedPaths.length && window.sb) {
+                        try { await window.sb.storage.from('food-images').remove(uploadedPaths); } catch (_) {}
+                    }
+                    showToast(error?.message || 'Could not publish the food post.');
+                }
+            } finally {
+                publishFoodBtn.disabled = false;
+                publishFoodBtn.textContent = 'Publish food';
+            }
+        });
+
+        const locateMe = document.getElementById('locateMe');
+        const latitude = document.getElementById('latitude');
+        const longitude = document.getElementById('longitude');
+        const locationStatus = document.getElementById('location-status');
+        const pickupLocation = document.getElementById('pickup-location');
+
+        locateMe?.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                locationStatus.textContent = 'Location is not supported by this browser.';
+                return;
+            }
+            locateMe.disabled = true;
+            locationStatus.textContent = 'Locating you…';
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    latitude.value = position.coords.latitude.toFixed(6);
+                    longitude.value = position.coords.longitude.toFixed(6);
+                    document.getElementById('coordinates').hidden = false;
+                    if (!pickupLocation.value.trim()) pickupLocation.value = `Current location (${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)})`;
+                    locationStatus.textContent = 'Location captured. Check the pickup address below before publishing.';
+                    pickupLocation.dispatchEvent(new Event('input', { bubbles: true }));
+                    locateMe.disabled = false;
+                    if (window.feather) feather.replace({width:18,height:18,'stroke-width':1.8});
+                },
+                (error) => {
+                    const messages = {
+                        1: 'Location permission was denied. Please allow location access and try again.',
+                        2: 'Your location could not be determined. Please try again.',
+                        3: 'Location request timed out. Please try again.'
+                    };
+                    locationStatus.textContent = messages[error.code] || 'Unable to get your location.';
+                    locateMe.disabled = false;
+                },
+                { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
+            );
+        });
+    </script>
+    <script src="../js/donate-ui.js"></script>
+    <script src="../js/donation-controls.js"></script>
+</body>
+
+</html>

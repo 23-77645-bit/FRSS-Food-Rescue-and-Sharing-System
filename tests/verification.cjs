@@ -1,0 +1,31 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=require('node:path').resolve(__dirname,'..');
+const html=fs.readFileSync(root+'/pages/verification.html','utf8');
+const elements={};
+for(const match of html.matchAll(/id="([^"]+)"/g))elements[match[1]]={value:'',checked:false,disabled:false,handlers:{},classList:{add(){},remove(){}},addEventListener(name,fn){this.handlers[name]=fn}};
+const handlers={},window={location:{pathname:'/pages/verification.html',origin:'https://example.test'},addEventListener:(name,fn)=>handlers[name]=fn};
+const document={body:{},documentElement:{},getElementById:id=>elements[id],addEventListener(){}};
+const context=vm.createContext({window,document,console,setTimeout,clearTimeout,navigator:{},crypto:{randomUUID:()=> 'test-token'},FileReader:class {readAsDataURL(){this.result='preview';this.onload()}},location:{}});
+vm.runInContext(fs.readFileSync(root+'/js/app.js','utf8'),context);
+const toasts=[];context.showToast=message=>toasts.push(message);
+vm.runInContext(html.match(/<script>\s*([\s\S]*?)<\/script>/)[1],context);
+let uploadCalls=0,removed=[],rpcCalls=0,mode='second-fails';
+const bucket={upload:async path=>{uploadCalls++;if(mode==='second-fails'&&uploadCalls===2)throw new Error('upload offline');return {error:null}},remove:async paths=>{removed.push(...paths);return {error:null}}};
+function query(data){const q={select:()=>q,eq:()=>q,order:()=>q,limit:()=>q,maybeSingle:async()=>({data,error:null})};return q;}
+window.sb={auth:{getUser:async()=>({data:{user:{id:'user'}},error:null})},from:name=>query(name==='profiles'?{verification_status:'unverified',account_status:'active'}:null),storage:{from:()=>bucket},rpc:async()=>{rpcCalls++;return {error:new Error('review already pending')}}};
+(async()=>{
+ await handlers.DOMContentLoaded();
+ elements.idType.value='Passport';elements.verificationConsent.checked=true;
+ elements.idFile.handlers.change({target:{files:[{type:'image/png',size:100}]}});
+ elements.selfieFile.handlers.change({target:{files:[{type:'image/webp',size:100}]}});
+ await elements.verificationForm.handlers.submit({preventDefault(){}});
+ assert.equal(uploadCalls,2);assert.equal(rpcCalls,0);assert.deepEqual(removed,['user/id-test-token.png']);assert.equal(elements.submitVerification.disabled,false);assert.equal(elements.submitVerification.textContent,'Submit for verification');
+ console.log('PASS failed second verification upload cleans up the first file and restores the button');
+ mode='rpc-fails';uploadCalls=0;removed=[];
+ await elements.verificationForm.handlers.submit({preventDefault(){}});
+ assert.equal(rpcCalls,1);assert.deepEqual(removed,['user/id-test-token.png','user/selfie-test-token.webp']);assert.equal(elements.submitVerification.disabled,false);
+ console.log('PASS rejected verification submission removes both uploaded files and preserves actual image extensions');
+ elements.submitVerification.disabled=true;uploadCalls=0;
+ await elements.verificationForm.handlers.submit({preventDefault(){}});assert.equal(uploadCalls,0);
+ console.log('PASS duplicate verification submission does not upload again');
+})().catch(error=>{console.error(error);process.exitCode=1});

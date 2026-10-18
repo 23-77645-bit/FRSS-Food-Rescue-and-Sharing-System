@@ -1,0 +1,1388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" href="../img/logo.png">
+  <link rel="apple-touch-icon" href="../img/logo.png">
+  <title>Dashboard — FRSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin-workspace.css">
+  <link rel="stylesheet" href="../css/admin-selects.css">
+  <script src="../js/vendor/feather.min.js"></script>
+</head>
+<body>
+<header class="site-header" id="siteHeader">
+  <div class="container nav-wrap">
+    <a class="brand" href="../index.html" aria-label="FRSS home">
+      <span class="brand-mark"><img src="../img/logo.png" alt="FRSS" width="36" height="36"></span>
+    </a>
+    <div class="mobile-header-actions"><div class="mobile-notification-slot" id="mobileNotificationSlot"></div><button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu"><i data-feather="menu" aria-hidden="true"></i><span class="sr-only">Open menu</span></button></div>
+    <nav class="main-nav" id="mainNav">
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="dashboard.html" aria-current="page">Dashboard</a>
+        <a href="find-food.html">Find Food</a>
+        <a href="donate.html">Donate Food</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn btn-outline" href="#" data-logout>Log out</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="section container">
+  <div id="loadingDashboard" class="admin-loading">Loading dashboard…</div>
+
+  <!-- ADMIN DASHBOARD -->
+  <section id="adminDashboard" class="admin-dashboard hidden">
+    <aside class="admin-rail" id="adminRail" aria-label="Administration navigation">
+      <a class="admin-rail-brand" href="../index.html" aria-label="FRSS home"><img src="../img/logo.png" alt="" width="32" height="32"><span><strong>FRSS</strong><small>Administration</small></span></a>
+      <div class="admin-rail-divider"></div>
+      <nav class="admin-rail-nav" aria-label="Admin sections">
+      <button type="button" class="admin-rail-link" data-admin-view="overview" aria-label="Overview" title="Overview"><i data-feather="grid" aria-hidden="true"></i><span>Overview</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="users" aria-label="Users & verification" title="Users & verification"><i data-feather="users" aria-hidden="true"></i><span>Users & verification</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="food" aria-label="Food moderation" title="Food moderation"><i data-feather="package" aria-hidden="true"></i><span>Food moderation</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="claims" aria-label="Claims & pickups" title="Claims & pickups"><i data-feather="clipboard" aria-hidden="true"></i><span>Claims & pickups</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="categories" aria-label="Categories" title="Categories"><i data-feather="layers" aria-hidden="true"></i><span>Categories</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="reports" aria-label="Reports & analytics" title="Reports & analytics"><i data-feather="bar-chart-2" aria-hidden="true"></i><span>Reports & analytics</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="cases" aria-label="Cases" title="Cases"><i data-feather="alert-triangle" aria-hidden="true"></i><span>Cases</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="reputation" aria-label="Reputation" title="Reputation"><i data-feather="star" aria-hidden="true"></i><span>Reputation</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="content" aria-label="Announcements" title="Announcements"><i data-feather="bell" aria-hidden="true"></i><span>Announcements</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="settings" aria-label="System settings" title="System settings"><i data-feather="settings" aria-hidden="true"></i><span>System settings</span></button>
+      <button type="button" class="admin-rail-link" data-admin-view="audit" aria-label="Audit log" title="Audit log"><i data-feather="activity" aria-hidden="true"></i><span>Audit log</span></button>
+      </nav>
+      <div class="admin-rail-footer"><a class="admin-rail-link" href="../index.html" title="View website" aria-label="View website"><i data-feather="external-link" aria-hidden="true"></i><span>View website</span></a><button class="admin-rail-link" type="button" data-logout title="Log out" aria-label="Log out"><i data-feather="log-out" aria-hidden="true"></i><span>Log out</span></button></div>
+    </aside>
+    <button type="button" class="admin-rail-scrim" id="adminRailScrim" aria-label="Close navigation" hidden></button>
+    <div class="admin-workspace-bar"><div class="admin-workspace-breadcrumb"><button class="admin-drawer-toggle" id="adminDrawerToggle" type="button" aria-label="Open admin navigation" aria-controls="adminRail" aria-expanded="false"><i data-feather="menu" aria-hidden="true"></i></button><span>Admin workspace</span><strong id="adminCurrentSection" class="sr-only">Overview</strong></div><div class="admin-workspace-actions"><a href="notifications.html" class="admin-workspace-icon" aria-label="Notifications" title="Notifications"><i data-feather="bell" aria-hidden="true"></i></a><span class="admin-workspace-account"><i data-feather="shield" aria-hidden="true"></i><span>Administrator</span></span></div></div>
+
+    <div class="dashboard-title-row">
+      <div>
+        <h1 id="adminWorkspaceTitle">Overview</h1>
+        <p class="dashboard-subtitle" id="adminWorkspaceSubtitle">Monitor food sharing, review activity, and keep the platform running smoothly.</p>
+      </div>
+    </div>
+
+    <div id="adminOverviewAnalytics" class="admin-overview-analytics"></div>
+    <div class="admin-flow-grid">
+      <a class="admin-module" href="#users">
+        <div class="module-icon"><i data-feather="users"></i></div>
+        <div class="module-content">
+          <h2>Users</h2>
+          <span>Manage</span>
+          <strong id="userCount">—</strong>
+          <small>Total registered users</small>
+        </div>
+        <i class="module-arrow" data-feather="arrow-right"></i>
+      </a>
+
+      <a class="admin-module" href="#food">
+        <div class="module-icon"><i data-feather="package"></i></div>
+        <div class="module-content">
+          <h2>Food</h2>
+          <span>Monitor</span>
+          <strong id="foodCount">—</strong>
+          <small>Total food posts</small>
+        </div>
+        <i class="module-arrow" data-feather="arrow-right"></i>
+      </a>
+
+      <a class="admin-module" href="#claims">
+        <div class="module-icon"><i data-feather="clipboard"></i></div>
+        <div class="module-content">
+          <h2>Claims</h2>
+          <span>Monitor</span>
+          <strong id="claimCount">—</strong>
+          <small>Total claims</small>
+        </div>
+        <i class="module-arrow" data-feather="arrow-right"></i>
+      </a>
+
+      <a class="admin-module" href="#categories">
+        <div class="module-icon"><i data-feather="grid"></i></div>
+        <div class="module-content">
+          <h2>Categories</h2>
+          <span>Manage</span>
+          <strong id="categoryCount">—</strong>
+          <small>Active categories</small>
+        </div>
+        <i class="module-arrow" data-feather="arrow-right"></i>
+      </a>
+
+      <a class="admin-module" href="#reports">
+        <div class="module-icon"><i data-feather="bar-chart-2"></i></div>
+        <div class="module-content">
+          <h2>Reports</h2>
+          <span>Statistics</span>
+          <strong id="reportCount">—</strong>
+          <small>Recorded system activities</small>
+        </div>
+        <i class="module-arrow" data-feather="arrow-right"></i>
+      </a>
+    </div>
+
+    <section class="admin-section" id="users">
+      <div class="admin-section-heading">
+        <div><span class="eyebrow">USERS</span><h2>Manage Users</h2></div>
+        <span class="section-count" id="userSectionCount">— users</span>
+      </div>
+      <div class="admin-stat-row">
+        <div class="mini-stat"><span>Registered users</span><strong id="userStat">—</strong></div>
+        <div class="mini-stat"><span>Administrators</span><strong id="adminStat">—</strong></div>
+        <div class="mini-stat"><span>Regular users</span><strong id="regularUserStat">—</strong></div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="food">
+      <div class="admin-section-heading">
+        <div><span class="eyebrow">FOOD</span><h2>Monitor Food Posts</h2></div>
+        <span class="section-count" id="foodSectionCount">— posts</span>
+      </div>
+      <div class="admin-stat-row">
+        <div class="mini-stat"><span>Available</span><strong id="availableFoodStat">—</strong></div>
+        <div class="mini-stat"><span>Being claimed</span><strong id="reservedFoodStat">—</strong></div>
+        <div class="mini-stat"><span>Claimed</span><strong id="claimedFoodStat">—</strong></div>
+        <div class="mini-stat"><span>Completed</span><strong id="completedFoodStat">—</strong></div>
+        <div class="mini-stat"><span>Expired</span><strong id="expiredFoodStat">—</strong></div>
+      </div>
+      <div class="expiry-notice" id="adminExpiryNotice"><i data-feather="clock"></i><div><strong>Expired food is hidden from listings.</strong><span id="adminExpiryText">Expired posts are retained for records and shown here for monitoring.</span></div></div>
+      <div class="reservation-notice dashboard-reservation-notice"><i data-feather="clock"></i><div><strong>Reservations are visible in real time.</strong><span>When a recipient claims food, it is temporarily reserved so other users know it is already being claimed.</span></div></div><div class="expired-list" id="adminReservedList"><span class="admin-muted">Loading active reservations…</span></div><div class="expired-list" id="adminExpiredList"><span class="admin-muted">Loading expired food…</span></div>
+    </section>
+
+    <section class="admin-section" id="claims">
+      <div class="admin-section-heading">
+        <div><span class="eyebrow">CLAIMS</span><h2>Monitor Claims</h2></div>
+        <span class="section-count" id="claimSectionCount">— claims</span>
+      </div>
+      <div class="admin-stat-row">
+        <div class="mini-stat"><span>Pending</span><strong id="pendingClaimStat">—</strong></div>
+        <div class="mini-stat"><span>Ready for pickup</span><strong id="readyClaimStat">—</strong></div>
+        <div class="mini-stat"><span>Picked up</span><strong id="pickedClaimStat">—</strong></div>
+        <div class="mini-stat"><span>Completed</span><strong id="completedClaimStat">—</strong></div>
+      </div>
+    </section>
+
+    <section class="admin-section" id="categories">
+      <div class="admin-section-heading">
+        <div><span class="eyebrow">CATEGORIES</span><h2>Manage Categories</h2></div>
+        <span class="section-count" id="categorySectionCount">— categories</span>
+      </div>
+      <div class="category-list" id="categoryList">
+        <span class="admin-muted">Loading categories…</span>
+      </div>
+    </section>
+
+    <section class="admin-section" id="reports">
+      <div class="admin-section-heading">
+        <div><span class="eyebrow">REPORTS</span><h2>Statistics</h2></div>
+        <span class="section-count" id="reportSectionCount">— activities</span>
+      </div>
+      <div class="admin-stat-row">
+        <div class="mini-stat"><span>System activities</span><strong id="activityStat">—</strong></div>
+        <div class="mini-stat"><span>Food posts</span><strong id="reportFoodStat">—</strong></div>
+        <div class="mini-stat"><span>Claims</span><strong id="reportClaimStat">—</strong></div>
+        <div class="mini-stat"><span>Users</span><strong id="reportUserStat">—</strong></div><div class="mini-stat"><span>Open reports</span><strong id="openFoodReportsStat">—</strong></div>
+      </div>
+      <div class="admin-analytics-card" id="adminRescueAnalytics">
+        <div class="admin-analytics-heading"><div><span class="eyebrow">RESCUE IMPACT</span><h3>Food Rescue Analytics</h3></div><span class="admin-muted">Last 30 days</span></div>
+        <div class="admin-analytics-grid">
+          <div class="analytics-metric"><span>Total food rescued</span><strong id="analyticsRescuedQuantity">—</strong><small>completed claim quantity</small></div>
+          <div class="analytics-metric"><span>Completed rescues</span><strong id="analyticsCompletedRescues">—</strong><small>successful transactions</small></div>
+          <div class="analytics-metric"><span>Active claims</span><strong id="analyticsActiveClaims">—</strong><small>currently in progress</small></div>
+          <div class="analytics-metric"><span>Rescue completion</span><strong id="analyticsCompletionRate">—</strong><small>completed / total claims</small></div>
+        </div>
+        <div class="analytics-chart" id="analyticsChart" aria-label="Food rescue activity over the last 30 days"></div>
+      </div>
+      <div class="report-note">
+        <i data-feather="info"></i>
+        <span>Users can report expired, unavailable, inaccurate, unsafe, or incorrectly located food. Open reports appear below for admin review.</span>
+      </div>
+      <div class="expired-list" id="adminFoodReportsList"><span class="admin-muted">Loading food reports…</span></div>
+    </section>
+
+    <section class="admin-section admin-control-center" id="adminControlCenter">
+      <div class="admin-section-heading"><div><span class="eyebrow">CONTROL CENTER</span><h2>Admin Operations</h2><p class="admin-muted">Moderate the platform, investigate problems, protect users, and manage system rules.</p></div><span class="section-count" id="adminOpenCasesCount">— open cases</span></div>
+      <div class="admin-control-tabs" role="tablist">
+        <button class="admin-tab active" data-admin-tab="admin-users"><i data-feather="users"></i> Users</button>
+        <button class="admin-tab" data-admin-tab="admin-food"><i data-feather="package"></i> Food</button>
+        <button class="admin-tab" data-admin-tab="admin-claims"><i data-feather="clipboard"></i> Claims</button>
+        <button class="admin-tab" data-admin-tab="admin-cases"><i data-feather="alert-triangle"></i> Cases</button>
+        <button class="admin-tab" data-admin-tab="admin-reputation"><i data-feather="star"></i> Reputation</button>
+        <button class="admin-tab" data-admin-tab="admin-content"><i data-feather="bell"></i> Content</button>
+        <button class="admin-tab" data-admin-tab="admin-settings"><i data-feather="settings"></i> Settings</button>
+        <button class="admin-tab" data-admin-tab="admin-audit"><i data-feather="activity"></i> Audit</button>
+      </div>
+
+      <div class="admin-panel active" id="admin-users">
+        <div class="admin-panel-toolbar"><input id="adminUserSearch" class="admin-control-input" placeholder="Search users by name, phone, or ID…"><select id="adminUserStatusFilter" class="admin-control-select"><option value="all">All account statuses</option><option value="active">Active</option><option value="suspended">Suspended</option><option value="banned">Banned</option></select><select id="adminVerificationFilter" class="admin-control-select"><option value="all">All verification</option><option value="unverified">Unverified</option><option value="pending">Pending</option><option value="verified">Verified</option><option value="rejected">Rejected</option></select></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>User</th><th>Role</th><th>Account</th><th>Verification</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="adminUsersTable"><tr><td colspan="6">Loading users…</td></tr></tbody></table></div>
+        <div class="identity-review-block"><div class="identity-review-heading"><div><span class="eyebrow">IDENTITY REVIEW</span><h3>Pending ID & face verification</h3><p class="admin-muted">Review the submitted government ID and selfie before approving the account.</p></div><span class="section-count" id="pendingIdentityCount">— pending</span></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Applicant</th><th>ID type</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead><tbody id="adminIdentityTable"><tr><td colspan="5">Loading verification submissions…</td></tr></tbody></table></div></div>
+      </div>
+
+      <div class="admin-panel" id="admin-food">
+        <div class="admin-panel-toolbar"><input id="adminFoodSearch" class="admin-control-input" placeholder="Search food posts…"><select id="adminFoodStatusFilter" class="admin-control-select"><option value="all">All food statuses</option><option value="available">Available</option><option value="reserved">Reserved</option><option value="claimed">Claimed</option><option value="completed">Completed</option><option value="expired">Expired</option><option value="cancelled">Cancelled</option></select><select id="adminModerationFilter" class="admin-control-select"><option value="all">All moderation</option><option value="approved">Approved</option><option value="pending">Pending</option><option value="hidden">Hidden</option><option value="rejected">Rejected</option></select></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Food</th><th>Donor</th><th>Quantity</th><th>Status</th><th>Moderation</th><th>Actions</th></tr></thead><tbody id="adminFoodTable"><tr><td colspan="6">Loading food posts…</td></tr></tbody></table></div>
+      </div>
+
+      <div class="admin-panel" id="admin-claims">
+        <div class="admin-panel-toolbar"><select id="adminClaimFilter" class="admin-control-select"><option value="all">All claim statuses</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="ready_for_pickup">Ready for pickup</option><option value="picked_up">Picked up</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Food</th><th>Recipient</th><th>Donor</th><th>Qty</th><th>Status</th><th>Issue</th><th>Actions</th></tr></thead><tbody id="adminClaimsTable"><tr><td colspan="7">Loading claims…</td></tr></tbody></table></div>
+      </div>
+
+      <div class="admin-panel" id="admin-cases">
+        <div class="admin-stat-row"><div class="mini-stat"><span>Open</span><strong id="adminCaseOpen">—</strong></div><div class="mini-stat"><span>Investigating</span><strong id="adminCaseInvestigating">—</strong></div><div class="mini-stat"><span>Resolved</span><strong id="adminCaseResolved">—</strong></div><div class="mini-stat"><span>No-shows</span><strong id="adminNoShowStat">—</strong></div><div class="mini-stat"><span>Cancellations</span><strong id="adminCancellationStat">—</strong></div></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Case</th><th>Type</th><th>Priority</th><th>Status</th><th>Subject</th><th>Created</th><th>Actions</th></tr></thead><tbody id="adminCasesTable"><tr><td colspan="7">Loading cases…</td></tr></tbody></table></div>
+      </div>
+
+      <div class="admin-panel" id="admin-reputation">
+        <div class="admin-stat-row"><div class="mini-stat"><span>Ratings</span><strong id="adminRatingCount">—</strong></div><div class="mini-stat"><span>Average rating</span><strong id="adminAverageRating">—</strong></div><div class="mini-stat"><span>Open claim reports</span><strong id="adminClaimReportCount">—</strong></div></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Rated user</th><th>Rating</th><th>Feedback</th><th>Claim</th><th>Date</th></tr></thead><tbody id="adminRatingsTable"><tr><td colspan="5">Loading reputation…</td></tr></tbody></table></div>
+      </div>
+
+      <div class="admin-panel" id="admin-content">
+        <div class="admin-content-grid"><div class="admin-card"><h3>System Announcement</h3><input id="announcementTitle" class="admin-control-input" placeholder="Announcement title"><textarea id="announcementMessage" class="admin-control-textarea" placeholder="Message to users…"></textarea><select id="announcementAudience" class="admin-control-select"><option value="all">Everyone</option><option value="donors">Donors</option><option value="recipients">Recipients</option><option value="admins">Admins</option></select><button class="btn btn-primary" id="publishAnnouncement">Publish announcement</button></div><div class="admin-card"><h3>Pickup Locations</h3><div class="admin-panel-toolbar"><input id="locationName" class="admin-control-input" placeholder="Location name"><input id="locationAddress" class="admin-control-input" placeholder="Address"></div><button class="btn btn-outline" id="addLocation">Add location</button><div id="adminLocationsList" class="admin-chip-list">Loading locations…</div></div></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Announcement</th><th>Audience</th><th>Status</th><th>Starts</th><th>Actions</th></tr></thead><tbody id="adminAnnouncementsTable"><tr><td colspan="5">Loading announcements…</td></tr></tbody></table></div>
+      </div>
+
+      <div class="admin-panel" id="admin-settings">
+        <div class="admin-content-grid"><div class="admin-card"><h3>System Rules</h3><label>Pickup grace period (minutes)<input id="settingGrace" class="admin-control-input" type="number" min="0"></label><label>Maximum active claims per recipient<input id="settingMaxClaims" class="admin-control-input" type="number" min="1"></label><label class="admin-switch"><input id="settingAutoExpire" type="checkbox"><span>Automatic expiration status updates enabled</span></label><label class="admin-switch"><input id="settingModeration" type="checkbox"><span>Require food moderation before listing</span></label><button class="btn btn-primary" id="saveAdminSettings">Save settings</button></div><div class="admin-card"><h3>Admin Safety</h3><p class="admin-muted">Use Archive instead of delete when a record should remain available for audit. User restrictions and moderation actions are permanently recorded in the admin audit trail.</p><div class="admin-safety-list"><span><i data-feather="shield"></i> Controlled actions</span><span><i data-feather="archive"></i> History preserved</span><span><i data-feather="lock"></i> Admin-only operations</span></div></div></div>
+      </div>
+
+      <div class="admin-panel" id="admin-audit">
+        <div class="admin-panel-toolbar"><select id="adminAuditType" class="admin-control-select"><option value="all">All event types</option><option value="profile">Users</option><option value="food_post">Food</option><option value="claim">Claims</option><option value="admin_case">Cases</option></select></div>
+        <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead><tbody id="adminAuditTable"><tr><td colspan="5">Loading audit log…</td></tr></tbody></table></div>
+      </div>
+    </section>
+  </section>
+
+  <!-- NORMAL USER DASHBOARD -->
+  <section id="userDashboard" class="hidden user-dashboard">
+    <div class="user-hero">
+      <div class="user-hero-copy">
+        <span class="eyebrow">MY DASHBOARD</span>
+        <h1 id="userWelcome">Welcome back</h1>
+        <p class="dashboard-subtitle">Everything you need to share food, manage claims, and keep track of your rescue activity.</p>
+      </div>
+    </div>
+    <div id="userVerificationBanner" class="user-alert hidden"></div>
+
+    <div class="user-stat-grid" aria-label="Dashboard summary">
+      <article class="user-stat-card user-stat-blue">
+        <div class="user-stat-icon"><i data-feather="package"></i></div>
+        <div><span>Active food posts</span><strong id="userPostStat">—</strong><a href="donate.html">Manage posts <i data-feather="arrow-right"></i></a></div>
+      </article>
+      <article class="user-stat-card user-stat-red">
+        <div class="user-stat-icon"><i data-feather="heart"></i></div>
+        <div><span>Active claims</span><strong id="userClaimStat">—</strong><a href="find-food.html">View claims <i data-feather="arrow-right"></i></a></div>
+      </article>
+      <article class="user-stat-card user-stat-green">
+        <div class="user-stat-icon"><i data-feather="check-circle"></i></div>
+        <div><span>Completed rescues</span><strong id="userCompletedStat">—</strong><a href="#recentClaimName">Recent rescue <i data-feather="arrow-right"></i></a></div>
+      </article>
+      <article class="user-stat-card user-stat-amber">
+        <div class="user-stat-icon"><i data-feather="clock"></i></div>
+        <div><span>Expired food posts</span><strong id="userExpiredStat">—</strong><a href="expired-donations.html">Review expired <i data-feather="arrow-right"></i></a></div>
+      </article>
+    </div>
+
+    <div class="user-dashboard-grid user-dashboard-grid-primary">
+      <section class="user-panel user-panel-featured user-recent-claim" aria-labelledby="recentClaimHeading">
+        <div class="user-panel-heading">
+          <div><span class="eyebrow">RECENT CLAIM</span><h2 id="recentClaimName">No claims yet</h2></div>
+          <span class="badge hidden" id="recentClaimBadge"></span>
+        </div>
+        <p class="user-empty-copy" id="recentClaimEmpty">You have not claimed any food yet. <a href="find-food.html">Browse available food</a>.</p>
+        <div class="status-line hidden" id="recentClaimSteps"></div>
+        <div class="reservation-countdown hidden" id="recentClaimReservation"><i data-feather="clock"></i><span></span></div>
+        <div class="claim-action-row hidden" id="recentClaimActions">
+          <button class="btn btn-primary" id="recentClaimReady" type="button">I'm on my way</button>
+          <button class="btn btn-outline" id="recentClaimCancel" type="button">Cancel reservation</button>
+        </div>
+        <div class="pickup-card hidden" id="recentClaimPickup">
+          <div class="pickup-card-info"><div class="pickup-card-icon"><i data-feather="map-pin"></i></div><div><strong>Pickup location</strong><p id="recentClaimLocation"></p></div></div>
+          <div class="pickup-code-box hidden" id="recentClaimPickupCode"><span>Pickup code</span><strong id="recentClaimPickupCodeValue">------</strong></div>
+          <button class="btn btn-outline" id="recentClaimCopy" data-copy="">Copy location</button>
+        </div>
+      </section>
+</div>
+<div class="user-dashboard-grid user-dashboard-grid-secondary">
+      <section class="user-panel claim-requests-section">
+        <div class="user-panel-heading"><div><span class="eyebrow">CLAIM REQUESTS</span><h2>Requests for your food</h2></div><span class="user-section-tag">Donor action</span></div>
+        <p class="admin-muted claim-request-intro">Review requests from people who want to claim one of your food posts.</p>
+        <div class="claim-request-list" id="userClaimRequests"><span class="admin-muted">Loading claim requests…</span></div>
+      </section>
+
+  
+    </div>
+
+    <div class="frss-snackbar-grid" aria-label="Your activity shortcuts">
+      <a class="frss-snackbar" href="active-reservations.html"><span class="frss-snackbar-icon"><i data-feather="clock"></i></span><span class="frss-snackbar-copy"><strong>Active Reservations</strong></span><span class="frss-snackbar-meta"><strong id="snackbarReservedCount">—</strong><i data-feather="arrow-right"></i></span></a>
+      <a class="frss-snackbar" href="expired-donations.html"><span class="frss-snackbar-icon"><i data-feather="calendar"></i></span><span class="frss-snackbar-copy"><strong>Expired Donations</strong></span><span class="frss-snackbar-meta"><strong id="snackbarExpiredCount">—</strong><i data-feather="arrow-right"></i></span></a>
+      <a class="frss-snackbar" href="activity.html"><span class="frss-snackbar-icon"><i data-feather="activity"></i></span><span class="frss-snackbar-copy"><strong>My Activity</strong></span><span class="frss-snackbar-meta"><strong id="snackbarActivityCount">—</strong><i data-feather="arrow-right"></i></span></a>
+      <a class="frss-snackbar" href="reports.html"><span class="frss-snackbar-icon"><i data-feather="flag"></i></span><span class="frss-snackbar-copy"><strong>My Reports</strong></span><span class="frss-snackbar-meta"><strong id="snackbarReportsCount">—</strong><i data-feather="arrow-right"></i></span></a>
+    </div>
+
+    <div class="expiry-notice hidden user-alert" id="userExpiryNotice"><i data-feather="clock"></i><div><strong>You have expired food posts.</strong><span id="userExpiryText">These posts are no longer visible to people looking for available food.</span></div></div>
+
+    <div class="frss-snackbar-grid frss-snackbar-grid-account" aria-label="Account shortcuts">
+      <a class="frss-snackbar" href="account.html"><span class="frss-snackbar-icon"><i data-feather="user"></i></span><span class="frss-snackbar-copy"><strong>Profile & Settings</strong></span><span class="frss-snackbar-meta"><i data-feather="arrow-right"></i></span></a>
+    </div>
+
+
+
+    <div class="pickup-verification-help" id="pickupVerificationHelp" hidden><i data-feather="shield"></i><div><strong>Pickup verification</strong><span>Show the donor your pickup code when you arrive. The donor should verify the code before marking the food as picked up.</span></div></div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../js/config.js"></script>
+<button class="theme-fab" id="themeFab" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><i data-feather="moon" aria-hidden="true"></i></button>
+    <script src="../js/app.js"></script>
+<script src="../js/auth.js"></script>
+
+<style>
+  .hidden{display:none!important}
+  .admin-loading{padding:70px 0;text-align:center;color:var(--muted)}
+  .dashboard-title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:34px}
+  .dashboard-title-row h1{margin:4px 0 8px;font-size:clamp(34px,4vw,52px);letter-spacing:-.04em}
+  .dashboard-subtitle{margin:0;color:var(--muted);max-width:700px}
+  .admin-badge{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;background:var(--red-soft);color:var(--red);font-weight:700;font-size:13px;white-space:nowrap}
+  .admin-badge svg{width:16px}
+  .admin-flow-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+  .admin-module{position:relative;min-height:190px;border:1px solid var(--border);background:var(--surface);border-radius:20px;padding:22px 20px;display:flex;flex-direction:column;box-shadow:0 10px 35px rgba(20,20,20,.045);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .admin-module:hover{transform:translateY(-3px);border-color:#d8d8d8;box-shadow:0 16px 40px rgba(20,20,20,.09)}
+  .module-icon{width:44px;height:44px;border-radius:13px;background:var(--red-soft);color:var(--red);display:grid;place-items:center;margin-bottom:17px}
+  .module-icon svg{width:21px}
+  .module-content h2{margin:0;font-size:20px;line-height:1.1}
+  .module-content span{display:block;color:var(--red);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-top:5px}
+  .module-content strong{display:block;font-size:30px;line-height:1;margin-top:14px}
+  .module-content small{display:block;color:var(--muted);font-size:11px;margin-top:6px}
+  .module-arrow{position:absolute;right:17px;top:18px;width:17px;color:var(--muted)}
+  .admin-section{scroll-margin-top:110px;margin-top:50px;padding-top:34px;border-top:1px solid var(--border)}
+  .admin-section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}
+  .admin-section-heading h2{margin:3px 0 0;font-size:28px;letter-spacing:-.025em}
+  .section-count{font-size:13px;color:var(--muted);font-weight:700}
+  .admin-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .mini-stat{padding:20px;border:1px solid var(--border);background:var(--surface);border-radius:16px}
+  .mini-stat span{display:block;color:var(--muted);font-size:12px}
+  .mini-stat strong{display:block;font-size:29px;margin-top:7px}
+  .category-list{display:flex;flex-wrap:wrap;gap:10px}
+  .category-pill{padding:10px 14px;border:1px solid var(--border);border-radius:999px;background:var(--surface);font-size:13px;font-weight:700}
+  .category-pill small{color:var(--muted);font-weight:500;margin-left:5px}
+  .admin-muted{color:var(--muted)}
+  .expired-list .admin-muted,.reservation-list .admin-muted,.category-list .admin-muted{display:block;text-align:center;padding:28px 16px;border:1px dashed var(--border);border-radius:14px;background:var(--surface-2);font-size:13px}
+  .report-note{margin-top:16px;padding:15px 17px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:13px}
+  .expiry-notice{margin-top:16px;padding:15px 17px;border:1px solid #f2b7b7;border-radius:14px;background:#fff7f7;display:flex;gap:11px;align-items:flex-start;color:#7a2020;font-size:13px}.expiry-notice svg{width:18px;flex:0 0 auto;margin-top:1px}.expiry-notice strong{display:block;color:#b51e2a}.expiry-notice span{display:block;margin-top:3px;color:#7a5a5a}.dark .expiry-notice{background:#2a1515;border-color:#5b2929;color:#f3b0b0}.dark .expiry-notice strong{color:#ff8f98}.dark .expiry-notice span{color:#d7a6a6}
+  .expired-list{margin-top:14px;display:grid;gap:10px}.expired-item{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.expired-item strong{display:block}.expired-item small{display:block;color:var(--muted);margin-top:3px}.expired-badge{font-size:11px;font-weight:800;color:#b51e2a;background:#fff0f0;border:1px solid #f2c2c2;border-radius:999px;padding:6px 9px;white-space:nowrap}.dark .expired-badge{background:#35191b;border-color:#5b2929;color:#ff9aa1}
+  .report-note svg{width:17px;flex:0 0 auto;margin-top:2px}
+  .dashboard-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+  .dash-card{position:relative;border:1px solid var(--border);background:var(--surface);border-radius:18px;padding:22px;box-shadow:0 10px 30px rgba(20,20,20,.04);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .dash-card:hover{transform:translateY(-2px);border-color:#d8d8d8;box-shadow:0 14px 36px rgba(20,20,20,.08)}
+  .dash-card-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px}
+  .dash-card-icon svg{width:18px;height:18px}
+  .dash-card-icon.accent-blue{background:#eaf1ff;color:#2f6fed}
+  .dash-card-icon.accent-red{background:var(--red-soft);color:var(--red)}
+  .dash-card-icon.accent-green{background:#e6f6ec;color:#1f9254}
+  .dash-card-icon.accent-amber{background:#fff4d6;color:#8a6d1a}
+  .dark .dash-card-icon.accent-blue{background:rgba(47,111,237,.18)}
+  .dark .dash-card-icon.accent-green{background:rgba(31,146,84,.18)}
+  .dark .dash-card-icon.accent-amber{background:rgba(138,109,26,.28)}
+  .dash-card span{display:block;color:var(--muted);font-size:13px;font-weight:600}.dash-card strong{display:block;font-size:34px;line-height:1;margin:9px 0 12px;letter-spacing:-.02em}.dash-card a{display:inline-flex;align-items:center;gap:5px;color:var(--red);font-weight:700;font-size:13px}.dash-card a svg{width:14px;height:14px}
+  .section-sm{margin-top:50px}.status-line{--status-progress:0%;position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:4px;border:1px solid var(--border);padding:28px 18px 22px;border-radius:18px;color:var(--muted);font-size:12px;background:var(--surface);box-shadow:0 10px 30px rgba(20,20,20,.04);overflow-x:auto}
+  .status-track{position:absolute;top:44px;left:56px;right:56px;height:2px;background:var(--border);z-index:0;overflow:hidden;border-radius:999px}
+  .status-fill{height:100%;width:var(--status-progress);background:var(--red);border-radius:999px;transition:width .8s cubic-bezier(.22,1,.36,1);position:relative;overflow:visible}
+  .status-fill::before{content:'';position:absolute;top:50%;right:-7px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--red),0 0 12px 4px rgba(220,38,38,.55);transform:translateY(-50%);animation:statusTravel 1.05s ease-in-out infinite}
+  .status-fill::after{content:'';position:absolute;inset:-3px 0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.15) 35%,rgba(255,255,255,.95) 50%,rgba(255,255,255,.15) 65%,transparent 100%);background-size:180px 100%;background-repeat:no-repeat;animation:statusFlow .95s linear infinite;opacity:.95}
+  .status-line>span{position:relative;z-index:1;flex:1 1 0;min-width:76px;display:flex;flex-direction:column;align-items:center;gap:8px;font-weight:700;text-align:center;white-space:nowrap}
+  .status-dot{width:30px;height:30px;min-width:30px;flex:0 0 30px;box-sizing:border-box;border-radius:50%;background:var(--surface-2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .status-dot svg{width:14px;height:14px;flex:0 0 14px}
+  .status-line .done,.status-line .active{color:var(--red);font-weight:750}
+  .status-line .done .status-dot,.status-line .active .status-dot{background:var(--red);border-color:var(--red);color:#fff}
+  .status-line>.active .status-dot{animation:statusPulse 1.15s ease-in-out infinite}
+  @keyframes statusFlow{from{background-position:-180px 0}to{background-position:180px 0}}
+  @keyframes statusTravel{0%,100%{opacity:.7;transform:translateY(-50%) scale(.85)}50%{opacity:1;transform:translateY(-50%) scale(1.18)}}
+  @keyframes statusPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.35);transform:scale(1)}50%{box-shadow:0 0 0 9px rgba(220,38,38,0),0 0 14px 2px rgba(220,38,38,.35);transform:scale(1.08)}}
+  @media(prefers-reduced-motion:reduce){.status-fill{transition:none}.status-fill::before,.status-fill::after,.status-line>.active .status-dot{animation:none}}
+  .pickup-card{margin-top:16px;padding:20px;border:1px solid var(--border);border-radius:16px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--surface)}
+  .pickup-card-info{display:flex;align-items:center;gap:14px}
+  .pickup-card-icon{width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:var(--red-soft);color:var(--red);display:grid;place-items:center}
+  .pickup-card-icon svg{width:17px;height:17px}
+  .pickup-card p{margin:3px 0 0;color:var(--muted)}
+  .reservation-notice{margin-top:12px;padding:11px 12px;border:1px solid #ead7a0;border-radius:12px;background:#fffaf0;color:#725c18;display:flex;gap:8px;align-items:flex-start;font-size:11px;line-height:1.45}.reservation-notice svg{width:15px;flex:0 0 auto;margin-top:1px}.reservation-badge{background:#fff4d6!important;border-color:#ead7a0!important;color:#725c18!important}.food-card.is-reserved{border-color:#ead7a0}.food-card .claim-btn:disabled{opacity:1;cursor:not-allowed;background:#6f6f6f;border-color:#6f6f6f}.claim-hold-note{margin:10px 0 16px;padding:11px 12px;border-radius:12px;background:var(--surface-2);color:var(--muted);font-size:12px;line-height:1.5}.reservation-list{margin-top:14px;display:grid;gap:10px}.reservation-item{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:14px 16px;border:1px solid #ead7a0;border-radius:14px;background:var(--surface)}.reservation-item strong{display:block}.reservation-item small{display:block;color:var(--muted);margin-top:3px}.reservation-item .reservation-status{font-size:11px;font-weight:800;color:#725c18;background:#fff4d6;border:1px solid #ead7a0;border-radius:999px;padding:6px 9px;white-space:nowrap}.reservation-countdown{margin-top:14px;padding:12px 14px;border:1px solid #ead7a0;border-radius:13px;background:#fffaf0;color:#725c18;display:flex;gap:8px;align-items:center;font-size:12px}.reservation-countdown svg{width:16px}.claim-action-row{display:flex;gap:10px;margin-top:12px}.claim-action-row .btn{font-size:12px}.dark .reservation-notice,.dark .reservation-countdown{background:#2c2514;border-color:#5c4e20;color:#ead58c}.dark .reservation-badge{background:#382f16!important;border-color:#5c4e20!important;color:#ead58c!important}.dark .reservation-item{border-color:#5c4e20}.dark .reservation-item .reservation-status{background:#382f16;border-color:#5c4e20;color:#ead58c}
+  .notification-heading-actions{display:flex;align-items:center;gap:9px}.notification-heading-actions .btn{font-size:11px;padding:8px 11px}.notification-count{min-width:24px;height:24px;padding:0 7px;border-radius:999px;display:inline-grid;place-items:center;background:var(--red-soft);color:var(--red);font-size:11px;font-weight:800}.notification-list{margin-top:14px;display:grid;gap:10px}.notification-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:14px 16px;border:1px solid var(--border);border-radius:15px;background:var(--surface);box-shadow:0 8px 22px rgba(20,20,20,.03)}.notification-item.is-read{opacity:.7}.notification-icon{width:38px;height:38px;border-radius:12px;background:var(--red-soft);color:var(--red);display:grid;place-items:center}.notification-icon svg{width:17px;height:17px}.notification-copy strong{display:block;font-size:13px}.notification-copy p{margin:3px 0 3px;color:var(--muted);font-size:12px;line-height:1.5}.notification-copy small{color:var(--muted);font-size:10px}.notification-mark-read{font-size:10px!important;padding:7px 9px!important;white-space:nowrap}.claim-request-intro{margin:6px 0 0;max-width:700px}.claim-request-list{margin-top:14px;display:grid;gap:10px}.claim-request-item{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:16px;border:1px solid #ead7a0;border-radius:16px;background:var(--surface);box-shadow:0 8px 22px rgba(20,20,20,.03)}.claim-request-main{display:flex;align-items:flex-start;gap:12px;min-width:0}.claim-request-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;background:#fff4d6;color:#8a6d1a;display:grid;place-items:center}.claim-request-icon svg{width:18px;height:18px}.claim-request-main strong{display:block;font-size:14px}.claim-request-main p{margin:3px 0;color:var(--ink);font-size:12px;line-height:1.5}.claim-request-main small{display:block;color:var(--muted);font-size:10px;line-height:1.5}.claim-request-actions{display:flex;gap:8px;flex:0 0 auto}.claim-request-actions .btn{font-size:11px;min-width:76px}.dark .notification-item{background:var(--surface)}.dark .claim-request-item{border-color:#5c4e20}.dark .claim-request-icon{background:#382f16;color:#ead58c}
+  @media(max-width:1000px){.admin-flow-grid{grid-template-columns:repeat(3,1fr)}.dashboard-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:700px){.dashboard-title-row{align-items:flex-start;flex-direction:column}.admin-flow-grid{grid-template-columns:1fr 1fr}.admin-stat-row{grid-template-columns:1fr 1fr}.dashboard-grid{grid-template-columns:1fr}.pickup-card{align-items:start;gap:15px;flex-direction:column}.pickup-card button{width:100%}.status-track{left:44px;right:44px}.notification-item{grid-template-columns:auto 1fr;align-items:start}.notification-mark-read{grid-column:2;justify-self:start}.notification-heading-actions{width:100%;justify-content:flex-end}.claim-request-item{align-items:stretch;flex-direction:column}.claim-request-actions{width:100%}.claim-request-actions .btn{flex:1}}
+  @media(max-width:470px){.admin-flow-grid,.admin-stat-row{grid-template-columns:1fr}}
+.food-report-admin-item{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:15px 16px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.food-report-admin-item strong{display:block}.food-report-admin-item small{display:block;color:var(--muted);margin-top:4px}.food-report-admin-item select{border:1px solid var(--border);border-radius:10px;padding:8px 10px;background:var(--surface-2);color:var(--ink);font:inherit;font-size:12px}.food-report-admin-item .report-reason{display:inline-block;margin-top:7px;font-size:11px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.06em}@media(max-width:700px){.food-report-admin-item{align-items:flex-start;flex-direction:column}.food-report-admin-item select{width:100%}}
+
+  .admin-control-center{margin-top:22px}.admin-control-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.admin-tab{border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:12px;padding:10px 13px;font:inherit;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;gap:7px;align-items:center}.admin-tab svg{width:15px}.admin-tab.active{background:var(--red);border-color:var(--red);color:#fff}.admin-panel{display:none;border:1px solid var(--border);border-radius:18px;background:var(--surface);padding:18px;box-shadow:0 12px 32px rgba(20,20,20,.04)}.admin-panel.active{display:block}.admin-panel-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.admin-control-input,.admin-control-select,.admin-control-textarea{box-sizing:border-box;border:1px solid var(--border);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit;font-size:12px;min-width:160px}.admin-control-input{flex:1}.admin-control-textarea{width:100%;min-height:100px;resize:vertical}.admin-table-wrap{overflow:auto;border:1px solid var(--border);border-radius:14px}.admin-table{width:100%;border-collapse:collapse;min-width:780px}.admin-table th,.admin-table td{padding:12px 13px;text-align:left;border-bottom:1px solid var(--border);font-size:11px;vertical-align:middle}.admin-table th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface-2)}.admin-table tr:last-child td{border-bottom:0}.admin-table strong{display:block;font-size:12px}.admin-table small{color:var(--muted)}.admin-badge-pill{display:inline-flex;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:var(--surface-2);border:1px solid var(--border)}.admin-badge-pill.red{color:var(--red);border-color:rgba(220,38,38,.25);background:var(--red-soft)}.admin-row-actions{display:flex;gap:5px;flex-wrap:wrap}.admin-row-actions button{border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 8px;font:inherit;font-size:9px;font-weight:700;cursor:pointer}.admin-row-actions button.primary{background:var(--red);border-color:var(--red);color:#fff}.admin-content-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:15px}.admin-card{border:1px solid var(--border);border-radius:15px;padding:16px;background:var(--surface-2);display:grid;gap:10px}.admin-card h3{margin:0 0 2px;font-size:15px}.admin-card label{display:grid;gap:6px;font-size:11px;font-weight:700}.admin-card .admin-control-input,.admin-card .admin-control-select{width:100%}.admin-chip-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}.admin-chip{border:1px solid var(--border);border-radius:999px;padding:7px 9px;font-size:10px}.admin-switch{display:flex!important;grid-template-columns:auto 1fr;display:flex!important;align-items:center;gap:8px!important}.admin-switch input{accent-color:var(--red)}.admin-safety-list{display:grid;gap:8px;color:var(--muted);font-size:11px}.admin-safety-list span{display:flex;align-items:center;gap:8px}.admin-safety-list svg{width:15px;color:var(--red)}@media(max-width:800px){.admin-content-grid{grid-template-columns:1fr}.admin-panel{padding:12px}}
+
+  .admin-analytics-card{margin-top:16px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--surface-2)}.admin-analytics-heading{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.admin-analytics-heading h3{margin:3px 0 0;font-size:17px}.admin-analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.analytics-metric{padding:13px;border:1px solid var(--border);border-radius:13px;background:var(--surface)}.analytics-metric span,.analytics-metric small{display:block;color:var(--muted);font-size:10px}.analytics-metric strong{display:block;font-size:23px;margin:3px 0}.analytics-chart{height:150px;display:flex;align-items:flex-end;gap:5px;margin-top:18px;padding:14px 4px 0;border-top:1px solid var(--border);overflow:hidden}.analytics-bar{flex:1;min-width:5px;border-radius:6px 6px 2px 2px;background:var(--red);opacity:.8;position:relative}.analytics-bar span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:8px;color:var(--muted);white-space:nowrap}.user-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.account-card{border:1px solid var(--border);border-radius:16px;padding:18px;background:var(--surface);display:grid;gap:12px}.account-card-heading{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.account-card h3{margin:0;font-size:16px}.account-card label{display:grid;gap:6px;font-size:11px;font-weight:700}.account-card input{width:100%;box-sizing:border-box;border:1px solid var(--border);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:10px 12px;font:inherit}.account-card input:disabled{opacity:.65}.verification-pill{font-size:9px;font-weight:800;text-transform:uppercase;padding:6px 8px;border-radius:999px;background:var(--red-soft);color:var(--red)}.account-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.account-facts div{padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2)}.account-facts span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.05em}.account-facts strong{display:block;margin-top:3px;font-size:12px}.account-danger{margin-top:2px;padding:13px;border:1px solid rgba(220,38,38,.2);border-radius:13px;background:var(--red-soft)}.account-danger strong{font-size:12px}.account-danger p{margin:4px 0 10px;color:var(--muted);font-size:10px;line-height:1.5}.danger-outline{border-color:rgba(220,38,38,.35)!important;color:var(--red)!important}.activity-filter-row{display:flex;justify-content:flex-end;margin-top:10px}.activity-history-list,.reports-history-list{display:grid;gap:10px;margin-top:12px}.activity-item,.report-history-item{padding:15px 16px;border:1px solid var(--border);border-radius:15px;background:var(--surface);display:flex;justify-content:space-between;gap:14px;align-items:center}.activity-main{display:flex;gap:12px;align-items:flex-start;min-width:0}.activity-icon{width:38px;height:38px;border-radius:12px;background:var(--surface-2);color:var(--red);display:grid;place-items:center;flex:0 0 38px}.activity-main strong{display:block;font-size:13px}.activity-main p{margin:3px 0;color:var(--muted);font-size:11px;line-height:1.45}.activity-main small{color:var(--muted);font-size:9px}.activity-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.pickup-code-box{padding:9px 12px;border:1px dashed var(--red);border-radius:11px;background:var(--red-soft);text-align:center}.pickup-code-box span{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.08em}.pickup-code-box strong{font-size:18px;letter-spacing:.15em}.pickup-verification-help{margin-top:14px;padding:13px 15px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);display:flex;gap:10px;color:var(--muted);font-size:11px}.pickup-verification-help svg{width:17px;color:var(--red);flex:0 0 auto}.pickup-verification-help strong,.pickup-verification-help span{display:block}.pickup-verification-help strong{color:var(--ink);margin-bottom:2px}.report-history-item{align-items:flex-start}.report-history-item strong{font-size:12px}.report-history-item small{display:block;color:var(--muted);margin-top:3px;font-size:9px}.report-status{white-space:nowrap}.admin-control-tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;scrollbar-width:thin}.admin-tab{flex:0 0 auto}.admin-table-wrap{-webkit-overflow-scrolling:touch;scrollbar-width:thin}.admin-table th:first-child,.admin-table td:first-child{position:sticky;left:0;z-index:1;background:var(--surface)}.admin-table th:first-child{background:var(--surface-2)}
+  @media(max-width:800px){.admin-analytics-grid{grid-template-columns:1fr 1fr}.user-tools-grid{grid-template-columns:1fr}.account-facts{grid-template-columns:1fr 1fr}.admin-table{min-width:700px}.admin-control-tabs{margin-right:-4px}}
+  @media(max-width:520px){.admin-analytics-grid{grid-template-columns:1fr 1fr}.activity-item,.report-history-item{align-items:flex-start;flex-direction:column}.activity-actions{width:100%;justify-content:flex-start}.activity-actions .btn{flex:1}.account-facts{grid-template-columns:1fr}.admin-table{min-width:650px}.analytics-chart{gap:3px}}
+  /* ================================================================
+     USER DASHBOARD — clean, organized layout
+     Scoped to #userDashboard so admin styling remains unchanged.
+     ================================================================ */
+  #userDashboard{--user-gap:18px;max-width:1180px;margin:0 auto;padding-bottom:40px}
+  #userDashboard .user-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;padding:12px 0 30px;border-bottom:1px solid var(--border)}
+  #userDashboard .user-hero h1{margin:5px 0 8px;font-size:clamp(34px,5vw,52px);line-height:1.02;letter-spacing:-.045em}
+  #userDashboard .user-hero .dashboard-subtitle{max-width:650px}
+  #userDashboard .user-hero-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+  #userDashboard .user-hero-actions .btn{display:inline-flex;align-items:center;gap:7px}
+  #userDashboard .user-hero-actions .btn svg{width:16px}
+  #userDashboard .user-status-badge{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border:1px solid var(--border);border-radius:999px;background:var(--surface-2);font-size:11px;font-weight:800;color:var(--muted);white-space:nowrap}
+  #userDashboard .user-status-badge svg{width:14px;color:#2e8b57}
+  #userDashboard .user-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--user-gap);margin:22px 0}
+  #userDashboard .user-stat-card{min-width:0;display:flex;gap:13px;align-items:center;padding:19px;border:1px solid var(--border);border-radius:18px;background:var(--surface);box-shadow:0 8px 25px rgba(20,20,20,.035);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  #userDashboard .user-stat-card:hover{transform:translateY(-2px);box-shadow:0 13px 30px rgba(20,20,20,.07)}
+  #userDashboard .user-stat-icon{width:43px;height:43px;flex:0 0 43px;border-radius:13px;display:grid;place-items:center}
+  #userDashboard .user-stat-icon svg{width:20px}
+  #userDashboard .user-stat-card span{display:block;color:var(--muted);font-size:11px;line-height:1.25}
+  #userDashboard .user-stat-card strong{display:block;font-size:29px;line-height:1;margin:6px 0 7px;letter-spacing:-.03em}
+  #userDashboard .user-stat-card a{display:inline-flex;align-items:center;gap:4px;color:var(--ink);font-size:10px;font-weight:700;text-decoration:none}
+  #userDashboard .user-stat-card a:hover{color:var(--red)}
+  #userDashboard .user-stat-card a svg{width:12px}
+  #userDashboard .user-stat-blue .user-stat-icon{background:#eaf3ff;color:#3274c7}.dark #userDashboard .user-stat-blue .user-stat-icon{background:#17263a;color:#8bbcff}
+  #userDashboard .user-stat-red .user-stat-icon{background:var(--red-soft);color:var(--red)}
+  #userDashboard .user-stat-green .user-stat-icon{background:#eaf8f0;color:#2e8b57}.dark #userDashboard .user-stat-green .user-stat-icon{background:#162b20;color:#8fd3a9}
+  #userDashboard .user-stat-amber .user-stat-icon{background:#fff5df;color:#9a7417}.dark #userDashboard .user-stat-amber .user-stat-icon{background:#30270f;color:#e6c96d}
+  #userDashboard .user-dashboard-grid{display:grid;gap:var(--user-gap);margin-top:var(--user-gap)}
+  #userDashboard .user-dashboard-grid-primary{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+  #userDashboard .user-dashboard-grid-secondary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #userDashboard .user-panel{min-width:0;padding:21px;border:1px solid var(--border);border-radius:19px;background:var(--surface);box-shadow:0 8px 25px rgba(20,20,20,.035)}
+  #userDashboard .user-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:15px}
+  #userDashboard .user-panel-heading h2{margin:4px 0 0;font-size:22px;line-height:1.15;letter-spacing:-.025em}
+  #userDashboard .user-section-tag{padding:6px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+  #userDashboard .user-empty-copy{color:var(--muted);font-size:12px;line-height:1.6;margin:10px 0 0}
+  #userDashboard .user-empty-copy a{color:var(--red);font-weight:700}
+  #userDashboard .user-recent-claim{min-height:250px}
+  #userDashboard .user-recent-claim .status-line{margin-top:22px}
+  #userDashboard .user-recent-claim .reservation-countdown{margin-top:15px}
+  #userDashboard .user-recent-claim .claim-action-row{margin-top:15px}
+  #userDashboard .user-recent-claim .pickup-card{margin-top:15px}
+  #userDashboard .notification-section .notification-list{margin-top:0;max-height:300px;overflow:auto;padding-right:2px}
+  #userDashboard .notification-section .notification-item{box-shadow:none}
+  #userDashboard .claim-request-section,.user-dashboard .claim-requests-section{min-height:210px}
+  #userDashboard .claim-request-list,.user-dashboard .reservation-list,.user-dashboard .expired-list{margin-top:0}
+  #userDashboard .user-alert{margin-top:var(--user-gap)}
+  #userDashboard .user-account-summary{margin-top:var(--user-gap)}
+  #userDashboard .account-overview-grid{display:grid;grid-template-columns:1fr minmax(280px,.75fr);gap:15px;align-items:stretch}
+  #userDashboard .account-card-inline{padding:0;border:0;box-shadow:none;background:transparent}
+  #userDashboard .account-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  #userDashboard .account-full-width{grid-column:1/-1}
+  #userDashboard .account-card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+  #userDashboard .account-card-footer p{margin:0;min-height:16px}
+  #userDashboard .account-danger{margin:0;height:100%;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center}
+  #userDashboard .account-danger .btn{align-self:flex-start}
+  #userDashboard .activity-filter-row{margin:0 0 13px}
+  #userDashboard .activity-filter-row select{min-width:170px}
+  #userDashboard .activity-history-list,.user-dashboard .reports-history-list{margin-top:0}
+  #userDashboard .pickup-verification-help{margin-top:var(--user-gap);border-radius:16px}
+  #userDashboard .section-count{white-space:nowrap}
+  #userDashboard .notification-heading-actions{flex-wrap:wrap;justify-content:flex-end}
+  #userDashboard .notification-heading-actions .admin-control-select{min-width:110px;width:auto}
+  #userDashboard .notification-heading-actions .btn{white-space:nowrap}
+  @media(max-width:1000px){
+    #userDashboard .user-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    #userDashboard .user-dashboard-grid-primary,#userDashboard .user-dashboard-grid-secondary{grid-template-columns:1fr}
+    #userDashboard .account-overview-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:680px){
+    #userDashboard{padding-bottom:24px}
+    #userDashboard .user-hero{align-items:flex-start;flex-direction:column;padding-bottom:24px}
+    #userDashboard .user-hero-actions{width:100%;justify-content:flex-start}
+    #userDashboard .user-hero-actions .btn{flex:1;justify-content:center}
+    #userDashboard .user-status-badge{width:100%;justify-content:center}
+    #userDashboard .user-stat-grid{grid-template-columns:1fr 1fr;gap:10px}
+    #userDashboard .user-stat-card{padding:14px;gap:10px}
+    #userDashboard .user-stat-icon{width:38px;height:38px;flex-basis:38px;border-radius:11px}
+    #userDashboard .user-stat-card strong{font-size:25px}
+    #userDashboard .user-panel{padding:16px;border-radius:16px}
+    #userDashboard .user-panel-heading{gap:10px}
+    #userDashboard .user-panel-heading h2{font-size:19px}
+    #userDashboard .account-form-grid{grid-template-columns:1fr}
+    #userDashboard .account-full-width{grid-column:auto}
+    #userDashboard .account-card-footer{align-items:stretch;flex-direction:column}
+    #userDashboard .account-card-footer .btn{width:100%}
+    #userDashboard .notification-heading-actions{width:100%;justify-content:flex-start}
+    #userDashboard .notification-heading-actions .btn{flex:1}
+  }
+  @media(max-width:430px){
+    #userDashboard .user-stat-grid{grid-template-columns:1fr}
+    #userDashboard .user-stat-card{min-height:74px}
+  }
+
+
+  .frss-snackbar-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:var(--user-gap)}
+  .frss-snackbar{display:flex;align-items:center;gap:13px;min-width:0;padding:15px 16px;border:1px solid var(--border);border-radius:16px;background:var(--surface);box-shadow:0 7px 22px rgba(20,20,20,.035);color:var(--ink);transition:transform .18s,box-shadow .18s,border-color .18s;text-decoration:none}
+  .frss-snackbar:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(20,20,20,.08);border-color:rgba(229,35,40,.2)}
+  .frss-snackbar-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;display:grid;place-items:center;background:var(--red-soft);color:var(--red)}
+  .frss-snackbar-icon svg{width:18px;height:18px}
+  .frss-snackbar-copy{min-width:0;display:grid;gap:2px;flex:1}
+  .frss-snackbar-copy .eyebrow{font-size:8px;margin:0}
+  .frss-snackbar-copy strong{font-size:14px;line-height:1.25}
+  .frss-snackbar-copy small{font-size:10px;color:var(--muted);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .frss-snackbar-meta{display:flex;align-items:center;gap:8px;color:var(--red);flex:0 0 auto}
+  .frss-snackbar-meta strong{font-size:14px}
+  .frss-snackbar-meta svg{width:16px;height:16px}
+  @media(max-width:680px){.frss-snackbar-grid{grid-template-columns:1fr}.frss-snackbar{padding:14px}.frss-snackbar-copy small{white-space:normal}}
+
+
+  /* =========================================================
+     ADMIN DASHBOARD — CLEAN / ORGANIZED LAYOUT
+     ========================================================= */
+  #adminDashboard{
+    --admin-gap:20px;
+    display:grid;
+    grid-template-columns:repeat(12,minmax(0,1fr));
+    gap:var(--admin-gap);
+    max-width:1280px;
+    margin:0 auto;
+    padding-bottom:44px;
+  }
+  #adminDashboard > .dashboard-title-row,
+  #adminDashboard > .admin-flow-grid,
+  #adminDashboard > .admin-control-center{grid-column:1/-1}
+  #adminDashboard > .dashboard-title-row{
+    margin:0;
+    padding:8px 0 4px;
+    align-items:flex-end;
+  }
+  #adminDashboard > .dashboard-title-row h1{
+    margin:5px 0 8px;
+    font-size:clamp(34px,4.5vw,50px);
+    line-height:1.03;
+    letter-spacing:-.045em;
+  }
+  #adminDashboard > .dashboard-title-row .dashboard-subtitle{max-width:720px}
+  #adminDashboard > .dashboard-title-row .admin-badge{
+    flex-shrink:0;
+    box-shadow:0 7px 20px rgba(20,20,20,.05);
+  }
+  #adminDashboard > .admin-flow-grid{
+    margin:0;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:14px;
+  }
+  #adminDashboard > .admin-flow-grid .admin-module{
+    min-height:142px;
+    padding:18px;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:12px;
+    box-shadow:0 8px 26px rgba(20,20,20,.035);
+    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  }
+  #adminDashboard > .admin-flow-grid .admin-module:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 32px rgba(20,20,20,.075);
+    border-color:rgba(220,38,38,.25);
+  }
+  #adminDashboard > .admin-flow-grid .module-icon{
+    width:40px;height:40px;border-radius:12px;
+    display:grid;place-items:center;
+    background:var(--surface-2);
+  }
+  #adminDashboard > .admin-flow-grid .module-icon svg{width:18px}
+  #adminDashboard > .admin-flow-grid .module-content{display:grid;gap:3px}
+  #adminDashboard > .admin-flow-grid .module-content h2{margin:0;font-size:15px;letter-spacing:-.02em}
+  #adminDashboard > .admin-flow-grid .module-content span{font-size:9px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:800}
+  #adminDashboard > .admin-flow-grid .module-content strong{font-size:28px;line-height:1;margin-top:3px;letter-spacing:-.04em}
+  #adminDashboard > .admin-flow-grid .module-content small{font-size:9px;color:var(--muted)}
+  #adminDashboard > .admin-flow-grid .module-arrow{display:none}
+
+  #adminDashboard > .admin-section{
+    margin:0;
+    min-width:0;
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    background:var(--surface);
+    box-shadow:0 8px 26px rgba(20,20,20,.035);
+  }
+  #adminDashboard > #users,
+  #adminDashboard > #claims,
+  #adminDashboard > #categories{grid-column:span 4}
+  #adminDashboard > #food,
+  #adminDashboard > #reports{grid-column:span 6}
+  #adminDashboard > .admin-section .admin-section-heading{margin:0 0 16px}
+  #adminDashboard > .admin-section .admin-section-heading h2{font-size:18px;letter-spacing:-.025em}
+  #adminDashboard > .admin-section .admin-stat-row{margin:0;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:9px}
+  #adminDashboard > .admin-section .mini-stat{
+    min-height:68px;
+    padding:11px 12px;
+    border-radius:13px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+  }
+  #adminDashboard > .admin-section .mini-stat span{font-size:9px}
+  #adminDashboard > .admin-section .mini-stat strong{font-size:22px;margin-top:4px}
+  #adminDashboard > .admin-section .expiry-notice,
+  #adminDashboard > .admin-section .reservation-notice,
+  #adminDashboard > .admin-section .report-note{margin-top:12px;border-radius:13px;padding:11px 12px}
+  #adminDashboard > .admin-section .expired-list,
+  #adminDashboard > .admin-section .category-list{margin-top:12px;max-height:190px;overflow:auto}
+  #adminDashboard > .admin-section .category-list{gap:7px}
+  #adminDashboard > .admin-section .category-pill{padding:7px 9px}
+
+  #adminDashboard > #adminControlCenter{
+    margin:0;
+    padding:0;
+    border:0;
+    background:transparent;
+    box-shadow:none;
+  }
+  #adminDashboard > #adminControlCenter > .admin-section-heading{
+    padding:4px 0 2px;
+    margin:0;
+  }
+  #adminDashboard > #adminControlCenter > .admin-section-heading h2{font-size:24px}
+  #adminDashboard > #adminControlCenter > .admin-section-heading p{max-width:700px}
+  #adminDashboard > #adminControlCenter .admin-control-tabs{
+    position:sticky;
+    top:10px;
+    z-index:10;
+    margin:14px 0 12px;
+    padding:8px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    background:color-mix(in srgb,var(--surface) 92%,transparent);
+    backdrop-filter:blur(12px);
+    box-shadow:0 8px 24px rgba(20,20,20,.07);
+  }
+  #adminDashboard > #adminControlCenter .admin-tab{
+    border-radius:10px;
+    padding:9px 11px;
+    font-size:10px;
+  }
+  #adminDashboard > #adminControlCenter .admin-panel{
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(20,20,20,.045);
+  }
+  #adminDashboard > #adminControlCenter .admin-panel-toolbar{align-items:center}
+  #adminDashboard > #adminControlCenter .admin-control-input,
+  #adminDashboard > #adminControlCenter .admin-control-select,
+  #adminDashboard > #adminControlCenter .admin-control-textarea{
+    border-radius:11px;
+  }
+  #adminDashboard > #adminControlCenter .admin-table-wrap{border-radius:14px}
+  #adminDashboard > #adminControlCenter .admin-table th{white-space:nowrap}
+  #adminDashboard > #adminControlCenter .admin-table td{padding:13px}
+  #adminDashboard > #adminControlCenter .admin-card{border-radius:16px}
+
+  @media(max-width:1100px){
+    #adminDashboard > .admin-flow-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    #adminDashboard > #users,#adminDashboard > #claims,#adminDashboard > #categories,
+    #adminDashboard > #food,#adminDashboard > #reports{grid-column:span 6}
+  }
+  @media(max-width:760px){
+    #adminDashboard{display:block;padding-bottom:30px}
+    #adminDashboard > *{margin-bottom:14px!important}
+    #adminDashboard > .dashboard-title-row{padding-top:4px;align-items:flex-start;gap:15px}
+    #adminDashboard > .dashboard-title-row h1{font-size:36px}
+    #adminDashboard > .admin-flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    #adminDashboard > .admin-flow-grid .admin-module{min-height:125px;padding:14px;border-radius:15px}
+    #adminDashboard > .admin-section{padding:15px;border-radius:16px}
+    #adminDashboard > #adminControlCenter .admin-control-tabs{top:4px;overflow:auto;flex-wrap:nowrap;scrollbar-width:none}
+    #adminDashboard > #adminControlCenter .admin-tab{white-space:nowrap;flex:0 0 auto}
+    #adminDashboard > #adminControlCenter .admin-panel{padding:13px;border-radius:16px}
+    #adminDashboard > #adminControlCenter .admin-panel-toolbar{display:grid;grid-template-columns:1fr}
+    #adminDashboard > #adminControlCenter .admin-control-input,
+    #adminDashboard > #adminControlCenter .admin-control-select{width:100%;min-width:0}
+  }
+  @media(max-width:430px){
+    #adminDashboard > .admin-flow-grid{grid-template-columns:1fr}
+    #adminDashboard > .admin-flow-grid .admin-module{min-height:108px}
+    #adminDashboard > .admin-section .admin-stat-row{grid-template-columns:1fr 1fr}
+  }
+
+
+.identity-review-block{margin-top:22px;border:1px solid var(--border);border-radius:16px;padding:16px;background:var(--surface-2)}.identity-review-heading{display:flex;justify-content:space-between;gap:15px;align-items:flex-start;margin-bottom:13px}.identity-review-heading h3{margin:3px 0 4px;font-size:18px}.identity-review-heading p{margin:0;font-size:10px}.identity-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px}.identity-modal.hidden{display:none}.identity-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.48);backdrop-filter:blur(3px)}.identity-modal-card{position:relative;width:min(900px,100%);max-height:92vh;overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:0 25px 80px rgba(0,0,0,.2)}.identity-modal-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.identity-modal-head h2{margin:3px 0 0;font-size:25px}.identity-modal-close{border:1px solid var(--border);background:var(--surface-2);border-radius:10px;width:36px;height:36px;cursor:pointer}.identity-applicant{margin:15px 0;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);font-size:11px}.identity-applicant strong{font-size:13px}.identity-images{display:grid;grid-template-columns:1fr 1fr;gap:14px}.identity-images figure{margin:0}.identity-images figcaption{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}.identity-image-frame{height:320px;border:1px solid var(--border);border-radius:14px;background:#111;display:grid;place-items:center;overflow:hidden}.identity-image-frame img{width:100%;height:100%;object-fit:contain}.identity-notes-label{display:grid;gap:6px;margin-top:15px;font-size:10px;font-weight:800}.identity-notes-label textarea{min-height:80px;resize:vertical;border:1px solid var(--border);border-radius:11px;padding:10px;background:var(--surface-2);color:var(--ink);font:inherit}.identity-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:14px}.identity-modal-actions .btn{min-width:150px;justify-content:center}@media(max-width:700px){.identity-images{grid-template-columns:1fr}.identity-image-frame{height:240px}.identity-modal-card{padding:16px}.identity-modal-actions{display:grid;grid-template-columns:1fr}.identity-modal-actions .btn{width:100%}}
+</style>
+
+<script src="../js/admin-workspace.js"></script>
+<script src="../js/admin-selects.js"></script>
+<script>
+const DASHBOARD_ROLES = Object.freeze({ ADMIN: 'admin', USER: 'user' });
+
+function hideDashboardViews() {
+  document.getElementById('adminDashboard')?.classList.add('hidden');
+  document.getElementById('userDashboard')?.classList.add('hidden');
+}
+
+function showDashboardView(role) {
+  hideDashboardViews();
+  document.body.classList.toggle('admin-workspace', role === DASHBOARD_ROLES.ADMIN);
+  if(role === DASHBOARD_ROLES.ADMIN) window.FRSSAdminWorkspace?.init();
+  if (role === DASHBOARD_ROLES.ADMIN) {
+    document.getElementById('adminDashboard')?.classList.remove('hidden');
+    return;
+  }
+  document.getElementById('userDashboard')?.classList.remove('hidden');
+}
+
+async function getDashboardProfile(userId) {
+  const { data, error } = await window.sb
+    .from('profiles')
+    .select('id, full_name, phone, role, account_status, verification_status, created_at, closed_at')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) throw new Error('Your user profile could not be found.');
+  return data;
+}
+
+function isAdminProfile(profile) {
+  return String(profile?.role || '').toLowerCase() === DASHBOARD_ROLES.ADMIN;
+}
+
+async function initializeDashboardSession() {
+  if (!window.sb) throw new Error('Supabase is not configured.');
+
+  const { data: authData, error: authError } = await window.sb.auth.getUser();
+  if (authError || !authData?.user) {
+    window.location.href = 'login.html';
+    return null;
+  }
+
+  const currentUser = authData.user;
+  window.currentUserId = currentUser.id;
+  window.currentUser = currentUser;
+  const profile = await getDashboardProfile(currentUser.id);
+
+  if (profile.account_status !== 'active') {
+    await window.sb.auth.signOut();
+    showToast(profile.closed_at ? 'This account has been closed.' : 'This account is not active. Please contact an administrator.');
+    setTimeout(() => { window.location.href = 'login.html'; }, 700);
+    return null;
+  }
+
+  // Fail closed: never leave an admin section visible while the role is loading.
+  const role = isAdminProfile(profile) ? DASHBOARD_ROLES.ADMIN : DASHBOARD_ROLES.USER;
+  window.dashboardRole = role;
+  window.dashboardProfile = profile;
+  showDashboardView(role);
+  if (role === DASHBOARD_ROLES.USER) {
+    const vb=document.getElementById('userVerificationBanner');
+    const v=profile.verification_status||'unverified';
+    if(vb && v!=='verified'){
+      vb.className='user-alert';
+      vb.innerHTML=`<i data-feather="shield"></i><div><strong>${v==='pending'?'Identity verification is under review.':'Identity verification is required.'}</strong><span>${v==='pending'?'An administrator is reviewing your ID and selfie.':'Verify your government ID and selfie before donating or claiming food.'}</span></div><a class="btn btn-outline" href="verification.html">${v==='pending'?'View status':'Verify identity'}</a>`;
+    }
+  }
+
+  return { currentUser, profile, role };
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const loading = document.getElementById('loadingDashboard');
+
+  // Both dashboards start hidden. Only the authenticated role may reveal one.
+  hideDashboardViews();
+
+  try {
+    const session = await initializeDashboardSession();
+    if (!session) return;
+
+    const { currentUser, profile, role } = session;
+    loading?.classList.add('hidden');
+
+    await refreshExpiredFood();
+
+    if (role === DASHBOARD_ROLES.ADMIN) {
+      await loadAdminDashboard();
+      await loadAdminControlCenter();
+    } else {
+      await loadUserDashboard(currentUser, profile);
+    }
+
+    if (window.sb && !window.dashboardRealtimeChannel) {
+      window.dashboardRealtimeChannel = window.sb.channel('frss-dashboard-live')
+        .on('postgres_changes',{event:'*',schema:'public',table:'food_posts'},()=>refreshDashboardLive())
+        .on('postgres_changes',{event:'*',schema:'public',table:'claims'},()=>refreshDashboardLive())
+        .subscribe();
+    }
+
+    if (window.feather) window.feather.replace({width:18,height:18,'stroke-width':1.8});
+  } catch (err) {
+    console.error(err);
+    hideDashboardViews();
+    if (loading) {
+      loading.classList.remove('hidden');
+      loading.textContent = 'Could not load the dashboard. Please check your account and try again.';
+    }
+  }
+});
+
+let dashboardRefreshTimer = null;
+async function refreshDashboardLive(){
+  clearTimeout(dashboardRefreshTimer);
+  dashboardRefreshTimer=setTimeout(async()=>{
+    try{
+      const session = await initializeDashboardSession();
+      if(!session)return;
+
+      await refreshExpiredFood();
+      if(session.role === DASHBOARD_ROLES.ADMIN){
+        await loadAdminDashboard();
+        await loadAdminControlCenter();
+      }else{
+        await loadUserDashboard(session.currentUser,session.profile);
+      }
+      if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+    }catch(err){
+      hideDashboardViews();
+      console.warn('Live dashboard refresh failed:',err);
+    }
+  },350);
+}
+
+const CLAIM_STEPS = [
+  ['pending','Pending'],
+  ['confirmed','Confirmed'],
+  ['ready_for_pickup','Ready for Pickup'],
+  ['picked_up','Picked Up'],
+  ['completed','Completed']
+];
+
+async function refreshExpiredFood(){
+  if(!window.sb)return;
+  try{
+    const {error}=await window.sb.rpc('expire_food_posts');
+    if(error) console.warn('Expiration refresh unavailable:',error);
+  }catch(err){console.warn('Expiration refresh failed:',err)}
+}
+
+function renderExpiredList(targetId, posts){
+  const el=document.getElementById(targetId);
+  if(!el)return;
+  if(!posts?.length){el.innerHTML='<span class="admin-muted">No expired food posts.</span>';return;}
+  el.innerHTML=posts.map(p=>`<div class="expired-item"><div><strong>${escapeHtml(p.food_name||'Food post')}</strong><small>Expired ${escapeHtml(formatExpiry(p.expiration_at))} · ${Number(p.quantity||0)} ${escapeHtml(p.unit||'units')}</small></div><span class="expired-badge">Expired</span></div>`).join('');
+}
+
+async function loadDonorClaimRequests(currentUser, profile){
+  const uid=currentUser.id;
+  const list=document.getElementById('userClaimRequests');
+  if(!list||!window.sb)return;
+  const {data:claims,error}=await window.sb.from('claims')
+    .select('id,claimant_id,quantity,claimed_at,status,food_post_id,food_posts(food_name,unit,pickup_location,reservation_expires_at,donor_id)')
+    .eq('status','pending')
+    .order('claimed_at',{ascending:true})
+    .limit(12);
+  if(error){console.warn('Could not load donor claim requests:',error);list.innerHTML='<span class="admin-muted">Claim requests are unavailable. Run the claim approval migration in Supabase.</span>';return;}
+  const donorClaims=(claims||[]).filter(c=>String(c.food_posts?.donor_id||'')===String(uid));
+  if(!donorClaims.length){list.innerHTML='<span class="admin-muted">No pending claim requests.</span>';return;}
+  const claimantIds=[...new Set(donorClaims.map(c=>c.claimant_id).filter(Boolean))];
+  const profileMap=new Map();
+  if(claimantIds.length){
+    const {data:profiles,error:profileError}=await window.sb.from('profiles').select('id,full_name').in('id',claimantIds);
+    if(profileError)console.warn('Could not load claimant names:',profileError);
+    (profiles||[]).forEach(p=>profileMap.set(String(p.id),p.full_name||'Community member'));
+  }
+  list.innerHTML=donorClaims.map(c=>{
+    const post=c.food_posts||{};
+    const claimant=profileMap.get(String(c.claimant_id))||'Community member';
+    return `<article class="claim-request-item"><div class="claim-request-main"><div class="claim-request-icon"><i data-feather="heart"></i></div><div><strong>${escapeHtml(post.food_name||'Food post')}</strong><p>${escapeHtml(claimant)} requested ${escapeHtml(String(c.quantity))} ${escapeHtml(post.unit||'unit(s)')}.</p><small>Requested ${escapeHtml(formatExpiry(c.claimed_at))} · hold ends ${escapeHtml(formatExpiry(post.reservation_expires_at))}</small></div></div><div class="claim-request-actions"><button class="btn btn-outline claim-decline-btn" type="button" data-claim-id="${escapeHtml(c.id)}">Decline</button><button class="btn btn-primary claim-accept-btn" type="button" data-claim-id="${escapeHtml(c.id)}">Accept</button></div></article>`;
+  }).join('');
+  if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+  list.querySelectorAll('.claim-accept-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const id=btn.dataset.claimId,row=btn.closest('.claim-request-item'),decline=row?.querySelector('.claim-decline-btn');
+    btn.disabled=true;if(decline)decline.disabled=true;
+    if(await updateClaimStatus(id,'confirmed')){showToast('Claim accepted. The recipient has been notified.');await loadUserDashboard(currentUser,profile);}
+    else {btn.disabled=false;if(decline)decline.disabled=false;}
+  }));
+  list.querySelectorAll('.claim-decline-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const id=btn.dataset.claimId,row=btn.closest('.claim-request-item'),accept=row?.querySelector('.claim-accept-btn');
+    btn.disabled=true;if(accept)accept.disabled=true;
+    if(await updateClaimStatus(id,'cancelled')){showToast('Claim declined. The food is available again.');await loadUserDashboard(currentUser,profile);}
+    else {btn.disabled=false;if(accept)accept.disabled=false;}
+  }));
+}
+
+async function loadUserDashboard(currentUser, profile) {
+  const uid = currentUser.id;
+  window.currentUserId = uid;
+  const firstName = (profile?.full_name || '').trim().split(/\s+/)[0];
+  if (firstName) document.getElementById('userWelcome').textContent = `Welcome back, ${firstName}`;
+
+  const countClaims = async (statuses) => {
+    const { count, error } = await window.sb.from('claims')
+      .select('*', { count: 'exact', head: true })
+      .eq('claimant_id', uid)
+      .in('status', statuses);
+    if (error) throw error;
+    return count || 0;
+  };
+
+  const [posts, activeClaims, completed, expiredPosts, reservedPosts] = await Promise.all([
+    window.sb.from('food_posts').select('*', { count: 'exact', head: true })
+      .eq('donor_id', uid).eq('status', 'available')
+      .then(({ count, error }) => { if (error) throw error; return count || 0; }),
+    countClaims(['pending', 'confirmed', 'ready_for_pickup', 'picked_up']),
+    countClaims(['completed']),
+    window.sb.from('food_posts').select('id,food_name,quantity,unit,expiration_at,status')
+      .eq('donor_id', uid).eq('status', 'expired').order('expiration_at', { ascending: false }).limit(8)
+      .then(({ data, error }) => { if (error) throw error; return data || []; }),
+    window.sb.from('food_posts').select('id,food_name,quantity,remaining_quantity,unit,expiration_at,reservation_expires_at,status')
+      .eq('donor_id', uid).eq('status', 'reserved').order('reservation_expires_at', { ascending: true }).limit(8)
+      .then(({ data, error }) => { if (error) throw error; return data || []; })
+  ]);
+  document.getElementById('userPostStat').textContent = posts;
+  document.getElementById('userClaimStat').textContent = activeClaims;
+  document.getElementById('userCompletedStat').textContent = completed;
+  document.getElementById('userExpiredStat').textContent = expiredPosts.length;
+  document.getElementById('userExpiryNotice')?.classList.toggle('hidden', expiredPosts.length === 0);
+  if(expiredPosts.length) document.getElementById('userExpiryText').textContent = `${expiredPosts.length} food post${expiredPosts.length===1?' has':'s have'} expired and ${expiredPosts.length===1?'is':'are'} no longer shown as available.`;
+  const snackbarExpired=document.getElementById('snackbarExpiredCount'); if(snackbarExpired) snackbarExpired.textContent=expiredPosts.length;
+  const snackbarReserved=document.getElementById('snackbarReservedCount'); if(snackbarReserved) snackbarReserved.textContent=reservedPosts.length;
+
+  await loadDonorClaimRequests(currentUser,profile);
+  await loadUserNotifications(uid);
+  setupNotificationRealtime(uid);
+  await loadUserEnhancements(currentUser, profile);
+  const markAll=document.getElementById('notificationMarkAll');
+  if(markAll&&!markAll.dataset.bound){markAll.dataset.bound='true';markAll.addEventListener('click',markAllNotificationsRead);}
+
+  const { data: recent, error } = await window.sb.from('claims')
+    .select('id,claimant_id,status,claimed_at,pickup_code,food_posts(food_name,pickup_location,reservation_expires_at,donor_id)')
+    .eq('claimant_id', uid)
+    .order('claimed_at', { ascending: false })
+    .limit(1);
+  if (error) throw error;
+  const claim = recent?.[0];
+  if (!claim) return;
+
+  const food = claim.food_posts || {};
+  document.getElementById('recentClaimName').textContent = food.food_name || 'Claimed food';
+  document.getElementById('recentClaimEmpty').classList.add('hidden');
+
+  const badge = document.getElementById('recentClaimBadge');
+  const stepIndex = CLAIM_STEPS.findIndex(([key]) => key === claim.status);
+  badge.textContent = claim.status === 'cancelled' ? 'Cancelled' : (CLAIM_STEPS[stepIndex]?.[1] || claim.status);
+  badge.classList.remove('hidden');
+
+  const steps = document.getElementById('recentClaimSteps');
+  if (claim.status !== 'cancelled') {
+    const progress = stepIndex < 0 ? 0 : (stepIndex / (CLAIM_STEPS.length - 1)) * 100;
+    steps.innerHTML = `<div class="status-track" aria-hidden="true"><div class="status-fill"></div></div>` + CLAIM_STEPS.map(([, label], i) => {
+      const cls = i < stepIndex ? 'done' : (i === stepIndex ? 'active' : '');
+      const icon = i < stepIndex ? 'check' : 'circle';
+      return `<span class="${cls}"><span class="status-dot"><i data-feather="${icon}"></i></span><small>${label}</small></span>`;
+    }).join('');
+    steps.style.setProperty('--status-progress', `${progress}%`);
+    steps.classList.remove('hidden');
+  }
+
+  const reservationBox=document.getElementById('recentClaimReservation');
+  const reservationText=reservationBox?.querySelector('span');
+  const actionRow=document.getElementById('recentClaimActions');
+  const readyBtn=document.getElementById('recentClaimReady');
+  const cancelBtn=document.getElementById('recentClaimCancel');
+  const activeReservation=['pending','confirmed','ready_for_pickup'].includes(claim.status);
+  if(reservationBox && reservationText && activeReservation && food.reservation_expires_at){
+    reservationText.textContent=claim.status==='pending' ? `Claim request sent to the donor. Your hold lasts until ${formatExpiry(food.reservation_expires_at)} while you wait for approval.` : `Claim approved. Reserved for you until ${formatExpiry(food.reservation_expires_at)}.`;
+    reservationBox.classList.remove('hidden');
+  } else reservationBox?.classList.add('hidden');
+  if(actionRow){
+    actionRow.classList.toggle('hidden',!activeReservation);
+    if(readyBtn){
+      readyBtn.classList.toggle('hidden',claim.status==='ready_for_pickup');
+      readyBtn.onclick=async()=>{readyBtn.disabled=true;if(await updateClaimStatus(claim.id,'ready_for_pickup')){showToast('The donor can now see that you are on your way.');await loadUserDashboard(currentUser,profile)}readyBtn.disabled=false};
+    }
+    if(cancelBtn){
+      cancelBtn.onclick=async()=>{cancelBtn.disabled=true;if(await updateClaimStatus(claim.id,'cancelled')){showToast('Reservation cancelled. The food is available again.');await loadUserDashboard(currentUser,profile)}cancelBtn.disabled=false};
+    }
+  }
+
+  if (food.pickup_location) {
+    document.getElementById('recentClaimLocation').textContent = food.pickup_location;
+    document.getElementById('recentClaimCopy').dataset.copy = food.pickup_location;
+    document.getElementById('recentClaimPickup').classList.remove('hidden');
+  }
+  const recentCodeBox=document.getElementById('recentClaimPickupCode');
+  const recentCodeValue=document.getElementById('recentClaimPickupCodeValue');
+  if(recentCodeBox && recentCodeValue && claim.pickup_code && ['confirmed','ready_for_pickup','picked_up'].includes(claim.status)){
+    recentCodeValue.textContent=claim.pickup_code;
+    recentCodeBox.classList.remove('hidden');
+  } else recentCodeBox?.classList.add('hidden');
+  if (window.feather) window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+
+async function getCount(table, filters = null) {
+  let q = window.sb.from(table).select('*', {count:'exact', head:true});
+  if (filters) {
+    Object.entries(filters).forEach(([column,value]) => q = q.eq(column,value));
+  }
+  const { count, error } = await q;
+  if (error) throw error;
+  return count || 0;
+}
+
+async function loadAdminDashboard() {
+  const [users, admins, food, availableFood, reservedFood, claimedFood, completedFood, expiredFood,
+         claims, pendingClaims, readyClaims, pickedClaims, completedClaims,
+         categories, activities, openFoodReports] = await Promise.all([
+    getCount('profiles'),
+    getCount('profiles',{role:'admin'}),
+    getCount('food_posts'),
+    getCount('food_posts',{status:'available'}),
+    getCount('food_posts',{status:'reserved'}),
+    getCount('food_posts',{status:'claimed'}),
+    getCount('food_posts',{status:'completed'}),
+    getCount('food_posts',{status:'expired'}),
+    getCount('claims'),
+    getCount('claims',{status:'pending'}),
+    getCount('claims',{status:'ready_for_pickup'}),
+    getCount('claims',{status:'picked_up'}),
+    getCount('claims',{status:'completed'}),
+    getCount('categories',{is_active:true}),
+    getCount('audit_logs'),
+    getCount('food_reports',{status:'open'})
+  ]);
+
+  const values = {
+    userCount:users,userSectionCount:`${users} users`,userStat:users,adminStat:admins,
+    regularUserStat:Math.max(users-admins,0),reportUserStat:users,
+    foodCount:food,foodSectionCount:`${food} posts`,reportFoodStat:food,
+    availableFoodStat:availableFood,reservedFoodStat:reservedFood,claimedFoodStat:claimedFood,completedFoodStat:completedFood,expiredFoodStat:expiredFood,
+    claimCount:claims,claimSectionCount:`${claims} claims`,reportClaimStat:claims,
+    pendingClaimStat:pendingClaims,readyClaimStat:readyClaims,pickedClaimStat:pickedClaims,completedClaimStat:completedClaims,
+    categoryCount:categories,categorySectionCount:`${categories} active categories`,
+    reportCount:activities,reportSectionCount:`${activities} activities`,activityStat:activities,openFoodReportsStat:openFoodReports
+  };
+  Object.entries(values).forEach(([id,value]) => { const el=document.getElementById(id); if(el) el.textContent=value; });
+
+  const {data: adminReserved,error:reservedError} = await window.sb.from('food_posts')
+    .select('id,food_name,quantity,remaining_quantity,unit,expiration_at,reservation_expires_at,status')
+    .eq('status','reserved').order('reservation_expires_at',{ascending:true}).limit(10);
+  if(reservedError) throw reservedError;
+  const adminReservedList=document.getElementById('adminReservedList');
+  if(adminReservedList) adminReservedList.innerHTML=(adminReserved||[]).length ? (adminReserved||[]).map(p=>`<div class="reservation-item"><div><strong>${escapeHtml(p.food_name||'Food post')}</strong><small>Being claimed · hold ends ${escapeHtml(formatExpiry(p.reservation_expires_at))}</small></div><span class="reservation-status">Reserved</span></div>`).join('') : '<span class="admin-muted">No active reservations.</span>';
+
+  const {data: adminExpired,error:expiredError} = await window.sb.from('food_posts')
+    .select('id,food_name,quantity,unit,expiration_at,status')
+    .eq('status','expired').order('expiration_at',{ascending:false}).limit(10);
+  if(expiredError) throw expiredError;
+  renderExpiredList('adminExpiredList', adminExpired || []);
+  const adminExpiryText=document.getElementById('adminExpiryText');
+  if(adminExpiryText) adminExpiryText.textContent = expiredFood ? `${expiredFood} expired food post${expiredFood===1?'':'s'} ${expiredFood===1?'is':'are'} hidden from public availability and retained for monitoring.` : 'No expired food posts are currently recorded.';
+
+  const {data: categoryRows,error} = await window.sb.from('categories')
+    .select('name,is_active')
+    .eq('is_active',true)
+    .order('name');
+  if (error) throw error;
+  const list=document.getElementById('categoryList');
+  list.innerHTML = (categoryRows||[]).map(c => `<span class="category-pill">${escapeHtml(c.name)} <small>Active</small></span>`).join('') || '<span class="admin-muted">No active categories.</span>';
+
+  const {data: reports,error: reportsError} = await window.sb.from('food_reports')
+    .select('id,food_post_id,reason,details,status,created_at,food_posts(food_name)')
+    .order('created_at',{ascending:false}).limit(12);
+  if(reportsError) throw reportsError;
+  const reportsList=document.getElementById('adminFoodReportsList');
+  if(reportsList) reportsList.innerHTML=(reports||[]).length ? reports.map(r=>`<div class="food-report-admin-item"><div><strong>${escapeHtml(r.food_posts?.food_name||'Food post')}</strong><small>${escapeHtml(r.details||'No additional details')} · ${escapeHtml(formatExpiry(r.created_at))}</small><span class="report-reason">${escapeHtml(r.reason)}</span></div><select data-report-id="${escapeHtml(r.id)}" aria-label="Report status"><option value="open" ${r.status==='open'?'selected':''}>Open</option><option value="reviewed" ${r.status==='reviewed'?'selected':''}>Reviewed</option><option value="resolved" ${r.status==='resolved'?'selected':''}>Resolved</option><option value="dismissed" ${r.status==='dismissed'?'selected':''}>Dismissed</option></select></div>`).join('') : '<span class="admin-muted">No food reports yet.</span>';
+  reportsList?.querySelectorAll('select[data-report-id]').forEach(select=>select.addEventListener('change',async()=>{
+    select.disabled=true;
+    const {error}=await window.sb.from('food_reports').update({status:select.value}).eq('id',select.dataset.reportId);
+    if(error){showToast(error.message||'Could not update report.');} else {showToast('Report status updated.');}
+    select.disabled=false;
+    const count=await getCount('food_reports',{status:'open'}); const stat=document.getElementById('openFoodReportsStat'); if(stat)stat.textContent=count;
+  }));
+
+  await loadAdminRescueAnalytics();
+  if (window.feather) window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+
+async function loadAdminRescueAnalytics(){
+  const {data,error}=await window.sb.rpc('admin_rescue_analytics');
+  if(error){console.warn('Could not load rescue analytics:',error);return;}
+  const d=data||{};
+  const totalClaims=Number(d.total_claims||0),completed=Number(d.completed_rescues||0);
+  const values={analyticsRescuedQuantity:Number(d.total_rescued_quantity||0),analyticsCompletedRescues:completed,analyticsActiveClaims:Number(d.active_claims||0),analyticsCompletionRate:totalClaims?`${((completed/totalClaims)*100).toFixed(1)}%`:'—'};
+  Object.entries(values).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value;});
+  const chart=document.getElementById('analyticsChart');if(!chart)return;
+  const days=Array.isArray(d.daily)?d.daily:[];
+  const max=Math.max(1,...days.map(x=>Number(x.claims||0)));
+  chart.innerHTML=days.map(x=>{const pct=Math.max(3,Number(x.claims||0)/max*100);const date=new Date(`${x.day}T00:00:00`);const label=date.getDate()===1||date.getDay()===1?date.toLocaleDateString([],{month:'short',day:'numeric'}):'';return `<div class="analytics-bar" style="height:${pct}%" title="${escapeHtml(x.day)} · ${escapeHtml(String(x.claims||0))} completed · ${escapeHtml(String(x.quantity||0))} rescued"><span>${escapeHtml(label)}</span></div>`;}).join('');
+}
+
+
+async function loadAdminControlCenter(){
+  if(!window.sb)return;
+  setupAdminTabs();
+  bindAdminControls();
+  await Promise.all([loadAdminUsers(),loadAdminIdentityVerifications(),loadAdminFood(),loadAdminClaims(),loadAdminCases(),loadAdminReputation(),loadAdminContent(),loadAdminSettings(),loadAdminAudit()]);
+  if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+function setupAdminTabs(){if(window.FRSSAdminWorkspace)return;document.querySelectorAll('.admin-tab').forEach(btn=>{if(btn.dataset.bound)return;btn.dataset.bound='1';btn.addEventListener('click',()=>{document.querySelectorAll('.admin-tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.admin-panel').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.adminTab)?.classList.add('active')})})}
+function bindAdminControls(){
+  [['adminUserSearch',loadAdminUsers],['adminUserStatusFilter',loadAdminUsers],['adminVerificationFilter',loadAdminUsers],['adminFoodSearch',loadAdminFood],['adminFoodStatusFilter',loadAdminFood],['adminModerationFilter',loadAdminFood],['adminClaimFilter',loadAdminClaims],['adminAuditType',loadAdminAudit]].forEach(([id,fn])=>{const e=document.getElementById(id);if(e&&!e.dataset.bound){e.dataset.bound='1';e.addEventListener(e.tagName==='INPUT'?'input':'change',()=>fn())}});
+  const pub=document.getElementById('publishAnnouncement');if(pub&&!pub.dataset.bound){pub.dataset.bound='1';pub.addEventListener('click',publishAdminAnnouncement)}
+  const loc=document.getElementById('addLocation');if(loc&&!loc.dataset.bound){loc.dataset.bound='1';loc.addEventListener('click',addAdminLocation)}
+  const save=document.getElementById('saveAdminSettings');if(save&&!save.dataset.bound){save.dataset.bound='1';save.addEventListener('click',saveAdminSettings)}
+}
+const adminDate=v=>v?new Date(v).toLocaleString():'';
+const adminPill=(v,red=false)=>`<span class="admin-badge-pill ${red?'red':''}">${escapeHtml(String(v||'').replaceAll('_',' '))}</span>`;
+async function loadAdminUsers(){const tbody=document.getElementById('adminUsersTable');if(!tbody)return;let q=window.sb.from('profiles').select('id,full_name,phone,role,account_status,verification_status,created_at').order('created_at',{ascending:false}).limit(300);const status=document.getElementById('adminUserStatusFilter')?.value||'all',ver=document.getElementById('adminVerificationFilter')?.value||'all',search=(document.getElementById('adminUserSearch')?.value||'').trim().toLowerCase();if(status!=='all')q=q.eq('account_status',status);if(ver!=='all')q=q.eq('verification_status',ver);const {data,error}=await q;if(error){tbody.innerHTML=`<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;return}const rows=(data||[]).filter(u=>!search||[u.full_name,u.phone,u.id].some(x=>String(x||'').toLowerCase().includes(search)));tbody.innerHTML=rows.map(u=>`<tr><td><strong>${escapeHtml(u.full_name||'Unnamed user')}</strong><small>${escapeHtml(u.phone||u.id)}</small></td><td>${adminPill(u.role)}</td><td>${adminPill(u.account_status,u.account_status!=='active')}</td><td>${adminPill(u.verification_status,u.verification_status==='rejected')}</td><td>${adminDate(u.created_at)}</td><td><div class="admin-row-actions">${u.verification_status==='verified'?`<button class="primary" data-user-action="verify" data-id="${u.id}">Unverify</button>`:u.verification_status==='pending'?`<button class="primary" data-review-user="${u.id}">Review</button>`:''}<button data-user-action="suspend" data-id="${u.id}">${u.account_status==='suspended'?'Restore':'Suspend'}</button><button data-user-action="ban" data-id="${u.id}">${u.account_status==='banned'?'Restore':'Ban'}</button></div></td></tr>`).join('')||'<tr><td colspan="6">No users match your filters.</td></tr>';tbody.querySelectorAll('[data-user-action]').forEach(b=>b.addEventListener('click',async()=>{const action=b.dataset.userAction;if(action==='verify'){await adminRpc('admin_set_verification',{p_user_id:b.dataset.id,p_status:'unverified',p_notes:'Verification reset by administrator'})}else{const target=b.textContent==='Restore'?'active':action==='ban'?'banned':'suspended';const reason=target==='active'?null:prompt(`Reason for ${target} user:`)||'Admin action';await adminRpc('admin_set_user_status',{p_user_id:b.dataset.id,p_status:target,p_reason:reason})}await loadAdminUsers();await loadAdminIdentityVerifications();await loadAdminAudit()}));tbody.querySelectorAll('[data-review-user]').forEach(b=>b.addEventListener('click',async()=>{const {data}=await window.sb.from('identity_verifications').select('id').eq('user_id',b.dataset.reviewUser).eq('status','pending').order('submitted_at',{ascending:false}).limit(1).maybeSingle();if(data?.id)openIdentityReview(data.id);else showToast('No pending identity submission was found for this user.')}));}
+
+async function loadAdminIdentityVerifications(){const tbody=document.getElementById('adminIdentityTable');if(!tbody)return;const {data,error}=await window.sb.from('identity_verifications').select('id,user_id,id_type,status,submitted_at,admin_notes,profiles(full_name,phone,profile_number)').eq('status','pending').order('submitted_at',{ascending:true}).limit(100);if(error){tbody.innerHTML=`<tr><td colspan="5">${escapeHtml(error.message)}</td></tr>`;return}const rows=data||[];const count=document.getElementById('pendingIdentityCount');if(count)count.textContent=`${rows.length} pending`;tbody.innerHTML=rows.map(v=>`<tr><td><strong>${escapeHtml(v.profiles?.full_name||'Unnamed user')}</strong><small>${escapeHtml(v.profiles?.phone||'')}</small></td><td>${escapeHtml(v.id_type)}</td><td>${adminDate(v.submitted_at)}</td><td>${adminPill(v.status)}</td><td><button class="primary" data-review-identity="${v.id}">Review</button></td></tr>`).join('')||'<tr><td colspan="5">No pending identity submissions.</td></tr>';tbody.querySelectorAll('[data-review-identity]').forEach(b=>b.addEventListener('click',()=>openIdentityReview(b.dataset.reviewIdentity)));}
+
+async function openIdentityReview(id){const {data,error}=await window.sb.from('identity_verifications').select('id,user_id,id_type,status,submitted_at,admin_notes,id_document_path,selfie_path,profiles(full_name,phone,profile_number)').eq('id',id).maybeSingle();if(error||!data){showToast(error?.message||'Verification submission not found.');return}const [idUrl,selfieUrl]=await Promise.all([window.sb.storage.from('identity-verification').createSignedUrl(data.id_document_path,600),window.sb.storage.from('identity-verification').createSignedUrl(data.selfie_path,600)]);if(idUrl.error||selfieUrl.error){showToast(idUrl.error?.message||selfieUrl.error?.message||'Could not open verification images.');return}document.getElementById('identityApplicant').innerHTML=`<strong>${escapeHtml(data.profiles?.full_name||'Unnamed user')}</strong> · Profile ${escapeHtml(String(data.profiles?.profile_number??'—'))} · ${escapeHtml(data.id_type)} · Submitted ${escapeHtml(adminDate(data.submitted_at))}`;document.getElementById('identityIdImage').src=idUrl.data.signedUrl;document.getElementById('identitySelfieImage').src=selfieUrl.data.signedUrl;document.getElementById('identityReviewNotes').value=data.admin_notes||'';const modal=document.getElementById('identityModal');modal.dataset.id=id;modal.classList.remove('hidden');if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});}
+function closeIdentityReview(){document.getElementById('identityModal')?.classList.add('hidden')}
+document.addEventListener('click',e=>{if(e.target.closest('[data-close-identity]'))closeIdentityReview()});
+async function reviewIdentity(status){const modal=document.getElementById('identityModal');const id=modal?.dataset.id;if(!id)return;const notes=document.getElementById('identityReviewNotes').value.trim()||null;const btn=status==='verified'?document.getElementById('identityApprove'):document.getElementById('identityReject');if(btn)btn.disabled=true;const ok=await adminRpc('admin_review_identity_verification',{p_verification_id:id,p_status:status,p_notes:notes});if(btn)btn.disabled=false;if(!ok)return;closeIdentityReview();showToast(status==='verified'?'Identity verification approved.':'Identity verification rejected.');await loadAdminUsers();await loadAdminIdentityVerifications();await loadAdminAudit()}
+document.getElementById('identityApprove')?.addEventListener('click',()=>reviewIdentity('verified'));document.getElementById('identityReject')?.addEventListener('click',()=>reviewIdentity('rejected'));
+
+async function loadAdminFood(){const tbody=document.getElementById('adminFoodTable');if(!tbody)return;let q=window.sb.from('food_posts').select('id,food_name,quantity,remaining_quantity,unit,status,moderation_status,created_at,profiles:donor_id(full_name)').order('created_at',{ascending:false}).limit(300);const st=document.getElementById('adminFoodStatusFilter')?.value||'all',mod=document.getElementById('adminModerationFilter')?.value||'all',search=(document.getElementById('adminFoodSearch')?.value||'').toLowerCase();if(st!=='all')q=q.eq('status',st);if(mod!=='all')q=q.eq('moderation_status',mod);const {data,error}=await q;if(error){tbody.innerHTML=`<tr><td colspan="6">${escapeHtml(error.message)}</td></tr>`;return}const rows=(data||[]).filter(p=>!search||String(p.food_name||'').toLowerCase().includes(search));tbody.innerHTML=rows.map(p=>`<tr><td><strong>${escapeHtml(p.food_name)}</strong><small>${escapeHtml(p.id)}</small></td><td>${escapeHtml(p.profiles?.full_name||'—')}</td><td>${escapeHtml(p.remaining_quantity)} / ${escapeHtml(p.quantity)} ${escapeHtml(p.unit||'')}</td><td>${adminPill(p.status)}</td><td>${adminPill(p.moderation_status,p.moderation_status!=='approved')}</td><td><div class="admin-row-actions"><button class="primary" data-food-action="approve" data-id="${p.id}">Approve</button><button data-food-action="hide" data-id="${p.id}">Hide</button><button data-food-action="archive" data-id="${p.id}">Archive</button><button data-food-action="restore" data-id="${p.id}">Restore</button></div></td></tr>`).join('')||'<tr><td colspan="6">No food posts match your filters.</td></tr>';tbody.querySelectorAll('[data-food-action]').forEach(b=>b.addEventListener('click',async()=>{const action=b.dataset.foodAction;const reason=action==='archive'||action==='hide'||action==='approve'?prompt('Optional reason:')||null:null;await adminRpc('admin_moderate_food',{p_food_id:b.dataset.id,p_action:action,p_reason:reason});await loadAdminFood();await loadAdminAudit()}))}
+async function loadAdminClaims(){const tbody=document.getElementById('adminClaimsTable');if(!tbody)return;let q=window.sb.from('claims').select('id,quantity,status,issue_status,claimed_at,profiles:claimant_id(full_name),food_posts(id,food_name,donor_id,profiles:donor_id(full_name))').order('claimed_at',{ascending:false}).limit(300);const st=document.getElementById('adminClaimFilter')?.value||'all';if(st!=='all')q=q.eq('status',st);const {data,error}=await q;if(error){tbody.innerHTML=`<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;return}tbody.innerHTML=(data||[]).map(c=>`<tr><td><strong>${escapeHtml(c.food_posts?.food_name||'—')}</strong><small>${escapeHtml(c.id)}</small></td><td>${escapeHtml(c.profiles?.full_name||'—')}</td><td>${escapeHtml(c.food_posts?.profiles?.full_name||'—')}</td><td>${escapeHtml(c.quantity)}</td><td>${adminPill(c.status,c.status==='cancelled')}</td><td>${adminPill(c.issue_status||'none',c.issue_status==='open')}</td><td><div class="admin-row-actions">${['pending','confirmed','ready_for_pickup'].includes(c.status)?`<button data-claim-action="noshow" data-id="${c.id}">No-show</button>`:''}<button data-claim-action="report" data-id="${c.id}">Report</button></div></td></tr>`).join('')||'<tr><td colspan="7">No claims match your filter.</td></tr>';tbody.querySelectorAll('[data-claim-action]').forEach(b=>b.addEventListener('click',async()=>{if(b.dataset.claimAction==='noshow'){const reason=prompt('No-show reason:','Recipient did not arrive')||'Recipient did not arrive';await adminRpc('admin_no_show',{p_claim_id:b.dataset.id,p_reason:reason});await loadAdminClaims();await loadAdminCases()}else{const reason=prompt('Problem report reason:','other')||'other';const details=prompt('Details:')||null;const {error}=await window.sb.from('claim_reports').insert({claim_id:b.dataset.id,reporter_id:window.currentUserId,reason:reason,details});if(error)showToast(error.message);else showToast('Claim report created.');await loadAdminCases()}}))}
+async function loadAdminCases(){const tbody=document.getElementById('adminCasesTable');if(!tbody)return;const {data,error}=await window.sb.from('admin_cases').select('id,case_number,source_type,priority,status,subject,created_at').order('created_at',{ascending:false}).limit(200);if(error){tbody.innerHTML=`<tr><td colspan="7">${escapeHtml(error.message)}</td></tr>`;return}const counts={open:0,investigating:0,resolved:0};(data||[]).forEach(x=>counts[x.status]=(counts[x.status]||0)+1);['open','investigating','resolved'].forEach(k=>{const e=document.getElementById('adminCase'+k[0].toUpperCase()+k.slice(1));if(e)e.textContent=counts[k]||0});const open=document.getElementById('adminOpenCasesCount');if(open)open.textContent=`${(counts.open||0)+(counts.investigating||0)} open cases`;const [{count:ns},{count:can}]=await Promise.all([window.sb.from('claims').select('id',{count:'exact',head:true}).not('no_show_at','is',null),window.sb.from('claims').select('id',{count:'exact',head:true}).not('cancelled_at','is',null)]);document.getElementById('adminNoShowStat').textContent=ns||0;document.getElementById('adminCancellationStat').textContent=can||0;tbody.innerHTML=(data||[]).map(c=>`<tr><td>#${c.case_number}</td><td>${adminPill(c.source_type)}</td><td>${adminPill(c.priority,c.priority==='urgent')}</td><td>${adminPill(c.status,c.status==='open')}</td><td>${escapeHtml(c.subject)}</td><td>${adminDate(c.created_at)}</td><td><div class="admin-row-actions"><button class="primary" data-case-id="${c.id}">Resolve</button></div></td></tr>`).join('')||'<tr><td colspan="7">No admin cases yet.</td></tr>';tbody.querySelectorAll('[data-case-id]').forEach(b=>b.addEventListener('click',async()=>{const resolution=prompt('Resolution:')||'';await adminRpc('admin_update_case',{p_case_id:b.dataset.caseId,p_status:'resolved',p_resolution:resolution,p_assignee:null});await loadAdminCases();await loadAdminAudit()}))}
+async function loadAdminReputation(){const tbody=document.getElementById('adminRatingsTable');if(!tbody)return;const {data,error}=await window.sb.from('reputation_ratings').select('rating,feedback,created_at,profiles:rated_user_id(full_name),claim_id').order('created_at',{ascending:false}).limit(200);if(error){tbody.innerHTML=`<tr><td colspan="5">${escapeHtml(error.message)}</td></tr>`;return}document.getElementById('adminRatingCount').textContent=(data||[]).length;const avg=(data||[]).reduce((a,x)=>a+Number(x.rating||0),0)/(data||[]).length;document.getElementById('adminAverageRating').textContent=(data||[]).length?avg.toFixed(1):'—';document.getElementById('adminClaimReportCount').textContent=await getCount('claim_reports',{status:'open'});tbody.innerHTML=(data||[]).map(r=>`<tr><td>${escapeHtml(r.profiles?.full_name||'—')}</td><td>${'★'.repeat(Number(r.rating||0))}</td><td>${escapeHtml(r.feedback||'—')}</td><td>${escapeHtml(r.claim_id)}</td><td>${adminDate(r.created_at)}</td></tr>`).join('')||'<tr><td colspan="5">No ratings yet.</td></tr>'}
+async function loadAdminContent(){const {data:ann,error}=await window.sb.from('admin_announcements').select('id,title,message,audience,is_active,starts_at').order('created_at',{ascending:false}).limit(100);const tbody=document.getElementById('adminAnnouncementsTable');if(error){tbody.innerHTML=`<tr><td colspan="5">${escapeHtml(error.message)}</td></tr>`}else tbody.innerHTML=(ann||[]).map(a=>`<tr><td><strong>${escapeHtml(a.title)}</strong><small>${escapeHtml(a.message)}</small></td><td>${adminPill(a.audience)}</td><td>${adminPill(a.is_active?'active':'inactive')}</td><td>${adminDate(a.starts_at)}</td><td><button class="admin-row-actions" data-ann-id="${a.id}">Toggle</button></td></tr>`).join('')||'<tr><td colspan="5">No announcements.</td></tr>';tbody?.querySelectorAll('[data-ann-id]').forEach(b=>b.addEventListener('click',async()=>{const id=b.dataset.annId;const row=(ann||[]).find(x=>x.id===id);await window.sb.from('admin_announcements').update({is_active:!row.is_active}).eq('id',id);await loadAdminContent() }));const locList=document.getElementById('adminLocationsList');const {data:locs}=await window.sb.from('pickup_locations').select('id,name,address,is_active').order('name');if(locList)locList.innerHTML=(locs||[]).map(l=>`<span class="admin-chip">${escapeHtml(l.name)}${l.address?' · '+escapeHtml(l.address):''}</span>`).join('')||'<span class="admin-muted">No locations configured.</span>'}
+async function loadAdminSettings(){const {data}=await window.sb.from('system_settings').select('key,value');const map=Object.fromEntries((data||[]).map(x=>[x.key,x.value]));document.getElementById('settingGrace').value=Number(map.pickup_grace_minutes??60);document.getElementById('settingMaxClaims').value=Number(map.max_claims_per_user??10);document.getElementById('settingAutoExpire').checked=map.auto_expire_enabled===true||map.auto_expire_enabled==='true';document.getElementById('settingModeration').checked=map.require_food_moderation===true||map.require_food_moderation==='true'}
+async function loadAdminAudit(){const tbody=document.getElementById('adminAuditTable');if(!tbody)return;let q=window.sb.from('audit_logs').select('id,action,entity_type,entity_id,details,created_at,profiles:actor_id(full_name)').order('created_at',{ascending:false}).limit(150);const type=document.getElementById('adminAuditType')?.value||'all';if(type!=='all')q=q.eq('entity_type',type);const {data,error}=await q;if(error){tbody.innerHTML=`<tr><td colspan="5">${escapeHtml(error.message)}</td></tr>`;return}tbody.innerHTML=(data||[]).map(a=>`<tr><td>${adminDate(a.created_at)}</td><td>${escapeHtml(a.profiles?.full_name||'System')}</td><td>${escapeHtml(a.action)}</td><td>${escapeHtml(a.entity_type)}<small>${escapeHtml(a.entity_id||'')}</small></td><td>${escapeHtml(JSON.stringify(a.details||{}))}</td></tr>`).join('')||'<tr><td colspan="5">No audit events yet.</td></tr>'}
+async function adminRpc(fn,args){const {error}=await safeRequest(()=>window.sb.rpc(fn,args));if(error){showToast(error.message||'Admin action failed.');return false}showToast('Admin action completed.');return true}
+async function publishAdminAnnouncement(){const title=document.getElementById('announcementTitle').value.trim(),message=document.getElementById('announcementMessage').value.trim(),audience=document.getElementById('announcementAudience').value;if(!title||!message){showToast('Add a title and message.');return}const {error}=await window.sb.from('admin_announcements').insert({title,message,audience,created_by:window.currentUserId});if(error)showToast(error.message);else{document.getElementById('announcementTitle').value='';document.getElementById('announcementMessage').value='';showToast('Announcement published.');await loadAdminContent()}}
+async function addAdminLocation(){const name=document.getElementById('locationName').value.trim(),address=document.getElementById('locationAddress').value.trim();if(!name){showToast('Enter a location name.');return}const {error}=await window.sb.from('pickup_locations').insert({name,address});if(error)showToast(error.message);else{document.getElementById('locationName').value='';document.getElementById('locationAddress').value='';showToast('Pickup location added.');await loadAdminContent()}}
+async function saveAdminSettings(){const items=[['pickup_grace_minutes',Number(document.getElementById('settingGrace').value||60)],['max_claims_per_user',Number(document.getElementById('settingMaxClaims').value||10)],['auto_expire_enabled',document.getElementById('settingAutoExpire').checked],['require_food_moderation',document.getElementById('settingModeration').checked]];let ok=true;for(const [key,value] of items){const saved=await adminRpc('admin_update_setting',{p_key:key,p_value:value});if(!saved)ok=false;}if(ok)showToast('System settings saved.');else showToast('Some settings could not be saved.');await loadAdminSettings();await loadAdminAudit()}
+
+
+async function loadUserEnhancements(currentUser, profile){
+  await Promise.all([
+    loadUserProfilePanel(currentUser, profile),
+    loadUserActivityHistory(currentUser.id),
+    loadUserReportsHistory(currentUser.id),
+    loadUserReputationSummary(currentUser.id)
+  ]);
+  bindUserEnhancementControls(currentUser.id);
+  await loadNotificationInbox(currentUser.id);
+  await loadUserAnnouncements(currentUser.id);
+  if(window.feather) window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+
+let userActivityCache=[];
+let userNotificationCache=[];
+
+function bindUserEnhancementControls(uid){
+  const profileForm=document.getElementById('profileForm');
+  if(profileForm && !profileForm.dataset.bound){
+    profileForm.dataset.bound='1';
+    profileForm.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const btn=document.getElementById('saveProfileBtn');
+      const name=document.getElementById('profileFullName')?.value.trim();
+      const phone=document.getElementById('profilePhone')?.value.trim()||null;
+      if(!name){showToast('Please enter your full name.');return;}
+      btn.disabled=true;btn.textContent='Saving…';
+      const {error}=await safeRequest(()=>window.sb.rpc('update_my_profile',{p_full_name:name,p_phone:phone}));
+      btn.disabled=false;btn.textContent='Save profile';
+      if(error){showToast(error.message||'Could not save your profile.');return;}
+      showToast('Profile updated.');
+      window.dashboardProfile={...window.dashboardProfile,full_name:name,phone};
+      const firstName=name.split(/\s+/)[0];
+      if(firstName)document.getElementById('userWelcome').textContent=`Welcome back, ${firstName}`;
+    });
+  }
+  const close=document.getElementById('closeAccountBtn');
+  if(close && !close.dataset.bound){
+    close.dataset.bound='1';
+    close.addEventListener('click',async()=>{
+      const ok=confirm('Close your account? Your active claims will be cancelled, active food posts archived, and your profile will be anonymized. Historical transaction records will remain for auditability.');
+      if(!ok)return;
+      close.disabled=true;close.textContent='Closing account…';
+      const {error}=await safeRequest(()=>window.sb.rpc('close_my_account'));
+      if(error){showToast(error.message||'Could not close your account.');close.disabled=false;close.textContent='Close account';return;}
+      await window.sb.auth.signOut();
+      window.location.href='login.html';
+    });
+  }
+  const activityFilter=document.getElementById('activityFilter');
+  if(activityFilter && !activityFilter.dataset.bound){
+    activityFilter.dataset.bound='1';
+    activityFilter.addEventListener('change',()=>renderUserActivityHistory(activityFilter.value));
+  }
+  const notificationFilter=document.getElementById('notificationFilter');
+  if(notificationFilter && !notificationFilter.dataset.bound){
+    notificationFilter.dataset.bound='1';
+    notificationFilter.addEventListener('change',()=>renderNotificationInbox());
+  }
+  const bottom=document.getElementById('notificationMarkAllBottom');
+  if(bottom && !bottom.dataset.bound){
+    bottom.dataset.bound='1';
+    bottom.addEventListener('click',async()=>{await markAllNotificationsRead();await loadNotificationInbox(uid);});
+  }
+}
+
+async function loadUserProfilePanel(currentUser, profile){
+  const email=document.getElementById('profileEmail');
+  const name=document.getElementById('profileFullName');
+  const phone=document.getElementById('profilePhone');
+  const verification=document.getElementById('profileVerificationBadge');
+  const verificationText=document.getElementById('accountVerificationText');
+  const status=document.getElementById('profileStatusBadge');
+  const since=document.getElementById('accountMemberSince');
+  if(email)email.value=currentUser.email||'';
+  if(name)name.value=profile.full_name||'';
+  if(phone)phone.value=profile.phone||'';
+  const v=profile.verification_status||'unverified';
+  if(verification)verification.textContent=v;
+  if(verificationText)verificationText.textContent=v.replace(/_/g,' ');
+  if(status)status.textContent=profile.account_status||'active';
+  if(since)since.textContent=profile.created_at?new Date(profile.created_at).toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'}):'—';
+  const help=document.getElementById('profileHelp');
+  if(help)help.textContent=v==='verified'?'Your account is verified and eligible to post and claim food.':'Your account must be verified before you can post or claim food.';
+}
+
+async function loadUserActivityHistory(uid){
+  const base='id,claimant_id,quantity,status,claimed_at,confirmed_at,ready_at,picked_up_at,completed_at,pickup_code,food_post_id,food_posts(food_name,unit,pickup_location,donor_id,profiles:donor_id(full_name))';
+  const queries=[window.sb.from('claims').select(base).eq('claimant_id',uid).order('claimed_at',{ascending:false}).limit(100)];
+  queries.push(window.sb.from('claims').select(base.replace('food_posts(', 'food_posts!inner(')).eq('food_posts.donor_id',uid).order('claimed_at',{ascending:false}).limit(100));
+  const results=await Promise.all(queries);
+  const errors=results.map(r=>r.error).filter(Boolean);
+  if(errors.length){console.warn('Could not load activity history:',errors[0]);const el=document.getElementById('userActivityHistory');if(el)el.innerHTML='<span class="admin-muted">Activity history is unavailable.</span>';return;}
+  const map=new Map();results.flatMap(r=>r.data||[]).forEach(c=>map.set(String(c.id),c));
+  userActivityCache=[...map.values()].sort((a,b)=>new Date(b.claimed_at)-new Date(a.claimed_at)).slice(0,100);
+  renderUserActivityHistory(document.getElementById('activityFilter')?.value||'all');
+}
+
+function renderUserActivityHistory(filter='all'){
+  const list=document.getElementById('userActivityHistory');
+  if(!list)return;
+  const uid=window.currentUserId;
+  let rows=userActivityCache||[];
+  rows=rows.filter(c=>{
+    const isDonor=String(c.food_posts?.donor_id||'')===String(uid);
+    const isClaimant=String(c.claimant_id||'')===String(uid);
+    if(filter==='donations')return isDonor;
+    if(filter==='claims')return isClaimant;
+    if(filter==='completed')return c.status==='completed';
+    if(filter==='cancelled')return c.status==='cancelled';
+    return isDonor||isClaimant;
+  });
+  const count=document.getElementById('activityHistoryCount');if(count)count.textContent=`${rows.length} record${rows.length===1?'':'s'}`; const snack=document.getElementById('snackbarActivityCount'); if(snack)snack.textContent=rows.length;
+  if(!rows.length){list.innerHTML='<span class="admin-muted">No activity matches this filter.</span>';return;}
+  const ratings=(window.userRatings||[]);
+  list.innerHTML=rows.map(c=>{
+    const post=c.food_posts||{};
+    const isDonor=String(post.donor_id||'')===String(uid);
+    const roleText=isDonor?'Donation':'Claim';
+    const ratedUser=isDonor?c.claimant_id:post.donor_id;
+    const alreadyRated=ratings.some(r=>String(r.claim_id)===String(c.id)&&String(r.rated_user_id)===String(ratedUser));
+    let actions='';
+    if(c.status==='ready_for_pickup' && isDonor){
+      actions=`<div class="pickup-code-box"><span>Ask for code</span><strong>${escapeHtml(c.pickup_code||'------')}</strong></div><button class="btn btn-primary verify-pickup-btn" data-id="${escapeHtml(c.id)}" type="button">Verify pickup</button>`;
+    } else if(c.status==='picked_up' && isDonor){
+      actions=`<button class="btn btn-primary complete-claim-btn" data-id="${escapeHtml(c.id)}" type="button">Complete rescue</button>`;
+    } else if(c.status==='completed' && !alreadyRated && ratedUser){
+      actions=`<button class="btn btn-outline rate-user-btn" data-id="${escapeHtml(c.id)}" data-rated-user="${escapeHtml(ratedUser)}" data-rated-name="${escapeHtml(isDonor?'Recipient':'Donor')}" type="button">Rate ${isDonor?'recipient':'donor'}</button>`;
+    }
+    if(!isDonor && ['confirmed','ready_for_pickup','picked_up'].includes(c.status) && c.pickup_code){
+      actions+=`<div class="pickup-code-box"><span>Your pickup code</span><strong>${escapeHtml(c.pickup_code)}</strong></div>`;
+    }
+    if(['pending','confirmed','ready_for_pickup','picked_up','completed'].includes(c.status)) actions+=`<button class="btn btn-outline report-claim-btn" data-id="${escapeHtml(c.id)}" type="button">Report issue</button>`;
+    return `<article class="activity-item"><div class="activity-main"><div class="activity-icon"><i data-feather="${isDonor?'package':'heart'}"></i></div><div><strong>${escapeHtml(post.food_name||'Food post')}</strong><p>${roleText} · ${escapeHtml(String(c.quantity))} ${escapeHtml(post.unit||'unit(s)')} · <span class="admin-badge-pill">${escapeHtml(c.status.replace(/_/g,' '))}</span></p><small>${escapeHtml(formatExpiry(c.claimed_at))}${post.pickup_location?' · '+escapeHtml(post.pickup_location):''}</small></div></div><div class="activity-actions">${actions||`<span class="admin-muted">${c.status==='completed'?'Completed':'In progress'}</span>`}</div></article>`;
+  }).join('');
+  list.querySelectorAll('.verify-pickup-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const code=prompt('Enter the pickup code shown by the recipient:');
+    if(!code)return;
+    btn.disabled=true;
+    const {error}=await safeRequest(()=>window.sb.rpc('update_claim_status',{p_claim_id:btn.dataset.id,p_status:'picked_up',p_pickup_code:code.trim()}));
+    if(error)showToast(error.message||'Pickup code could not be verified.');
+    else {showToast('Pickup verified.');await loadUserActivityHistory(window.currentUserId);await loadUserDashboard(window.currentUser,window.dashboardProfile);}
+    btn.disabled=false;
+  }));
+  list.querySelectorAll('.complete-claim-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    btn.disabled=true;
+    if(await updateClaimStatus(btn.dataset.id,'completed')){showToast('Rescue completed.');await loadUserActivityHistory(window.currentUserId);await loadUserReputationSummary(window.currentUserId);await loadUserDashboard(window.currentUser,window.dashboardProfile);}
+    btn.disabled=false;
+  }));
+  list.querySelectorAll('.rate-user-btn').forEach(btn=>btn.addEventListener('click',async()=>openRatingPrompt(btn.dataset.id,btn.dataset.ratedUser,btn.dataset.ratedName)));
+  list.querySelectorAll('.report-claim-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const reason=prompt('Report reason (food_unavailable, wrong_quantity, food_unsafe, donor_no_show, recipient_no_show, wrong_location, other):','other');
+    const allowed=['food_unavailable','wrong_quantity','food_unsafe','donor_no_show','recipient_no_show','wrong_location','other'];
+    if(!reason||!allowed.includes(reason.trim())){if(reason)showToast('Please use one of the listed report reasons.');return;}
+    const details=prompt('Additional details:','')||null;
+    const {error}=await window.sb.from('claim_reports').insert({claim_id:btn.dataset.id,reporter_id:window.currentUserId,reason:reason.trim(),details});
+    if(error)showToast(error.message||'Could not submit report.');else{showToast('Report submitted.');await loadUserReportsHistory(window.currentUserId);}
+  }));
+  if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+
+async function openRatingPrompt(claimId,ratedUserId,label){
+  const rating=Number(prompt(`Rate this ${String(label||'community member').toLowerCase()} from 1 to 5:`,'5'));
+  if(!Number.isInteger(rating)||rating<1||rating>5){showToast('Rating must be a whole number from 1 to 5.');return;}
+  const feedback=prompt('Optional feedback:','')||null;
+  const {error}=await window.sb.rpc('submit_reputation_rating',{p_claim_id:claimId,p_rated_user_id:ratedUserId,p_rating:rating,p_feedback:feedback});
+  if(error){showToast(error.message||'Could not submit rating.');return;}
+  showToast('Thank you for your feedback.');
+  await loadUserReputationSummary(window.currentUserId);
+  await loadUserActivityHistory(window.currentUserId);
+}
+
+async function loadUserReputationSummary(uid){
+  const {data,error}=await window.sb.from('reputation_ratings').select('claim_id,rated_user_id,rating,feedback,created_at').eq('rater_id',uid).order('created_at',{ascending:false});
+  if(error){console.warn('Could not load reputation summary:',error);window.userRatings=[];return;}
+  window.userRatings=data||[];
+  const completed=await window.sb.from('claims').select('id',{count:'exact',head:true}).eq('claimant_id',uid).eq('status','completed');
+  const rated=await window.sb.from('reputation_ratings').select('rating',{count:'exact',head:false}).eq('rated_user_id',uid);
+  const avg=(rated.data||[]).reduce((sum,r)=>sum+Number(r.rating||0),0)/(rated.data||[]).length;
+  const count=document.getElementById('accountCompletedCount');if(count)count.textContent=completed.count||0;
+  const avgEl=document.getElementById('accountAverageRating');if(avgEl)avgEl.textContent=(rated.data||[]).length?avg.toFixed(1)+' ★':'—';
+}
+
+async function loadUserReportsHistory(uid){
+  const list=document.getElementById('userReportsHistory');
+  const [{data:foodReports,error:foodError},{data:claimReports,error:claimError}]=await Promise.all([
+    window.sb.from('food_reports').select('id,reason,details,status,created_at,food_posts(food_name)').eq('reporter_id',uid).order('created_at',{ascending:false}).limit(50),
+    window.sb.from('claim_reports').select('id,reason,details,status,created_at,claims(food_post_id,food_posts(food_name))').eq('reporter_id',uid).order('created_at',{ascending:false}).limit(50)
+  ]);
+  if(foodError||claimError){if(list)list.innerHTML='<span class="admin-muted">Your reports are unavailable.</span>';return;}
+  const rows=[...(foodReports||[]).map(r=>({...r,kind:'Food report',name:r.food_posts?.food_name||'Food post'})),...(claimReports||[]).map(r=>({...r,kind:'Claim report',name:r.claims?.food_posts?.food_name||'Claim'}))].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  const count=document.getElementById('myReportsCount');if(count)count.textContent=`${rows.length} report${rows.length===1?'':'s'}`; const snack=document.getElementById('snackbarReportsCount'); if(snack)snack.textContent=rows.length;
+  if(!list)return; list.innerHTML=rows.length?rows.map(r=>`<article class="report-history-item"><div><strong>${escapeHtml(r.kind)} · ${escapeHtml(r.name)}</strong><small>${escapeHtml(r.reason)} · ${escapeHtml(formatExpiry(r.created_at))}</small><small>${escapeHtml(r.details||'No additional details')}</small></div><span class="admin-badge-pill report-status">${escapeHtml(r.status)}</span></article>`).join(''):'<span class="admin-muted">You have not submitted any reports.</span>';
+}
+
+async function loadNotificationInbox(uid){
+  const {data,error}=await window.sb.from('notifications').select('id,claim_id,type,title,message,is_read,created_at').eq('user_id',uid).order('created_at',{ascending:false}).limit(100);
+  if(error){const list=document.getElementById('userNotificationsInbox');if(list)list.innerHTML='<span class="admin-muted">Notification inbox is unavailable.</span>';return;}
+  userNotificationCache=data||[];
+  renderNotificationInbox();
+}
+
+function renderNotificationInbox(){
+  const list=document.getElementById('userNotificationsInbox');if(!list)return;
+  const filter=document.getElementById('notificationFilter')?.value||'all';
+  const rows=userNotificationCache.filter(n=>filter==='unread'?!n.is_read:filter==='read'?n.is_read:true);
+  list.innerHTML=rows.length?rows.map(n=>`<article class="notification-item ${n.is_read?'is-read':''}" data-notification-id="${escapeHtml(n.id)}"><div class="notification-icon"><i data-feather="${escapeHtml(notificationTypeIcon(n.type))}"></i></div><div class="notification-copy"><strong>${escapeHtml(n.title||'Notification')}</strong><p>${escapeHtml(n.message||'')}</p><small>${escapeHtml(formatNotificationTime(n.created_at))}</small></div>${n.is_read?'':'<button class="btn btn-outline notification-inbox-read" type="button">Mark read</button>'}</article>`).join(''):'<span class="admin-muted">No notifications match this filter.</span>';
+  list.querySelectorAll('.notification-inbox-read').forEach(btn=>btn.addEventListener('click',async()=>{const id=btn.closest('.notification-item')?.dataset.notificationId;if(!id)return;btn.disabled=true;const {error}=await window.sb.from('notifications').update({is_read:true}).eq('id',id);if(error){showToast(error.message||'Could not mark notification as read.');btn.disabled=false;return;}await loadNotificationInbox(window.currentUserId);await loadUserNotifications(window.currentUserId);}));
+  if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+
+async function loadUserAnnouncements(uid){
+  // Non-admin users should never receive admin-only announcements. Donors and
+  // recipients are both regular FRSS users, so both audiences apply here.
+  const {data,error}=await window.sb.from('admin_announcements').select('id,title,message,audience,starts_at,ends_at').eq('is_active',true).in('audience',['all','donors','recipients']).order('starts_at',{ascending:false}).limit(8);
+  if(error||!data?.length)return;
+  const inbox=document.getElementById('userNotificationsInbox');
+  if(!inbox)return;
+  const announcementHtml=data.map(a=>`<article class="notification-item is-read"><div class="notification-icon"><i data-feather="megaphone"></i></div><div class="notification-copy"><strong>${escapeHtml(a.title)}</strong><p>${escapeHtml(a.message)}</p><small>System announcement · ${escapeHtml(formatExpiry(a.starts_at))}</small></div></article>`).join('');
+  inbox.insertAdjacentHTML('afterbegin',announcementHtml);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  }[char]));
+}
+</script>
+</body>
+</html>

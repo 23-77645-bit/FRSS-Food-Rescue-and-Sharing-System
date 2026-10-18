@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" type="image/png" href="../img/logo.png">
+<link rel="apple-touch-icon" href="../img/logo.png">
+<title>Profile & settings — FRSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+<script src="../js/vendor/feather.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../js/config.js"></script>
+<style>
+.account-page{max-width:900px;margin:0 auto;padding-bottom:70px}.account-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin:20px 0 24px}.account-head h1{margin:5px 0 8px;font-size:clamp(32px,5vw,48px);letter-spacing:-.045em}.account-head p{margin:0;color:var(--muted);font-size:13px}.account-grid{display:grid;grid-template-columns:1fr;gap:14px}.account-card{border:1px solid var(--border);border-radius:17px;padding:20px;background:var(--surface);box-shadow:0 7px 22px rgba(20,20,20,.035)}.account-card h2{margin:0;font-size:18px}.account-section-note{margin:4px 0 0;color:var(--muted);font-size:11px;line-height:1.45}.account-card-heading{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.account-heading-actions{display:flex;align-items:center;gap:8px}.account-edit-btn{width:38px;height:38px;padding:0!important;display:inline-flex;align-items:center;justify-content:center;border-radius:10px}.account-edit-btn svg{width:17px;height:17px}.account-edit-btn.editing{background:var(--red-soft);color:var(--red);border-color:rgba(220,38,38,.25)}.account-form-grid input[readonly]:not(#profileId){opacity:1;cursor:default}.account-form-grid input.editable-input{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.08);outline:none}.profile-edit-actions{display:none;align-items:center;gap:10px}.profile-edit-actions.is-editing{display:flex}.profile-cancel-btn{display:none}.profile-cancel-btn.is-editing{display:inline-flex}.account-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.account-form-grid label{display:grid;gap:6px;font-size:11px;font-weight:700}.account-form-grid .full-width{grid-column:1/-1}.account-form-grid input{width:100%;box-sizing:border-box;border:1px solid var(--border);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:11px 12px;font:inherit}.account-form-grid input:disabled{opacity:.65}.account-form-grid input[readonly]{opacity:.8;cursor:not-allowed;background:var(--surface-2)}.account-card-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:16px}.verification-pill{font-size:9px;font-weight:800;text-transform:uppercase;padding:6px 9px;border-radius:999px;background:var(--red-soft);color:var(--red)}.account-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}.account-facts div{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2)}.account-facts span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.05em}.account-facts strong{display:block;margin-top:4px;font-size:12px}.account-danger{margin-top:14px;padding:14px;border:1px solid rgba(220,38,38,.2);border-radius:13px;background:var(--red-soft)}.account-danger strong{display:block;margin-top:3px;font-size:12px}.danger-eyebrow{color:var(--red)!important}.account-danger p{margin:5px 0 11px;color:var(--muted);font-size:10px;line-height:1.5}.danger-outline{border-color:rgba(220,38,38,.35)!important;color:var(--red)!important}.account-back{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:12px;font-weight:700}.account-back:hover{color:var(--ink)}.account-back svg{width:15px}.account-status{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:10px}.account-status svg{width:14px;color:var(--red)}
+@media(max-width:700px){.account-grid{grid-template-columns:1fr}.account-form-grid{grid-template-columns:1fr}.account-form-grid .full-width{grid-column:auto}.account-card-footer{align-items:flex-start;flex-direction:column}.account-head{align-items:flex-start;flex-direction:column}.account-head .section-count{align-self:flex-start}}
+</style>
+
+<style>
+.account-verification-action{margin-top:14px}.account-verification-pending,.account-verification-success{display:flex;gap:11px;align-items:center;padding:13px 14px;border:1px solid var(--border);border-radius:13px;background:var(--surface-2)}.account-verification-pending>svg,.account-verification-success>svg{width:18px;color:var(--red);flex:0 0 auto}.account-verification-pending>div,.account-verification-success>div{flex:1}.account-verification-pending strong,.account-verification-success strong,.account-verification-pending span,.account-verification-success span{display:block}.account-verification-pending strong,.account-verification-success strong{font-size:11px}.account-verification-pending span,.account-verification-success span{font-size:10px;color:var(--muted);line-height:1.45;margin-top:2px}.account-verification-pending .btn{white-space:nowrap}
+@media(max-width:650px){.account-verification-pending{align-items:flex-start;flex-wrap:wrap}.account-verification-pending .btn{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html" aria-label="FRSS home"><span class="brand-mark"><img src="../img/logo.png" alt="" width="36" height="36"></span></a><nav class="main-nav"><a href="dashboard.html">Dashboard</a><a href="find-food.html">Find Food</a><a href="donate.html">Donate Food</a><a class="btn btn-outline" href="#" data-logout>Log out</a></nav></div></header>
+<main class="section container account-page">
+<a class="account-back" href="dashboard.html"><i data-feather="arrow-left"></i> Back to dashboard</a>
+<div class="account-head"><div><span class="eyebrow">MY ACCOUNT</span><h1>Profile & settings</h1><p>Manage your personal information and review your account details.</p></div><span class="account-status" id="accountStatus"><i data-feather="check-circle"></i> Active account</span></div>
+<div class="account-grid">
+<section class="account-card">
+  <div class="account-card-heading"><div><span class="eyebrow">PROFILE</span><h2>Personal information</h2><p class="account-section-note">View your personal details or edit your name and phone number.</p></div><div class="account-heading-actions"><button class="btn btn-outline account-edit-btn" type="button" id="editProfileBtn" aria-label="Edit profile" title="Edit profile"><i data-feather="edit-2"></i></button><span class="verification-pill" id="profileVerificationBadge">Verification</span></div></div>
+  <form id="profileForm">
+    <div class="account-form-grid">
+      <label>Full name<input id="profileFullName" name="fullName" maxlength="120" required readonly aria-readonly="true"></label>
+      <label>Phone number<input id="profilePhone" name="phone" maxlength="40" inputmode="tel" placeholder="Optional" readonly aria-readonly="true"></label>
+      <label>Profile ID<input id="profileId" type="text" readonly aria-readonly="true"></label>
+      <label>Email address<input id="profileEmail" type="email" disabled></label>
+    </div>
+    <div class="account-card-footer"><p class="admin-muted" id="profileHelp"></p><div class="profile-edit-actions" id="profileEditActions"><button class="btn btn-outline profile-cancel-btn" type="button" id="cancelProfileBtn">Cancel</button><button class="btn btn-primary" type="submit" id="saveProfileBtn">Save profile</button></div></div>
+  </form>
+</section>
+<section class="account-card">
+  <div class="account-card-heading"><div><span class="eyebrow">ACCOUNT</span><h2>Account overview</h2><p class="account-section-note">Review your verification status and rescue activity.</p></div></div>
+  <div class="account-facts"><div><span>Verification</span><strong id="accountVerificationText">—</strong></div><div><span>Member since</span><strong id="accountMemberSince">—</strong></div><div><span>Completed rescues</span><strong id="accountCompletedCount">—</strong></div><div><span>Average rating</span><strong id="accountAverageRating">—</strong></div></div>
+  <div class="account-verification-action" id="accountVerificationAction"></div>
+  <div class="account-danger"><div><span class="eyebrow danger-eyebrow">ACCOUNT ACTION</span><strong>Close account</strong></div><p>This anonymizes your profile, closes active claims, archives active food posts, and prevents further platform actions. Historical transaction records are retained for auditability.</p><button class="btn btn-outline danger-outline" id="closeAccountBtn" type="button">Close account</button></div>
+</section>
+</div>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="../js/app.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+async function initAccountPage(){
+  if(!window.sb){window.location.href='login.html';return;}
+  const {data,error}=await window.sb.auth.getUser();
+  if(error||!data?.user){window.location.href='login.html';return;}
+  const user=data.user;
+  const {data:profile,error:profileError}=await window.sb.from('profiles').select('id,profile_number,full_name,phone,role,account_status,verification_status,created_at,closed_at').eq('id',user.id).maybeSingle();
+  if(profileError||!profile){showToast(profileError?.message||'Your user profile could not be found.');return;}
+  if(profile.account_status!=='active'){
+    await window.sb.auth.signOut();
+    showToast(profile.closed_at?'This account has been closed.':'This account is not active.');
+    setTimeout(()=>window.location.href='login.html',700);return;
+  }
+  window.currentUserId=user.id;
+  document.getElementById('profileId').value=profile.profile_number != null ? String(profile.profile_number).padStart(6,'0') : '—';
+  document.getElementById('profileEmail').value=user.email||'';
+  document.getElementById('profileFullName').value=profile.full_name||'';
+  document.getElementById('profilePhone').value=profile.phone||'';
+  const v=profile.verification_status||'unverified';
+  document.getElementById('profileVerificationBadge').textContent=v;
+  document.getElementById('accountVerificationText').textContent=v.replace(/_/g,' ');
+  document.getElementById('accountStatus').innerHTML='<i data-feather="check-circle"></i> '+(profile.account_status||'active')+' account';
+  document.getElementById('accountMemberSince').textContent=profile.created_at?new Date(profile.created_at).toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'}):'—';
+  document.getElementById('profileHelp').textContent=v==='verified'?'Your account is verified and eligible to post and claim food.':'Your account must be verified before you can post or claim food.';
+  const verificationAction=document.getElementById('accountVerificationAction');
+  if(v==='verified') verificationAction.innerHTML='<div class=\"account-verification-success\"><i data-feather=\"check-circle\"></i><div><strong>Identity verified</strong><span>Your ID and face verification were approved. You can donate and claim food.</span></div></div>';
+  else if(v==='pending') verificationAction.innerHTML='<div class=\"account-verification-pending\"><i data-feather=\"clock\"></i><div><strong>Verification under review</strong><span>Your ID and selfie are waiting for administrator review.</span></div></div>';
+  else if(v==='rejected') verificationAction.innerHTML='<div class=\"account-verification-pending\"><i data-feather=\"alert-circle\"></i><div><strong>Verification needs attention</strong><span>Your previous submission was rejected. You can submit a new ID and selfie.</span></div><a class=\"btn btn-primary\" href=\"verification.html\">Review & resubmit</a></div>';
+  else verificationAction.innerHTML='<div class=\"account-verification-pending\"><i data-feather=\"shield\"></i><div><strong>Identity verification required</strong><span>Submit your government ID and face verification selfie before donating or claiming food.</span></div><a class=\"btn btn-primary\" href=\"verification.html\">Verify identity</a></div>';
+  originalProfileValues={fullName:profile.full_name||'',phone:profile.phone||''};
+  setProfileEditing(false);
+  await loadAccountStats(user.id);
+  if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+async function loadAccountStats(uid){
+  const completed=await window.sb.from('claims').select('id',{count:'exact',head:true}).eq('claimant_id',uid).eq('status','completed');
+  const rated=await window.sb.from('reputation_ratings').select('rating').eq('rated_user_id',uid);
+  document.getElementById('accountCompletedCount').textContent=completed.error?'—':(completed.count||0);
+  const rows=rated.data||[];
+  const avg=rows.reduce((sum,r)=>sum+Number(r.rating||0),0)/(rows.length||1);
+  document.getElementById('accountAverageRating').textContent=rated.error?'—':(rows.length?avg.toFixed(1)+' ★':'—');
+}
+const profileFullNameInput=document.getElementById('profileFullName');
+const profilePhoneInput=document.getElementById('profilePhone');
+const editProfileBtn=document.getElementById('editProfileBtn');
+const cancelProfileBtn=document.getElementById('cancelProfileBtn');
+const profileEditActions=document.getElementById('profileEditActions');
+let originalProfileValues={fullName:'',phone:''};
+let profileEditing=false;
+
+function setProfileEditing(editing){
+  profileEditing=editing;
+  profileFullNameInput.readOnly=!editing;
+  profilePhoneInput.readOnly=!editing;
+  profileFullNameInput.classList.toggle('editable-input',editing);
+  profilePhoneInput.classList.toggle('editable-input',editing);
+  editProfileBtn.classList.toggle('editing',editing);
+  editProfileBtn.setAttribute('aria-label',editing?'Editing profile':'Edit profile');
+  editProfileBtn.title=editing?'Editing profile':'Edit profile';
+  profileEditActions.classList.toggle('is-editing',editing);
+  cancelProfileBtn.classList.toggle('is-editing',editing);
+  if(window.feather)window.feather.replace({width:18,height:18,'stroke-width':1.8});
+}
+
+editProfileBtn.addEventListener('click',()=>{
+  if(profileEditing)return;
+  originalProfileValues={fullName:profileFullNameInput.value,phone:profilePhoneInput.value};
+  setProfileEditing(true);
+  profileFullNameInput.focus();
+});
+
+cancelProfileBtn.addEventListener('click',()=>{
+  profileFullNameInput.value=originalProfileValues.fullName;
+  profilePhoneInput.value=originalProfileValues.phone;
+  setProfileEditing(false);
+});
+
+document.getElementById('profileForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  if(!profileEditing)return;
+  const btn=document.getElementById('saveProfileBtn');
+  const name=profileFullNameInput.value.trim();
+  const phone=profilePhoneInput.value.trim()||null;
+  if(!name){showToast('Please enter your full name.');profileFullNameInput.focus();return;}
+  btn.disabled=true;cancelProfileBtn.disabled=true;btn.textContent='Saving…';
+  const {error}=await safeRequest(()=>window.sb.rpc('update_my_profile',{p_full_name:name,p_phone:phone}));
+  btn.disabled=false;cancelProfileBtn.disabled=false;btn.textContent='Save profile';
+  if(error){showToast(error.message||'Could not save your profile.');return;}
+  originalProfileValues={fullName:name,phone:phone||''};
+  setProfileEditing(false);
+  showToast('Profile updated.');
+});
+document.getElementById('closeAccountBtn').addEventListener('click',async()=>{
+  const btn=document.getElementById('closeAccountBtn');
+  const ok=confirm('Close your account? Your active claims will be cancelled, active food posts archived, and your profile will be anonymized. Historical transaction records will remain for auditability.');
+  if(!ok)return;
+  btn.disabled=true;btn.textContent='Closing account…';
+  const {error}=await safeRequest(()=>window.sb.rpc('close_my_account'));
+  if(error){showToast(error.message||'Could not close your account.');btn.disabled=false;btn.textContent='Close account';return;}
+  await window.sb.auth.signOut();window.location.href='login.html';
+});
+window.addEventListener('DOMContentLoaded',initAccountPage);
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+/* Admin-only application shell; account dashboards retain their own layout. */
+.admin-workspace { background:var(--surface-2); }
+.admin-workspace > .site-header { display:none; }
+.admin-workspace > main.section.container { width:auto; max-width:none; padding:0 30px 40px; margin-left:76px; margin-right:0; }
+.admin-workspace #adminDashboard { display:block; max-width:1600px; margin:0 auto; }
+.admin-workspace #adminDashboard.hidden { display:none; }
+.admin-workspace #adminDashboard > [hidden], .admin-workspace .admin-panel[hidden] { display:none !important; }
+.admin-rail { position:fixed; top:0; bottom:0; left:0; z-index:1000; display:flex; flex-direction:column; width:76px; padding:18px 12px 12px; box-sizing:border-box; overflow:hidden; border-right:1px solid var(--border); background:var(--surface); color:var(--ink); transition:width .22s ease,box-shadow .22s ease; }
+.admin-rail.is-expanded { width:250px; box-shadow:16px 0 35px rgba(0,0,0,.08); }
+.admin-rail-brand { display:flex; align-items:center; gap:14px; min-height:42px; padding:3px 9px; text-decoration:none; color:var(--ink); white-space:nowrap; }
+.admin-rail-brand img { flex-shrink:0; object-fit:contain; }
+.admin-rail-brand span { opacity:0; transition:opacity .16s; }
+.admin-rail-brand strong { display:block; font-size:16px; letter-spacing:.6px; }
+.admin-rail-brand small { display:block; font-size:10px; color:var(--muted); margin-top:2px; }
+.admin-rail-divider { height:1px; background:var(--border); margin:17px 6px; flex-shrink:0; }
+.admin-rail-nav { display:flex; flex-direction:column; gap:4px; flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
+.admin-rail-nav::-webkit-scrollbar { display:none; }
+.admin-rail-link { display:flex; align-items:center; gap:16px; width:100%; flex-shrink:0; padding:13px 16px; min-height:46px; box-sizing:border-box; border:0; border-radius:12px; color:var(--muted); background:transparent; font:inherit; font-size:12px; text-align:left; text-decoration:none; white-space:nowrap; cursor:pointer; }
+.admin-rail-link svg { width:19px; height:19px; flex-shrink:0; }
+.admin-rail-link span { opacity:0; transition:opacity .16s; }
+.admin-rail.is-expanded .admin-rail-link span, .admin-rail.is-expanded .admin-rail-brand span { opacity:1; }
+.admin-rail-link:hover { color:var(--ink); background:var(--surface-2); }
+.admin-rail-link.is-active { color:var(--red); background:var(--red-soft); font-weight:650; }
+.admin-rail-link:focus-visible, .admin-workspace button:focus-visible, .admin-workspace a:focus-visible { outline:2px solid var(--red); outline-offset:-2px; }
+.admin-rail-footer { flex-shrink:0; border-top:1px solid var(--border); padding-top:10px; margin-top:10px; }
+.admin-workspace-bar { display:flex; align-items:center; justify-content:space-between; gap:16px; height:68px; border-bottom:1px solid var(--border); margin-bottom:22px; }
+.admin-workspace-breadcrumb { display:flex; align-items:center; gap:12px; color:var(--muted); font-size:12px; }
+.admin-workspace-breadcrumb strong { color:var(--ink); font-weight:600; }
+.admin-breadcrumb-divider { opacity:.45; }
+.admin-workspace-actions { display:flex; align-items:center; gap:16px; }
+.admin-workspace-icon { display:grid; place-items:center; width:36px; height:36px; color:var(--muted); background:var(--surface); border:1px solid var(--border); border-radius:11px; }
+.admin-workspace-icon svg { width:17px; height:17px; }
+.admin-workspace-account { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); }
+.admin-workspace-account svg { width:16px; height:16px; color:var(--red); }
+.admin-drawer-toggle { display:none; }
+.admin-rail-scrim { position:fixed; inset:0; z-index:990; border:0; background:rgba(0,0,0,.4); }
+.admin-rail-scrim[hidden] { display:none; }
+.admin-workspace #adminDashboard > .dashboard-title-row { padding:0; margin:0 0 25px; grid-column:auto; }
+.admin-workspace #adminWorkspaceTitle { font-size:30px; line-height:1.2; letter-spacing:-1px; margin-top:6px; }
+.admin-workspace .dashboard-subtitle { font-size:12px; line-height:1.6; max-width:700px; }
+.admin-workspace #adminDashboard > .admin-flow-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin:0 0 22px; }
+.admin-workspace #adminDashboard .admin-module { display:flex; flex-direction:column; align-items:flex-start; padding:20px; min-height:0; gap:14px; border-radius:18px; background:var(--surface); border:1px solid var(--border); box-shadow:0 3px 12px rgba(0,0,0,.025); }
+.admin-workspace .module-content h2 { font-size:12px; }
+.admin-workspace .module-content strong { font-size:29px; line-height:1.1; }
+.admin-workspace .module-content small { font-size:10px; }
+.admin-workspace .module-content > span { display:none; }
+.admin-workspace #adminDashboard > .admin-section { display:block; margin:0 0 20px; padding:22px; border:1px solid var(--border); border-radius:18px; background:var(--surface); min-height:0; }
+.admin-workspace #adminDashboard > .admin-section .admin-section-heading { margin-bottom:18px; }
+.admin-workspace .admin-section-heading h2 { font-size:18px; letter-spacing:-.4px; }
+.admin-workspace .admin-control-tabs { display:none; }
+.admin-workspace #adminControlCenter > .admin-section-heading { display:none; }
+.admin-workspace #adminDashboard > #adminControlCenter .admin-panel { background:transparent; border:0; padding:0; margin:0; box-shadow:none; }
+.admin-workspace .admin-table { font-size:12px; }
+.admin-workspace .admin-table th { padding:14px 12px; font-size:10px; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); background:var(--surface-2); }
+.admin-workspace .admin-table td { padding:14px 12px; }
+.admin-workspace .admin-table-wrap { border:1px solid var(--border); border-radius:13px; overflow:auto; }
+.admin-workspace .admin-panel-toolbar { margin:0 0 18px; }
+.admin-workspace .admin-control-input, .admin-workspace .admin-control-select, .admin-workspace .admin-control-textarea { min-height:42px; border-radius:11px; font-size:12px; }
+.admin-workspace .mini-stat { padding:15px; border-radius:12px; background:var(--surface-2); }
+.admin-workspace .mini-stat strong { font-size:24px; }
+.admin-workspace .mini-stat span { font-size:11px; }
+.admin-workspace .admin-overview-analytics { margin-bottom:22px; }
+.admin-workspace .admin-overview-analytics:empty { display:none; }
+.admin-workspace .admin-overview-analytics .admin-analytics-card { margin:0; padding:22px; border:1px solid var(--border); border-radius:18px; background:var(--surface); }
+.admin-workspace #adminDashboard { display:flex; flex-direction:column; }
+.admin-workspace .admin-workspace-bar { order:0; }
+.admin-workspace .dashboard-title-row { order:1; }
+.admin-workspace #adminDashboard > .admin-flow-grid { order:2; }
+.admin-workspace .admin-overview-analytics { order:3; }
+.admin-workspace #adminDashboard > .admin-section { order:4; }
+@media(max-width:1150px) { .admin-workspace #adminDashboard > .admin-flow-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:760px) {
+  .admin-workspace > main.section.container { margin-left:0; padding:0 16px 30px; }
+  .admin-rail { width:250px; transform:translateX(-100%); transition:transform .22s ease; }
+  .admin-rail.is-mobile-open { transform:translateX(0); }
+  .admin-rail .admin-rail-link span, .admin-rail .admin-rail-brand span { opacity:1; }
+  .admin-drawer-toggle { display:grid; place-items:center; width:34px; height:34px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--ink); }
+  .admin-drawer-toggle svg { width:18px; height:18px; }
+  .admin-workspace-bar { height:68px; margin-bottom:22px; }
+  .admin-workspace-breadcrumb > span:first-of-type, .admin-breadcrumb-divider { display:none; }
+  .admin-workspace-account span { display:none; }
+  .admin-workspace-actions { gap:10px; }
+  .admin-workspace #adminWorkspaceTitle { font-size:25px; }
+  .admin-workspace #adminDashboard > .admin-flow-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  .admin-workspace #adminDashboard .admin-module { padding:16px; }
+  .admin-workspace #adminDashboard > .admin-section { padding:16px; }
+  .admin-workspace .admin-stat-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .admin-drawer-open { overflow:hidden; }
+}
+@media(prefers-reduced-motion:reduce) { .admin-rail, .admin-rail-link span, .admin-rail-brand span { transition:none; } }
+
+.admin-rail-link[data-logout] { color:var(--red); }
+.admin-rail-link[data-logout]:hover { color:var(--red); background:var(--red-soft); }
+
+/* Readable management tables and comfortable action targets. */
+.admin-workspace #adminDashboard #adminControlCenter .admin-table { min-width:960px; font-size:14px; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-table th { padding:16px 18px; font-size:12px; letter-spacing:.5px; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-table td { padding:18px; font-size:14px; line-height:1.5; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-table strong { font-size:15px; font-weight:650; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-table small { display:block; margin-top:5px; font-size:11px; line-height:1.5; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-badge-pill { padding:7px 11px; font-size:11px; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-row-actions { gap:8px; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-row-actions button { min-height:40px; padding:10px 14px; border-radius:10px; font-size:13px; line-height:1.3; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-control-input,
+.admin-workspace #adminDashboard #adminControlCenter .admin-control-select,
+.admin-workspace #adminDashboard #adminControlCenter .admin-control-textarea { min-height:46px; padding:12px 15px; font-size:14px; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-select-trigger { min-height:46px; padding:12px 15px; font-size:14px; }
+.admin-workspace #adminDashboard #adminControlCenter .admin-panel-toolbar { gap:12px; margin-bottom:20px; }
+.admin-select-menu .admin-select-option { min-height:44px; font-size:14px; }
+@media(max-width:760px) {
+  .admin-workspace #adminDashboard #adminControlCenter .admin-panel-toolbar .admin-control-input { flex-basis:100%; }
+  .admin-workspace #adminDashboard #adminControlCenter .admin-select-trigger { flex:1; }
+}

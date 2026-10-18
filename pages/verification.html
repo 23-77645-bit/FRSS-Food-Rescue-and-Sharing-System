@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" href="../img/logo.png">
+  <title>Identity Verification — FRSS</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="../js/vendor/feather.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="../js/config.js"></script>
+</head>
+<body>
+<header class="site-header"><div class="container nav-wrap"><a class="brand" href="../index.html"><span class="brand-mark"><img src="../img/logo.png" alt="FRSS" width="36" height="36"></span></a><nav class="main-nav"><a href="dashboard.html">Dashboard</a><a href="find-food.html">Find Food</a><a href="donate.html">Donate Food</a><a class="btn btn-outline" href="account.html">My Account</a></nav></div></header>
+<main class="section container verification-page">
+  <a class="verification-back" href="account.html"><i data-feather="arrow-left"></i> Back to account</a>
+  <div class="verification-head"><div><span class="eyebrow">IDENTITY VERIFICATION</span><h1>Verify your identity</h1><p>Submit a valid ID and a clear selfie. Verification is required before you can donate or claim food.</p></div><span class="verification-status-pill" id="verificationStatus">Loading…</span></div>
+  <div id="verificationAlready" class="verification-card hidden"></div>
+  <form id="verificationForm" class="verification-grid" novalidate>
+    <section class="verification-card">
+      <div class="verification-step"><span>01</span><div><h2>Government ID</h2><p>Upload a clear photo of an accepted government-issued ID.</p></div></div>
+      <label class="verification-label">ID type<select id="idType" required><option value="">Select ID type</option><option>Philippine National ID</option><option>Driver's License</option><option>Passport</option><option>UMID</option><option>PRC ID</option><option>Postal ID</option><option>Other valid government ID</option></select></label>
+      <label class="upload-box"><input id="idFile" type="file" accept="image/jpeg,image/png,image/webp" required><i data-feather="upload-cloud"></i><strong>Upload ID photo</strong><span>JPG, PNG or WEBP · maximum 8 MB</span></label>
+      <div class="file-preview hidden" id="idPreviewWrap"><img id="idPreview" alt="ID preview"><button type="button" class="preview-remove" id="removeId">Remove</button></div>
+    </section>
+    <section class="verification-card">
+      <div class="verification-step"><span>02</span><div><h2>Face verification</h2><p>Take a clear selfie showing your full face. This is reviewed by an administrator.</p></div></div>
+      <div class="camera-box"><video id="cameraVideo" autoplay playsinline muted></video><canvas id="cameraCanvas" hidden></canvas><div class="camera-placeholder" id="cameraPlaceholder"><i data-feather="camera"></i><span>Camera preview</span></div></div>
+      <div class="camera-actions"><button type="button" class="btn btn-outline" id="startCamera"><i data-feather="camera"></i> Use camera</button><button type="button" class="btn btn-primary" id="captureSelfie" disabled><i data-feather="check"></i> Capture selfie</button></div>
+      <label class="upload-box compact"><input id="selfieFile" type="file" accept="image/jpeg,image/png,image/webp" capture="user"><i data-feather="image"></i><strong>Or upload a selfie</strong><span>JPG, PNG or WEBP · maximum 8 MB</span></label>
+      <div class="file-preview hidden" id="selfiePreviewWrap"><img id="selfiePreview" alt="Selfie preview"><button type="button" class="preview-remove" id="removeSelfie">Remove</button></div>
+    </section>
+    <section class="verification-card verification-submit-card"><div class="verification-security"><i data-feather="lock"></i><div><strong>Your documents are private.</strong><span>ID and selfie files are stored in a private verification area and are only available to you and authorized administrators.</span></div></div><label class="verification-check"><input type="checkbox" id="verificationConsent" required><span>I confirm that the information and images I submit belong to me and are accurate.</span></label><button class="btn btn-primary verification-submit" type="submit" id="submitVerification">Submit for verification</button><p class="verification-form-note" id="verificationNote"></p></section>
+  </form>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="../js/app.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+(() => {
+let currentUser=null, stream=null, idImage=null, selfieImage=null;
+const maxBytes=8*1024*1024;
+const $=id=>document.getElementById(id);
+function setPreview(file,img,wrap){if(!file)return;const reader=new FileReader();reader.onload=()=>{img.src=reader.result;wrap.classList.remove('hidden')};reader.readAsDataURL(file)}
+function validImage(file){if(!file)return false;if(file.size>maxBytes){showToast('Each image must be 8 MB or smaller.');return false}if(!['image/jpeg','image/png','image/webp'].includes(file.type)){showToast('Please use JPG, PNG, or WEBP images.');return false}return true}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null} $('cameraVideo').classList.remove('active');$('cameraPlaceholder').classList.remove('hidden');$('captureSelfie').disabled=true}
+async function startCamera(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});$('cameraVideo').srcObject=stream;$('cameraVideo').classList.add('active');$('cameraPlaceholder').classList.add('hidden');$('captureSelfie').disabled=false}catch(e){showToast('Camera access was not available. You can upload a selfie instead.')}}
+$('idFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(validImage(f)){idImage=f;setPreview(f,$('idPreview'),$('idPreviewWrap'))}});
+$('selfieFile').addEventListener('change',e=>{const f=e.target.files?.[0];if(validImage(f)){selfieImage=f;setPreview(f,$('selfiePreview'),$('selfiePreviewWrap'));stopCamera()}});
+$('removeId').addEventListener('click',()=>{$('idFile').value='';idImage=null;$('idPreviewWrap').classList.add('hidden')});
+$('removeSelfie').addEventListener('click',()=>{$('selfieFile').value='';selfieImage=null;$('selfiePreviewWrap').classList.add('hidden')});
+$('startCamera').addEventListener('click',startCamera);
+$('captureSelfie').addEventListener('click',()=>{const video=$('cameraVideo'),canvas=$('cameraCanvas');if(!video.videoWidth)return;canvas.width=video.videoWidth;canvas.height=video.videoHeight;canvas.getContext('2d').drawImage(video,0,0);canvas.toBlob(blob=>{if(!blob)return;selfieImage=new File([blob],'selfie.jpg',{type:'image/jpeg'});setPreview(selfieImage,$('selfiePreview'),$('selfiePreviewWrap'));stopCamera()},'image/jpeg',.92)});
+async function init(){const {data,error}=await window.sb.auth.getUser();if(error||!data?.user){location.href='login.html';return}currentUser=data.user;const {data:profile,error:pe}=await window.sb.from('profiles').select('verification_status,account_status').eq('id',currentUser.id).maybeSingle();if(pe||!profile){showToast(pe?.message||'Could not load your profile.');return}if(profile.account_status!=='active'){await window.sb.auth.signOut();location.href='login.html';return}$('verificationStatus').textContent=profile.verification_status||'unverified';const {data:latest}=await window.sb.from('identity_verifications').select('id,status,admin_notes,submitted_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1).maybeSingle();if(latest&&['pending','verified'].includes(latest.status)){ $('verificationForm').classList.add('hidden');$('verificationAlready').classList.remove('hidden');$('verificationAlready').innerHTML=`<div class="verification-result"><i data-feather="${latest.status==='verified'?'check-circle':'clock'}"></i><div><h2>${latest.status==='verified'?'Identity verified':'Verification under review'}</h2><p>${latest.status==='verified'?'Your identity has been approved. You can now donate and claim food.':'Your ID and selfie have been submitted. Please wait for an administrator to review them.'}</p>${latest.admin_notes?`<small>Admin note: ${escapeHtml(latest.admin_notes)}</small>`:''}</div></div>`;if(window.feather)window.feather.replace({width:20,height:20,'stroke-width':1.8})}else if(latest?.status==='rejected'){ $('verificationNote').textContent=latest.admin_notes?`Previous submission was rejected: ${latest.admin_notes}. You may submit again.`:'Your previous submission was rejected. Please submit a new one.'}}
+$('verificationForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('submitVerification');
+  if (btn.disabled) return;
+  if (!currentUser || !window.sb) { showToast('Please wait for your account to load or refresh the page.'); return; }
+  if (!idImage || !selfieImage) { showToast('Please provide both your ID photo and selfie.'); return; }
+  if (!$('idType').value || !$('verificationConsent').checked) { showToast('Please select your ID type and confirm the declaration.'); return; }
+  btn.disabled = true;
+  btn.textContent = 'Uploading…';
+  const uploaded = [];
+  let submitted = false;
+  try {
+    const token = crypto.randomUUID();
+    const extension = file => file.type.split('/')[1].replace('jpeg','jpg');
+    const idPath = `${currentUser.id}/id-${token}.${extension(idImage)}`;
+    const selfiePath = `${currentUser.id}/selfie-${token}.${extension(selfieImage)}`;
+    for (const [path, file] of [[idPath, idImage], [selfiePath, selfieImage]]) {
+      const { error } = await window.sb.storage.from('identity-verification').upload(path, file, { upsert:false, contentType:file.type });
+      if (error) throw error;
+      uploaded.push(path);
+    }
+    const { error } = await window.sb.rpc('submit_identity_verification', { p_id_type:$('idType').value, p_id_document_path:idPath, p_selfie_path:selfiePath });
+    if (error) throw error;
+    submitted = true;
+    stopCamera();
+    $('verificationStatus').textContent = 'pending';
+    $('verificationForm').classList.add('hidden');
+    $('verificationAlready').classList.remove('hidden');
+    $('verificationAlready').innerHTML = '<div class="verification-result"><i data-feather="clock"></i><div><h2>Submitted for review</h2><p>Your identity verification has been submitted. An administrator will review your ID and selfie before you can donate or claim food.</p></div></div>';
+    renderFeatherIcons();
+  } catch (error) {
+    if (!submitted && uploaded.length) {
+      try { await window.sb.storage.from('identity-verification').remove(uploaded); } catch (_) {}
+    }
+    showToast(error?.message || 'Could not submit verification. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit for verification';
+  }
+});
+window.addEventListener('beforeunload',stopCamera);window.addEventListener('DOMContentLoaded', () => init().catch(error => showToast(error?.message || 'Could not load verification. Please refresh.')));
+})();
+</script>
+<style>
+.verification-page{max-width:1050px;padding-bottom:80px}.verification-back{display:inline-flex;gap:7px;align-items:center;color:var(--muted);font-size:12px;font-weight:700;margin-bottom:22px}.verification-back svg{width:15px}.verification-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:22px}.verification-head h1{margin:4px 0 8px;font-size:clamp(32px,5vw,48px);letter-spacing:-.045em}.verification-head p{margin:0;color:var(--muted);max-width:680px;font-size:13px;line-height:1.55}.verification-status-pill{padding:8px 12px;border-radius:999px;background:var(--red-soft);color:var(--red);font-size:10px;font-weight:800;text-transform:uppercase;white-space:nowrap}.verification-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.verification-card{border:1px solid var(--border);border-radius:18px;padding:20px;background:var(--surface);box-shadow:0 8px 25px rgba(20,20,20,.035)}.verification-step{display:flex;gap:12px;margin-bottom:18px}.verification-step>span{width:32px;height:32px;border-radius:10px;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-size:10px;font-weight:800}.verification-step h2{margin:0;font-size:18px}.verification-step p{margin:4px 0 0;color:var(--muted);font-size:11px;line-height:1.5}.verification-label{display:grid;gap:6px;font-size:11px;font-weight:700;margin-bottom:12px}.verification-label select{border:1px solid var(--border);border-radius:10px;padding:11px;background:var(--surface-2);color:var(--ink);font:inherit}.upload-box{min-height:130px;border:1px dashed #cfcfcf;border-radius:14px;background:var(--surface-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;cursor:pointer;padding:16px;box-sizing:border-box}.upload-box input{display:none}.upload-box svg{width:24px;color:var(--red)}.upload-box strong{font-size:12px}.upload-box span{font-size:9px;color:var(--muted)}.upload-box.compact{min-height:95px;margin-top:12px}.file-preview{position:relative;margin-top:12px;border-radius:14px;overflow:hidden;background:#111}.file-preview img{display:block;width:100%;max-height:250px;object-fit:contain;background:#111}.preview-remove{position:absolute;right:9px;top:9px;border:0;border-radius:9px;padding:7px 10px;background:#fff;color:var(--red);font-weight:800;font-size:10px;cursor:pointer}.camera-box{height:230px;border-radius:14px;overflow:hidden;background:#151515;position:relative;display:grid;place-items:center}.camera-box video{width:100%;height:100%;object-fit:cover;display:none;transform:scaleX(-1)}.camera-box video.active{display:block}.camera-placeholder{display:flex;flex-direction:column;align-items:center;gap:7px;color:#aaa;font-size:10px}.camera-placeholder svg{width:25px}.camera-actions{display:flex;gap:8px;margin-top:10px}.camera-actions .btn{flex:1;justify-content:center}.camera-actions svg{width:15px}.verification-submit-card{grid-column:1/-1}.verification-security{display:flex;gap:10px;padding:13px 14px;border:1px solid var(--border);border-radius:13px;background:var(--surface-2);margin-bottom:13px}.verification-security svg{width:18px;color:var(--red);flex:0 0 auto}.verification-security strong,.verification-security span{display:block}.verification-security strong{font-size:11px}.verification-security span{font-size:10px;color:var(--muted);line-height:1.5;margin-top:2px}.verification-check{display:flex;gap:9px;align-items:flex-start;font-size:10px;color:var(--muted);margin-bottom:14px}.verification-check input{margin-top:2px}.verification-submit{width:100%;justify-content:center}.verification-form-note{font-size:10px;color:var(--muted);margin:10px 0 0}.verification-result{display:flex;gap:13px;align-items:flex-start;padding:8px}.verification-result>svg{color:var(--red);flex:0 0 auto;margin-top:2px}.verification-result h2{margin:0 0 5px;font-size:18px}.verification-result p{margin:0;color:var(--muted);font-size:11px;line-height:1.55}.verification-result small{display:block;margin-top:8px;color:var(--red);font-size:10px}.hidden{display:none!important}@media(max-width:760px){.verification-head{align-items:flex-start;flex-direction:column}.verification-grid{grid-template-columns:1fr}.verification-submit-card{grid-column:auto}}
+</style>
+</body>
+</html>

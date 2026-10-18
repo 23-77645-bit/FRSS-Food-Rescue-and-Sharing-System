@@ -1,0 +1,54 @@
+/* Calendar, menu, and time controls share the donation page's theme tokens. */
+.frss-original-select { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:0 !important; clip-path:inset(50%); overflow:hidden; opacity:0; pointer-events:none; }
+.donate-field .frss-control-trigger { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:50px; padding:13px 15px; border:1px solid transparent; border-radius:14px; background:var(--surface-2); color:var(--ink); font:inherit; text-align:left; cursor:pointer; transition:background .18s,border-color .18s,box-shadow .18s; }
+.frss-control-trigger:hover { background:var(--surface); border-color:var(--border); }
+.frss-control-trigger:focus-visible, .frss-control-trigger[aria-expanded="true"] { outline:none; border-color:var(--red); box-shadow:0 0 0 3px var(--red-soft); }
+.frss-control-value { flex:1; min-width:0; }
+.frss-control-trigger.is-placeholder .frss-control-value { color:var(--muted); }
+.frss-control-icon { display:grid; place-items:center; color:var(--muted); }
+.frss-control-icon svg { width:19px; height:19px; }
+.frss-control-overlay { position:fixed; inset:0; z-index:1500; }
+.frss-control-panel { position:fixed; width:min(360px,calc(100vw - 24px)); max-height:calc(100dvh - 24px); overflow:auto; padding:18px; border:1px solid var(--border); border-radius:22px; background:var(--surface); color:var(--ink); box-shadow:0 18px 65px rgba(0,0,0,.16); font-family:inherit; animation:frssControlIn .16s ease-out; }
+.frss-control-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; }
+.frss-control-copy strong { display:block; font-size:16px; letter-spacing:-.3px; }
+.frss-control-copy small { display:block; margin-top:4px; font-size:11px; color:var(--muted); }
+.frss-control-panel button { font-family:inherit; cursor:pointer; }
+.frss-control-panel button:disabled { cursor:default; }
+.frss-control-panel button:focus-visible, .frss-control-panel input:focus-visible { outline:2px solid var(--red); outline-offset:2px; }
+.frss-control-dismiss { display:grid; place-items:center; width:30px; height:30px; flex-shrink:0; border:0; border-radius:50%; background:var(--surface-2); color:var(--muted); font-size:22px; }
+.frss-option-list { display:grid; gap:5px; }
+.frss-option { display:flex; align-items:center; justify-content:space-between; gap:15px; padding:13px 14px; width:100%; border:0; border-radius:12px; background:transparent; color:var(--ink); font-size:14px; text-align:left; }
+.frss-option:hover, .frss-option:focus-visible { background:var(--surface-2); }
+.frss-option[aria-selected="true"] { background:var(--red-soft); color:var(--red); font-weight:650; }
+.frss-option-check { font-size:16px; }
+.frss-calendar-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; }
+.frss-calendar-nav strong { font-size:14px; }
+.frss-month-arrow { width:32px; height:32px; border:0; border-radius:10px; background:var(--surface-2); color:var(--ink); font-size:25px; }
+.frss-weekdays, .frss-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; }
+.frss-weekdays { margin-bottom:6px; text-align:center; color:var(--muted); font-size:11px; }
+.frss-weekdays span { padding:5px 0; }
+.frss-day { display:grid; place-items:center; aspect-ratio:1; border:0; border-radius:12px; background:transparent; color:var(--ink); font-size:13px; font-weight:550; }
+.frss-day:hover:not(:disabled) { background:var(--red-soft); color:var(--red); }
+.frss-day.is-today { box-shadow:inset 0 0 0 1px var(--border); color:var(--red); }
+.frss-day.is-selected { background:var(--red); color:white; }
+.frss-day:disabled { opacity:.3; }
+.frss-calendar-today, .frss-time-date { margin-top:10px; border:0; padding:8px 10px; border-radius:9px; background:var(--surface-2); color:var(--red); font-size:12px; font-weight:600; }
+.frss-time-date { margin:0 0 8px; }
+.frss-control-footer { display:flex; align-items:center; justify-content:space-between; gap:15px; padding-top:14px; margin-top:12px; border-top:1px solid var(--border); }
+.frss-picker-clear { border:0; padding:9px 4px; background:transparent; color:var(--muted); font-size:12px; }
+.frss-picker-done { border:0; border-radius:11px; padding:10px 18px; background:var(--red); color:white; font-size:12px; font-weight:650; }
+.frss-picker-done:disabled { opacity:.4; }
+.frss-time-preview { padding:10px 0 18px; text-align:center; font-size:28px; letter-spacing:-1px; font-weight:650; }
+.frss-time-columns { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.frss-time-column { display:flex; flex-direction:column; align-items:center; gap:8px; padding:12px; border-radius:16px; background:var(--surface-2); }
+.frss-time-column small { color:var(--muted); font-size:11px; }
+.frss-time-adjust { display:grid; place-items:center; width:36px; height:30px; border:0; border-radius:9px; background:var(--surface); color:var(--red); font-size:20px; }
+.frss-time-number { box-sizing:border-box; width:100%; max-width:90px; border:0; border-radius:12px; padding:10px 4px; background:var(--surface); color:var(--ink); text-align:center; font-family:inherit; font-weight:600; font-size:30px; line-height:1.2; }
+.frss-time-number[aria-invalid="true"] { outline:2px solid var(--red); }
+.frss-time-period { display:flex; gap:4px; border-radius:12px; padding:4px; margin-top:15px; background:var(--surface-2); }
+.frss-period { flex:1; border:0; border-radius:9px; padding:10px; color:var(--muted); background:transparent; font-size:12px; font-weight:650; }
+.frss-period[aria-pressed="true"] { color:var(--red); background:var(--surface); box-shadow:0 2px 6px rgba(0,0,0,.06); }
+.frss-picker-note { margin:12px 0 0; font-size:11px; color:var(--muted); text-align:center; }
+@keyframes frssControlIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width:600px) { .frss-control-overlay { background:rgba(0,0,0,.32); backdrop-filter:blur(3px); } .frss-control-panel { left:12px; right:12px; bottom:max(12px,env(safe-area-inset-bottom)); top:auto; width:auto; max-height:calc(100dvh - 32px); padding:22px; border-radius:25px; } .frss-day { max-height:44px; } }
+@media (prefers-reduced-motion:reduce) { .frss-control-panel { animation:none; } .frss-control-trigger { transition:none; } }

@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Food Rescue & Sharing System — rescue good food and share it with your community.">
+      <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <title>FRSS — Food Rescue & Sharing System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+    <script src="js/vendor/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="js/config.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="FRSS home">
+        <span class="brand-mark"><img src="img/logo.png" alt="FRSS" width="36" height="36"></span>
+      </a>
+
+      <div class="mobile-header-actions"><div class="mobile-notification-slot" id="mobileNotificationSlot"></div><button class="mobile-menu-btn" id="mobileMenuBtn" aria-expanded="false" aria-controls="mainNav" aria-label="Open menu"><i data-feather="menu" aria-hidden="true"></i><span class="sr-only">Open menu</span></button></div>
+
+      <nav class="main-nav" id="mainNav">
+        <div class="nav-links">
+          <a href="index.html" aria-current="page">Home</a>
+          <a href="pages/dashboard.html">Dashboard</a>  
+          <a href="pages/find-food.html">Find Food</a>
+          <a href="pages/donate.html">Donate Food</a>
+        </div>
+        <div class="nav-actions">
+                    <a class="btn btn-outline" href="pages/login.html">Log in</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero container reveal">
+      <div class="hero-copy">
+        <h1>Good food<br>should reach<br>people, <em>not the<br>bin.</em></h1>
+        <p>FRSS connects people with safe extra food in their community. Post<br class="desktop-only"> what you can share, discover available food, and coordinate pickup.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="#find-food">Find Food <i data-feather="arrow-right" aria-hidden="true"></i></a>
+          <a class="btn btn-soft btn-lg" href="#donate">Donate Food</a>
+        </div>
+      </div>
+
+      <div class="hero-card" aria-hidden="true">
+        <img class="hero-food-photo" src="img/hero-food.jpg" alt="">
+      </div>
+    </section>
+
+    <section class="home-food-section container" id="find-food">
+      <div class="home-food-heading">
+        <div>
+          <h2>Available near you</h2>
+          <p class="home-location-note" id="homeLocationNote">Turn on your location to see the closest available food.</p>
+        </div>
+        <button class="btn btn-primary location-enable-btn" id="homeLocationBtn" type="button"><i data-feather="navigation" aria-hidden="true"></i> Use my location</button>
+      </div>
+
+      <div class="food-grid home-food-grid hidden" id="foodGrid"></div>
+      <div class="home-food-footer hidden" id="homeFoodFooter"><a class="btn btn-outline" href="pages/find-food.html">View all available food <i data-feather="arrow-right" aria-hidden="true"></i></a></div>
+      <div class="empty-state hidden" id="emptyState">
+        <div>🥕</div>
+        <h3>No nearby food posts</h3>
+        <p>There are no available food posts with pickup coordinates near you yet.</p>
+      </div>
+    </section>
+
+    <section class="section soft-section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading centered">
+          <div><span class="eyebrow">HOW IT WORKS</span><h2>Simple from post to pickup</h2></div>
+        </div>
+        <div class="steps">
+          <article class="step reveal"><span>01</span><div class="step-icon"><i data-feather="clipboard" aria-hidden="true"></i></div><h3>Post food</h3><p>Add the food name, quantity, expiration, and pickup details.</p></article>
+          <article class="step reveal"><span>02</span><div class="step-icon"><i data-feather="search" aria-hidden="true"></i></div><h3>Find &amp; claim</h3><p>Browse available food and claim a quantity you can pick up.</p></article>
+          <article class="step reveal"><span>03</span><div class="step-icon"><i data-feather="users" aria-hidden="true"></i></div><h3>Coordinate pickup</h3><p>Follow the pickup details and keep track of your claim status.</p></article>
+          <article class="step reveal"><span>04</span><div class="step-icon"><i data-feather="check" aria-hidden="true"></i></div><h3>Complete</h3><p>Mark the rescue complete so the transaction remains traceable.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container sharing-carousel" id="donate" aria-labelledby="sharingTitle" aria-roledescription="carousel">
+      <div class="sharing-heading">
+        <div><span class="eyebrow">THE JOY OF GIVING</span><h2 id="sharingTitle">Good food. Shared with love.</h2><p>A little generosity can go a long way.</p></div>
+      </div>
+      <div class="sharing-window" tabindex="0" role="group" aria-label="Food-sharing photo gallery. Hover to pause the slideshow.">
+        <div class="sharing-track" id="sharingTrack">
+          <div class="sharing-group">
+              <figure class="sharing-slide">
+                <img src="img/community/6646923.jpg" alt="Volunteers sharing food and drinks at an outdoor donation event" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Sharing a little kindness</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6995247.jpg" alt="Volunteers preparing takeaway meals for donation" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Good food, shared</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6995220.jpg" alt="Volunteers distributing food at a donation center" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Together for our community</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6591165.jpg" alt="A team packing food donations into boxes" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Small acts. Real care.</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6995212.jpg" alt="Two volunteers sorting food donations" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Packed with kindness</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6646946.jpg" alt="Volunteers packing donations outdoors" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>More hands, more help</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6995244.jpg" alt="Masked volunteers handing out takeaway meals" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>A meal worth sharing</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/34612589.jpg" alt="Volunteers organizing canned goods at a food drive" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Make room for generosity</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6994963.jpg" alt="Volunteers sorting donated food and clothing" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Community starts with us</figcaption>
+              </figure>
+              <figure class="sharing-slide">
+                <img src="img/community/6348119.jpg" alt="A person holding a donation box" width="900" height="675" loading="lazy" decoding="async">
+                <figcaption>Pass the kindness on</figcaption>
+              </figure>
+          </div>
+        </div>
+      </div>
+      <p class="sharing-credit">Food-sharing inspiration · Stock photography from <a href="https://www.pexels.com" target="_blank" rel="noopener noreferrer">Pexels</a></p>
+    </section>
+
+    <section class="testimonials-section" aria-labelledby="testimonialsTitle">
+      <div class="container">
+        <div class="testimonials-heading">
+          <div>
+            <span class="eyebrow">FROM OUR COMMUNITY</span>
+            <h2 id="testimonialsTitle">Small donations. Meaningful impact.</h2>
+            <p>Real people using FRSS to share extra food and help their community.</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonials-window" tabindex="0" role="group" aria-label="Community testimonials. Hover to pause the testimonials.">
+        <div class="testimonials-track" id="testimonialsTrack">
+          <div class="testimonials-group">
+            <article class="testimonial-card">
+              <div class="testimonial-person"><img class="testimonial-avatar" src="img/testimonials/mara-santos.jpg" alt="Mara Santos"><div><strong>Mara Santos</strong><span>@marasantos</span></div></div>
+              <p>“This website makes donating food feel so easy and meaningful. Instead of letting extra food go to waste, I can share it with someone who needs it.”</p>
+            </article>
+            <article class="testimonial-card">
+              <div class="testimonial-person"><img class="testimonial-avatar" src="img/testimonials/daniel-reyes.jpg" alt="Daniel Reyes"><div><strong>Daniel Reyes</strong><span>@danreyes</span></div></div>
+              <p>“FRSS makes it simple to give what you have. Even a small food donation can become a helpful meal for someone in the community.”</p>
+            </article>
+            <article class="testimonial-card">
+              <div class="testimonial-person"><img class="testimonial-avatar" src="img/testimonials/angela-cruz.jpg" alt="Angela Cruz"><div><strong>Angela Cruz</strong><span>@angelacruz</span></div></div>
+              <p>“I love how useful this platform is. It connects people who have extra food with people who can actually use it.”</p>
+            </article>
+            <article class="testimonial-card">
+              <div class="testimonial-person"><img class="testimonial-avatar" src="img/testimonials/jessa-perez.jpg" alt="Jessa Perez"><div><strong>Jessa Perez</strong><span>@jessaperez</span></div></div>
+              <p>“Donating feels more purposeful when you know your extra food can help someone nearby. I would definitely encourage others to try FRSS.”</p>
+            </article>
+            <article class="testimonial-card">
+              <div class="testimonial-person"><img class="testimonial-avatar" src="img/testimonials/rafael-navarro.jpg" alt="Rafael Navarro"><div><strong>Rafael Navarro</strong><span>@rafnavarro</span></div></div>
+              <p>“A practical way to reduce food waste while helping people. Posting a donation only takes a few moments.”</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="community-map-section container" aria-label="Food rescue community map">
+      <h2 class="community-map-title">Turn extra servings into a rescued meal</h2>
+      <p class="community-map-subtitle">Give extra food and help your community reduce food waste.</p>
+      <div class="community-map-wrap">
+        <img class="community-map" src="img/ph-map.png" alt="Map of the Philippines showing community connections">
+      </div>
+      <a class="btn btn-primary btn-lg community-post-btn" href="pages/donate.html">Post Now <i data-feather="arrow-right" aria-hidden="true"></i></a>
+    </section>
+
+    <section class="section container" id="faq">
+      <div class="section-heading centered"><div><span class="eyebrow">FAQ</span><h2>Questions, answered</h2></div></div>
+      <div class="faq-list">
+        <details><summary>Can I both donate and claim food?</summary><p>Yes. The same registered user account can post extra food and claim available food.</p></details>
+        <details><summary>Can I claim my own food post?</summary><p>No. FRSS is designed to prevent users from claiming their own food posts.</p></details>
+        <details><summary>What happens when the quantity reaches zero?</summary><p>The remaining quantity becomes zero and the food post is no longer available for claiming.</p></details>
+        <details><summary>Does FRSS deliver food?</summary><p>No. Pickup is personally arranged and completed by the users involved.</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a class="brand" href="index.html" aria-label="FRSS home"><span class="brand-mark"><img src="img/logo.png" alt="" width="36" height="36"></span></a><p>Food Rescue &amp; Sharing PH.</p></div>
+      <div><h4>Explore</h4><a href="#find-food">Find Food</a><a href="#donate">Donate Food</a><a href="#faq">FAQ</a></div>
+      <div><h4>Account</h4><a href="pages/login.html">Log in</a><a href="pages/register.html">Register</a><a href="pages/dashboard.html">Dashboard</a></div>
+      <div><h4>Legal</h4><a href="https://www.adidas.com.ph/privacy_policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a><a href="https://www.adidas.com.ph/terms_and_conditions" target="_blank" rel="noopener noreferrer">Terms and Conditions</a></div>
+    </div>
+    <div class="container footer-bottom"><span>© 2026 FRSS</span><span>Built for community food rescue</span></div>
+  </footer>
+
+  <button class="theme-fab" id="themeFab" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><i data-feather="moon" aria-hidden="true"></i></button>
+  <button class="to-top" id="toTop" type="button" aria-label="Scroll to top"><i data-feather="arrow-up" aria-hidden="true"></i></button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+  <script src="js/community-carousel.js"></script>
+</body>
+</html>
