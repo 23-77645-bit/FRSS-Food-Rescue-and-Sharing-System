@@ -3021,6 +3021,7 @@ for select to authenticated
 using (user_id = auth.uid() or public.is_admin());
 
 drop policy if exists identity_verifications_insert_own on public.identity_verifications;
+
 create policy identity_verifications_insert_own on public.identity_verifications
 for insert to authenticated
 with check (user_id = auth.uid());
@@ -3179,3 +3180,72 @@ using (
 
 -- New verification submissions must use the validated RPC.
 drop policy if exists identity_verifications_insert_own on public.identity_verifications;
+
+-- ================================================================
+-- FINAL SECURITY HARDENING
+-- ================================================================
+-- Supabase projects can grant EXECUTE on newly created public-schema
+-- functions to API roles through default privileges. Reset those grants after
+-- every function has been created, then expose only the RPCs used by FRSS.
+revoke execute on all functions in schema public from public, anon, authenticated;
+
+-- Keep public listing policies independent from signed-in helper functions.
+drop policy if exists categories_select_active on public.categories;
+drop policy if exists categories_select_active_authenticated on public.categories;
+create policy categories_select_active on public.categories
+for select to anon
+using (is_active = true);
+create policy categories_select_active_authenticated on public.categories
+for select to authenticated
+using (is_active = true or public.is_admin());
+
+drop policy if exists food_posts_select on public.food_posts;
+drop policy if exists food_posts_select_public on public.food_posts;
+drop policy if exists food_posts_select_authenticated on public.food_posts;
+create policy food_posts_select_public on public.food_posts
+for select to anon
+using (
+  (status = 'reserved' or (status = 'available' and remaining_quantity > 0))
+  and expiration_at > now()
+  and moderation_status = 'approved'
+  and archived_at is null
+);
+create policy food_posts_select_authenticated on public.food_posts
+for select to authenticated
+using (
+  ((status = 'reserved' or (status = 'available' and remaining_quantity > 0))
+   and expiration_at > now() and moderation_status = 'approved' and archived_at is null)
+  or donor_id = auth.uid()
+  or public.has_claim_for_food_post(id)
+  or public.is_admin()
+);
+
+-- Read-only helpers used by signed-in RLS policies.
+grant execute on function public.has_claim_for_food_post(uuid) to authenticated;
+grant execute on function public.is_admin() to authenticated;
+
+-- Signed-in application RPCs.
+grant execute on function public.admin_archive_food(uuid,text) to authenticated;
+grant execute on function public.admin_moderate_food(uuid,text,text) to authenticated;
+grant execute on function public.admin_no_show(uuid,text) to authenticated;
+grant execute on function public.admin_rescue_analytics() to authenticated;
+grant execute on function public.admin_resolve_claim_report(uuid,text,text) to authenticated;
+grant execute on function public.admin_review_identity_verification(uuid,text,text) to authenticated;
+grant execute on function public.admin_set_user_status(uuid,text,text) to authenticated;
+grant execute on function public.admin_set_verification(uuid,text,text) to authenticated;
+grant execute on function public.admin_update_case(uuid,text,text,uuid) to authenticated;
+grant execute on function public.admin_update_setting(text,jsonb) to authenticated;
+grant execute on function public.claim_food(uuid,numeric) to authenticated;
+grant execute on function public.close_my_account() to authenticated;
+grant execute on function public.expire_food_posts() to authenticated;
+grant execute on function public.frss_setting_bool(text,boolean) to authenticated;
+grant execute on function public.frss_setting_number(text,numeric) to authenticated;
+grant execute on function public.release_expired_reservations() to authenticated;
+grant execute on function public.submit_identity_verification(text,text,text) to authenticated;
+grant execute on function public.submit_reputation_rating(uuid,uuid,smallint,text) to authenticated;
+grant execute on function public.update_claim_status(uuid,public.claim_status,text) to authenticated;
+grant execute on function public.update_my_profile(text,text) to authenticated;
+
+-- Pin trigger helper lookup paths to prevent object-shadowing attacks.
+alter function public.set_updated_at() set search_path = public;
+alter function public.set_food_report_updated_at() set search_path = public;

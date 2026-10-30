@@ -22,19 +22,20 @@
                 class="eyebrow">JOIN THE COMMUNITY</span>
             <h1 class="register-title">Create your account</h1>
 
+            <p id="authStatus" class="auth-status" role="status" aria-live="polite" hidden></p>
             <form id="registerForm">
-                <label>Full name<input name="fullName" required placeholder="Your name"></label>
-                <label>Email<input name="email" type="email" required placeholder="you@example.com"></label>
+                <label>Full name<input name="fullName" autocomplete="name" required placeholder="Your name"></label>
+                <label>Email<input name="email" autocomplete="email" type="email" required placeholder="you@example.com"></label>
                 <label>
                     <span>Password</span>
-                    <div class="password-field"><input id="password" name="password" type="password" required minlength="8"
+                    <div class="password-field"><input id="password" name="password" type="password" autocomplete="new-password" required minlength="8"
                             placeholder="At least 8 characters"><button type="button" id="togglePassword" aria-label="Show password" title="Show password">
                             <i data-feather="eye" aria-hidden="true"></i>
                         </button></div>
                 </label>
                 <label>
                     <span>Confirm password</span>
-                    <div class="password-field"><input id="confirmPassword" name="confirmPassword" type="password" required minlength="8"
+                    <div class="password-field"><input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required minlength="8"
                             placeholder="Re-enter your password"><button type="button" id="toggleConfirmPassword" aria-label="Show password" title="Show password">
                             <i data-feather="eye" aria-hidden="true"></i>
                         </button></div>
@@ -45,6 +46,18 @@
                 </label>
                 <button class="btn btn-primary btn-lg" type="submit">Create account</button>
             </form>
+            <div class="auth-divider">or</div>
+
+            <button type="button" class="btn btn-google btn-lg google-btn">
+                <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+                    <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+                    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+                    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+                </svg>
+                Continue with Google
+            </button>
+
             <p class="auth-foot">Already registered? <a href="login.html">Log in</a></p>
         </div>
     </main>

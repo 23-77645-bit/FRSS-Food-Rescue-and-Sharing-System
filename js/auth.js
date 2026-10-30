@@ -4,6 +4,7 @@
 
 async function runAuthAction(button, loadingText, action) {
   const label = button?.textContent;
+  const markup = button?.innerHTML;
   if (button?.disabled) return { error: new Error('Please wait for the current request.') };
   if (button) { button.disabled = true; button.textContent = loadingText; }
   try {
@@ -12,8 +13,38 @@ async function runAuthAction(button, loadingText, action) {
   } catch (error) {
     return { error };
   } finally {
-    if (button) { button.disabled = false; button.textContent = label; }
+    if (button) {
+      button.disabled = false;
+      if (markup !== undefined) button.innerHTML = markup;
+      else button.textContent = label;
+    }
   }
+}
+
+function showAuthMessage(message) {
+  const status = document.getElementById('authStatus');
+  if (!status) { showToast(message); return; }
+  status.textContent = message;
+  status.hidden = false;
+}
+
+function authErrorMessage(error, fallback) {
+  if (error?.code === 'invalid_credentials' || /invalid login credentials/i.test(error?.message || '')) {
+    return 'Email or password is incorrect. If you have not registered, choose Create an account below. If you already have an account, use Forgot password to reset it.';
+  }
+  if (error?.code === 'email_not_confirmed') {
+    return 'Please open the confirmation link in your email before logging in. Check your spam folder too.';
+  }
+  if (error?.code === 'over_email_send_rate_limit' || /rate limit|too many requests/i.test(error?.message || '')) {
+    return 'Too many email requests were made. Wait a few minutes, then try again.';
+  }
+  if (error?.name === 'TimeoutError' || error?.name === 'AbortError') {
+    return 'The account service took too long to respond. Please try again.';
+  }
+  if (/failed to fetch|fetch failed|network|load failed/i.test(error?.message || '')) {
+    return 'Cannot connect to the account service. Check your internet connection and try again. If this continues, contact the site administrator.';
+  }
+  return error?.message || fallback;
 }
 
 function authRedirectBase() {
@@ -52,11 +83,13 @@ async function handleLoginSubmit(e) {
   const email = form.querySelector('[name="email"]').value.trim();
   const password = form.querySelector('[name="password"]').value;
   const btn = form.querySelector('button[type="submit"]');
+  if (btn?.disabled) return;
+  showAuthMessage('Logging in…');
   const { error } = await runAuthAction(btn, 'Logging in…', () => window.sb.auth.signInWithPassword({ email, password }));
 
   if (error) {
     shakeFormFields(form, ['[name="email"]', '[name="password"]']);
-    showToast(error.message || 'Login failed. Check your email and password.');
+    showAuthMessage(authErrorMessage(error, 'Login failed. Check your email and password.'));
     return;
   }
   window.location.href = 'dashboard.html';
@@ -71,18 +104,26 @@ async function handleRegisterSubmit(e) {
   const confirmPassword = form.querySelector('[name="confirmPassword"]')?.value || '';
   const termsAccepted = form.querySelector('[name="terms"]')?.checked;
   const btn = form.querySelector('button[type="submit"]');
+  if (btn?.disabled) return;
+
+  if (!fullName) {
+    shakeFormFields(form, ['[name="fullName"]']);
+    showAuthMessage('Please enter your full name.');
+    return;
+  }
 
   if (password !== confirmPassword) {
     shakeFormFields(form, ['[name="password"]', '[name="confirmPassword"]']);
-    showToast("Passwords don't match.");
+    showAuthMessage("Passwords don't match.");
     return;
   }
 
   if (!termsAccepted) {
     shakeFormFields(form, ['[name="terms"]']);
-    showToast('Please accept the Terms and Conditions.');
+    showAuthMessage('Please accept the Terms and Conditions.');
     return;
   }
+  showAuthMessage('Creating your account…');
   const { data, error } = await runAuthAction(btn, 'Creating account…', () => window.sb.auth.signUp({
     email,
     password,
@@ -91,20 +132,84 @@ async function handleRegisterSubmit(e) {
 
   if (error) {
     shakeFormFields(form, ['[name="email"]', '[name="password"]']);
-    showToast(error.message || 'Could not create account.');
+    showAuthMessage(authErrorMessage(error, 'Could not create account.'));
     return;
   }
   if (data?.session) { window.location.href = 'dashboard.html'; return; }
-  showToast('Check your email to confirm your account.');
+  showAuthMessage('Check your email for a confirmation link. If you already have an account, log in or reset your password.');
   form.reset();
 }
 
-async function handleGoogleSignIn() {
-  const { error } = await runAuthAction(null, '', () => window.sb.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: authRedirectBase() + '/pages/dashboard.html' }
-  }));
-  if (error) showToast(error.message || 'Google sign-in failed.');
+async function handleGoogleSignIn(event) {
+  const button = event?.currentTarget;
+  if (button?.disabled) return;
+  showAuthMessage('Connecting to Google…');
+  const { error } = await runAuthAction(button, 'Connecting…', async () => {
+    // OAuth otherwise sends disabled-provider errors to a raw API error page.
+    const config = window.FRSS_CONFIG;
+    const response = await fetch(config.supabaseUrl + '/auth/v1/settings', {
+      headers: { apikey: config.supabaseAnonKey },
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!response.ok) throw new Error('The account service is unavailable. Please contact the site administrator.');
+    const settings = await response.json();
+    if (!settings.external?.google) throw new Error('Google sign-in is not configured yet. Please use email and password.');
+    const result = await window.sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: authRedirectBase() + '/pages/login.html', skipBrowserRedirect: true }
+    });
+    if (result.error) return result;
+    if (!result.data?.url) throw new Error('Google sign-in could not start. Please try again.');
+    window.location.href = result.data.url;
+    return result;
+  });
+  if (error) showAuthMessage(authErrorMessage(error, 'Google sign-in failed. Please try again.'));
+}
+
+async function completeAuthRedirect() {
+  if (!document.getElementById('loginForm')) return;
+  const query = new URLSearchParams(window.location.search);
+  const hash = new URLSearchParams(window.location.hash.slice(1));
+  const error = query.get('error_description') || hash.get('error_description') || query.get('error') || hash.get('error');
+  if (error) {
+    // Provider responses can contain authorization codes and server details.
+    // Keep those out of the page; the administrator can inspect Auth logs.
+    const exchangeFailed = /unable to exchange external code|invalid_client|client secret/i.test(error);
+    const denied = /access_denied/i.test(query.get('error') || hash.get('error') || '');
+    showAuthMessage(exchangeFailed
+      ? 'Google sign-in is temporarily unavailable. Please use email and password or try again later.'
+      : denied
+        ? 'Google sign-in was cancelled or access was denied. Please try again.'
+        : 'Sign-in could not be completed. Please try again.');
+    window.history.replaceState(null, '', window.location.pathname);
+    return;
+  }
+  if (!window.sb?.auth) return;
+
+  let redirecting = false;
+  const openDashboard = session => {
+    if (!session || redirecting) return false;
+    redirecting = true;
+    showAuthMessage('Signed in. Opening your dashboard…');
+    window.location.href = 'dashboard.html';
+    return true;
+  };
+
+  // OAuth URL tokens are processed asynchronously by supabase-js. Listen for
+  // the restored session as well as checking storage immediately so neither a
+  // fast nor a slow callback can leave the user on the login page.
+  window.sb.auth.onAuthStateChange?.((event, session) => {
+    if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
+      openDashboard(session);
+    }
+  });
+
+  if (/access_token=|refresh_token=|code=/.test(window.location.hash + window.location.search)) {
+    showAuthMessage('Completing Google sign-in…');
+  }
+  const result = await runAuthAction(null, '', () => window.sb.auth.getSession());
+  if (result.error) showAuthMessage(authErrorMessage(result.error, 'Could not finish sign-in. Please try again.'));
+  else openDashboard(result.data?.session);
 }
 
 async function handleForgotPasswordSubmit(e) {
@@ -112,18 +217,19 @@ async function handleForgotPasswordSubmit(e) {
   const form = e.target;
   const email = form.querySelector('[name="email"]').value.trim();
   const btn = form.querySelector('button[type="submit"]');
+  if (btn?.disabled) return;
+  showAuthMessage('Requesting a reset link…');
   const { error } = await runAuthAction(btn, 'Sending…', () => window.sb.auth.resetPasswordForEmail(email, {
     redirectTo: authRedirectBase() + '/pages/resetpassword.html'
   }));
 
   if (error) {
     shakeFormFields(form, ['[name="email"]']);
-    showToast(error.message || 'Could not send reset email.');
+    showAuthMessage(authErrorMessage(error, 'Could not request a reset email. Please try again.'));
     return;
   }
   form.reset();
-  const msg = document.getElementById('forgotSuccess');
-  if (msg) msg.classList.remove('hidden');
+  showAuthMessage('If an account exists for that email, a reset link has been requested. Check your inbox and spam folder. Delivery may take a few minutes.');
 }
 
 async function handleResetPasswordSubmit(e) {
@@ -193,6 +299,7 @@ function setupPasswordToggle(inputId, btnId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  completeAuthRedirect();
   document.getElementById('loginForm')?.addEventListener('submit', handleLoginSubmit);
   document.getElementById('registerForm')?.addEventListener('submit', handleRegisterSubmit);
   document.getElementById('forgotPasswordForm')?.addEventListener('submit', handleForgotPasswordSubmit);

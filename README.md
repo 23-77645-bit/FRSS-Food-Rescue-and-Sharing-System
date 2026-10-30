@@ -34,6 +34,17 @@ where id = 'YOUR-AUTH-USER-UUID';
 
 Configure Supabase Auth's site URL and redirect allowlist for your deployment's dashboard and password-reset pages. Google sign-in also requires the Google provider setup.
 
+For registration and Google sign-in:
+
+- Copy the URL and publishable key from your active Supabase project's Connect dialog into `js/config.js`. `_env.example` is documentation; this static site does not load environment files.
+- Enable email sign-up in Authentication. When email confirmation is enabled, users must open their confirmation email before logging in.
+- Enable Google under Authentication > Sign In / Providers and save your Google OAuth client ID and secret there. Keep the secret out of website files. In Google Cloud, add `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback` as an authorized redirect URI.
+- Under Authentication > URL Configuration, allow `/pages/login.html` (Google return), `/pages/dashboard.html` (email confirmation), and `/pages/resetpassword.html` on each site origin. For Live Server, include both `http://127.0.0.1:5500` and `http://localhost:5500` if you use both. Preserve any deployment subdirectory in these URLs.
+
+The login and registration pages display persistent status messages for connection errors, disabled Google sign-in, and email confirmation. Google sign-in returns to the login page, which waits for Supabase to restore the session before opening the dashboard.
+
+If Google sign-in returns `Unable to exchange external code`, inspect Supabase Auth logs. An `invalid_client` error with `The provided client secret is invalid` means the Google provider's saved secret must be replaced with an active secret belonging to the same Google Cloud Web application OAuth client as its Client ID. Save both in Supabase's Google provider settings, then start a fresh sign-in from the website; reloading an old callback cannot retry the code exchange. Keep the Google client secret out of `.env` and browser JavaScript for this static site. Setup: https://supabase.com/docs/guides/auth/social-sign-in/auth-google
+
 ## Audit and validation
 
 See `BUGFIX-NOTES.md` for the corrected issues, database instructions, test results, limitations, and the remaining live checks.

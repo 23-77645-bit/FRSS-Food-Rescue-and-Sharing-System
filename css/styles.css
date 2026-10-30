@@ -1111,6 +1111,16 @@ body.dark .donate-banner::before {
   transform: none
 }
 
+.auth-status {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--ink);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.auth-status[hidden] { display: none; }
+
 .toast {
   position: fixed;
   left: 50%;

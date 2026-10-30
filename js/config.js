@@ -1,8 +1,8 @@
 // Supabase configuration.
 // For local development, replace these values with your project credentials.
 window.FRSS_CONFIG = {
-  supabaseUrl: 'https://tdesgwnakzqnxfpeuidu.supabase.co',
-  supabaseAnonKey: 'sb_publishable_7wZjCj4uucX6ll0nI69h1w_6PuS8SLo'
+  supabaseUrl: "https://royrqzirzgcufjzgfkea.supabase.co",
+  supabaseAnonKey: "sb_publishable_KHFnV6IxzuOwWRkCwCurww_4koOdizA"
 };
 
 // Requires the Supabase JS UMD build to be loaded on the page BEFORE this
