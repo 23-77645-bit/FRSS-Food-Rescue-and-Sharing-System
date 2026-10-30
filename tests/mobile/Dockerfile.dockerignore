@@ -1,0 +1,7 @@
+# Only the package manifests and mobile test files enter the build context.
+**
+!package.json
+!package-lock.json
+!tests/
+!tests/mobile/
+!tests/mobile/**

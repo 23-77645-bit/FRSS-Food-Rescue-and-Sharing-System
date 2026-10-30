@@ -1,0 +1,7 @@
+# Native rootful Linux Docker Engine only. Opt-in privileged USB access.
+# Use with: docker compose -f compose.mobile.yml -f compose.mobile.linux-usb.yml ...
+services:
+  mobile:
+    privileged: true
+    volumes:
+      - /dev/bus/usb:/dev/bus/usb

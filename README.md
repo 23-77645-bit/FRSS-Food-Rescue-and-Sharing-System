@@ -47,6 +47,8 @@ If Google sign-in returns `Unable to exchange external code`, inspect Supabase A
 
 ## Audit and validation
 
+Android Chrome automation on a physical phone is documented step by step in [tests/mobile/README.md](tests/mobile/README.md). Windows Docker Desktop and Linux Docker Engine use `compose.mobile.yml` for Wireless debugging, with PowerShell and Bash examples for pairing, tests, logs and troubleshooting. Native Linux Docker USB testing uses the additional `compose.mobile.linux-usb.yml` override. The guide also includes a Windows-native USB alternative using `npm.cmd run mobile:server` and `npm.cmd run test:mobile`.
+
 See `BUGFIX-NOTES.md` for the corrected issues, database instructions, test results, limitations, and the remaining live checks.
 
 ```bash

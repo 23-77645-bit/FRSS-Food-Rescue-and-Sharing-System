@@ -1,0 +1,22 @@
+services:
+  mobile:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: tests/mobile/Dockerfile
+    ports:
+      - "127.0.0.1:4723:4723"
+    environment:
+      ANDROID_UDID: ${ANDROID_UDID:-}
+      MOBILE_BASE_URL: ${MOBILE_BASE_URL:-https://frss-food-rescue-and-sharing-system.netlify.app/}
+    volumes:
+      - mobile-adb-keys:/root/.android
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4723/status').then(r=>r.json()).then(s=>process.exit(s.value?.ready?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+
+volumes:
+  mobile-adb-keys:

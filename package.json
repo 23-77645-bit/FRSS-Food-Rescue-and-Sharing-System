@@ -1,6 +1,16 @@
 {
+  "scripts": {
+    "mobile:server": "appium server --address 127.0.0.1 --port 4723 --allow-insecure uiautomator2:chromedriver_autodownload",
+    "mobile:doctor": "appium driver doctor uiautomator2",
+    "test:mobile": "node --test --test-concurrency=1 tests/mobile/smoke.test.mjs"
+  },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.118.0"
+  },
+  "devDependencies": {
+    "appium": "3.9.0",
+    "appium-uiautomator2-driver": "8.7.3",
+    "webdriverio": "10.1.0"
   }
 }
