@@ -45,16 +45,30 @@ The login and registration pages display persistent status messages for connecti
 
 If Google sign-in returns `Unable to exchange external code`, inspect Supabase Auth logs. An `invalid_client` error with `The provided client secret is invalid` means the Google provider's saved secret must be replaced with an active secret belonging to the same Google Cloud Web application OAuth client as its Client ID. Save both in Supabase's Google provider settings, then start a fresh sign-in from the website; reloading an old callback cannot retry the code exchange. Keep the Google client secret out of `.env` and browser JavaScript for this static site. Setup: https://supabase.com/docs/guides/auth/social-sign-in/auth-google
 
+## Automated tests
+
+Run the desktop/static checks from the repository root:
+
+```bash
+node tests/auth.cjs
+node tests/regression.cjs
+node tests/verification.cjs
+node tests/admin-navigation.cjs
+python tests/check_project.py
+```
+
+- `tests/auth.cjs` covers mocked registration, login, password recovery, OAuth callbacks, and dashboard redirects.
+- `tests/regression.cjs` covers mocked food, claim, notification, location, and UI regression cases.
+- `tests/verification.cjs` covers mocked identity-upload cleanup and duplicate-submission protection.
+- `tests/admin-navigation.cjs` covers all admin views and sidebar pointer behavior.
+- `tests/check_project.py` combines each page's local and inline JavaScript and runs Node syntax checks across the static site.
+
+Run `npm run test:mobile` for the read-only Appium smoke tests. They require a physical Android device with Chrome, a running Appium server, and `ANDROID_UDID` set to the device serial shown by `adb devices -l`. The Docker and native setup steps are in [tests/mobile/README.md](tests/mobile/README.md).
+
 ## Audit and validation
 
 Android Chrome automation on a physical phone is documented step by step in [tests/mobile/README.md](tests/mobile/README.md). Windows Docker Desktop and Linux Docker Engine use `compose.mobile.yml` for Wireless debugging, with PowerShell and Bash examples for pairing, tests, logs and troubleshooting. Native Linux Docker USB testing uses the additional `compose.mobile.linux-usb.yml` override. The guide also includes a Windows-native USB alternative using `npm.cmd run mobile:server` and `npm.cmd run test:mobile`.
 
 See `BUGFIX-NOTES.md` for the corrected issues, database instructions, test results, limitations, and the remaining live checks.
-
-```bash
-python tests/check_project.py
-node tests/regression.cjs
-node tests/verification.cjs
-```
 
 Photo sources are listed in `PHOTO-CREDITS.md`.
