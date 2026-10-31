@@ -4,9 +4,9 @@
 
 Replace the website files with the files in this ZIP, preserving your own Supabase configuration in `js/config.js` if it differs.
 
-- Existing FRSS database: the patch now creates the identity verification table, private bucket, and policies if that setup is missing. Run `supabase-bug-fixes.sql` once in Supabase SQL Editor. Use this smaller patch instead of replaying historical migrations.
+- Existing FRSS database: run the updated `supabase-bug-fixes.sql` once in Supabase SQL Editor. The patch creates missing identity-verification objects and applies the final function grants and split public/authenticated listing policies. Use this smaller patch instead of replaying historical migrations.
 - New database: run the corrected `supabase-all-in-one.sql` instead. Do not run both files for a fresh setup.
-- No database changes were applied to your live project during this review.
+- The SQL was reviewed statically and was not executed against a live Supabase project. Applying the updated patch and checking it with anon, authenticated, and admin sessions is still required.
 
 ## Verified frontend fixes
 
@@ -42,6 +42,14 @@ Replace the website files with the files in this ZIP, preserving your own Supaba
 - No-show handling cannot reopen expired food or restore quantity for a different reservation.
 - Verification submission checks active profiles, duplicate pending requests, existing verification, and uploaded files. Reviews reject already reviewed or outdated submissions. Direct insertion no longer bypasses the submission RPC.
 - Account closure cancels both the user's own claims and claims against the user's donations, restores held quantities where appropriate, notifies the other participant, and clears reservation data. Picked-up rescues must be completed before closing the account.
+- Existing databases now receive the same final function privilege reset and split anonymous/authenticated category and food-post policies as fresh installations.
+
+### Function privilege audit
+
+- Front-end RPCs `claim_food`, `update_claim_status`, `release_expired_reservations`, and `expire_food_posts` are granted to `authenticated`, the role that calls them.
+- RLS helpers `is_admin`, `has_claim_for_food_post`, `frss_setting_bool`, and `frss_setting_number` are granted to `authenticated`. Anonymous category and food-post policies call no custom functions.
+- Trigger-only functions `set_updated_at`, `set_food_report_updated_at`, `handle_new_user`, `open_admin_case_from_claim_report`, `open_admin_case_from_food_report`, and `prepare_food_post` are intentionally not granted to API roles: PostgreSQL invokes them through their triggers, and they are not client RPCs.
+- Supabase-managed `auth.uid()` and `storage.foldername()` calls remain governed by Supabase's managed schema permissions and do not need grants in the `public` schema list.
 
 ## Validation performed
 
