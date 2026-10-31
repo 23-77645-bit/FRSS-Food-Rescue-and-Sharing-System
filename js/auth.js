@@ -85,6 +85,7 @@ async function handleLoginSubmit(e) {
   const btn = form.querySelector('button[type="submit"]');
   if (btn?.disabled) return;
   showAuthMessage('Logging in…');
+  window.FRSS_AUTH?.setRememberMe(Boolean(form.querySelector('[name="remember"]')?.checked));
   const { error } = await runAuthAction(btn, 'Logging in…', () => window.sb.auth.signInWithPassword({ email, password }));
 
   if (error) {
@@ -143,6 +144,7 @@ async function handleRegisterSubmit(e) {
 async function handleGoogleSignIn(event) {
   const button = event?.currentTarget;
   if (button?.disabled) return;
+  window.FRSS_AUTH?.setRememberMe(Boolean(document.getElementById('loginForm')?.querySelector('[name="remember"]')?.checked));
   showAuthMessage('Connecting to Google…');
   const { error } = await runAuthAction(button, 'Connecting…', async () => {
     // OAuth otherwise sends disabled-provider errors to a raw API error page.
