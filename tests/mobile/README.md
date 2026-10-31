@@ -16,6 +16,8 @@ Commands containing only `docker compose ...` work in both shells, even when a b
 
 The four starter tests check login controls, password visibility, registration navigation and forgot-password navigation. They do not create accounts, send recovery emails or sign into Google. Test Google sign-in and dashboard access separately with a test account.
 
+When `MOBILE_BASE_URL` is unset, the tests target the production site at `https://frss-food-rescue-and-sharing-system.netlify.app/`. The runner prints the resolved target before opening Chrome. Set `MOBILE_BASE_URL` only when you intentionally want to test another deployment or a local server reachable from the phone.
+
 The connection is: **test runner inside Docker → Appium inside Docker → ADB inside Docker → phone over Wi-Fi → Chrome → FRSS**.
 
 Use the root `compose.mobile.yml` for this guide. Include `-f compose.mobile.yml` in every command shown below. The obsolete `docker-compose.yml` setup has been removed because its site mount did not match this repository and its Appium service enabled privileged USB access by default.

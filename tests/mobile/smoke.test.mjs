@@ -4,6 +4,7 @@ import { remote } from 'webdriverio';
 import { mobileConfig } from './config.mjs';
 
 const { baseUrl, options } = mobileConfig();
+console.log(`Mobile smoke target: ${baseUrl.href}`);
 let browser;
 before(async () => { browser = await remote(options); }, { timeout: 180000 });
 after(async () => { if (browser) await browser.deleteSession(); }, { timeout: 30000 });
