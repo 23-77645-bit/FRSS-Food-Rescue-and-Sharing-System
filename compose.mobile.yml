@@ -1,3 +1,5 @@
+name: frss-mobile-test
+
 services:
   mobile:
     platform: linux/amd64
@@ -6,11 +8,14 @@ services:
       dockerfile: tests/mobile/Dockerfile
     ports:
       - "127.0.0.1:4723:4723"
+    env_file:
+      - path: .env.mobile
+        required: false
     environment:
-      ANDROID_UDID: ${ANDROID_UDID:-}
-      MOBILE_BASE_URL: ${MOBILE_BASE_URL:-https://frss-food-rescue-and-sharing-system.netlify.app/}
+      CHROMEDRIVER_CACHE_DIR: /opt/chromedrivers
     volumes:
       - mobile-adb-keys:/root/.android
+      - mobile-chromedrivers:/opt/chromedrivers
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4723/status').then(r=>r.json()).then(s=>process.exit(s.value?.ready?0:1)).catch(()=>process.exit(1))"]
       interval: 10s
@@ -20,3 +25,4 @@ services:
 
 volumes:
   mobile-adb-keys:
+  mobile-chromedrivers:

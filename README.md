@@ -43,6 +43,15 @@ For registration and Google sign-in:
 
 The login and registration pages display persistent status messages for connection errors, disabled Google sign-in, and email confirmation. Google sign-in returns to the login page, which waits for Supabase to restore the session before opening the dashboard.
 
+Login uses tab-scoped `sessionStorage` by default: navigation and refresh keep
+the login, while closing the tab normally clears it. Checking “Remember me” on
+the login page uses `localStorage` to preserve login across browser restarts,
+including Google sign-in. There is no inactivity timeout. Browser restore or
+duplicate-tab features can restore/copy session storage, so this is a browser
+storage policy, not server-side token revocation. Previously persisted logins
+without an explicit Remember me preference require a fresh login after this
+update. Redeploy the updated files to Netlify to apply it.
+
 If Google sign-in returns `Unable to exchange external code`, inspect Supabase Auth logs. An `invalid_client` error with `The provided client secret is invalid` means the Google provider's saved secret must be replaced with an active secret belonging to the same Google Cloud Web application OAuth client as its Client ID. Save both in Supabase's Google provider settings, then start a fresh sign-in from the website; reloading an old callback cannot retry the code exchange. Keep the Google client secret out of `.env` and browser JavaScript for this static site. Setup: https://supabase.com/docs/guides/auth/social-sign-in/auth-google
 
 ## Automated tests
@@ -51,6 +60,7 @@ Run the desktop/static checks from the repository root:
 
 ```bash
 node tests/auth.cjs
+node tests/session.cjs
 node tests/regression.cjs
 node tests/verification.cjs
 node tests/admin-navigation.cjs
@@ -58,6 +68,7 @@ python tests/check_project.py
 ```
 
 - `tests/auth.cjs` covers mocked registration, login, password recovery, OAuth callbacks, and dashboard redirects.
+- `tests/session.cjs` covers tab-scoped login, remembered login, token refresh, storage switching, and logout cleanup.
 - `tests/regression.cjs` covers mocked food, claim, notification, location, and UI regression cases.
 - `tests/verification.cjs` covers mocked identity-upload cleanup and duplicate-submission protection.
 - `tests/admin-navigation.cjs` covers all admin views and sidebar pointer behavior.

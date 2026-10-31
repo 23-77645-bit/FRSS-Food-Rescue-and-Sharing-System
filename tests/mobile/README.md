@@ -20,6 +20,46 @@ When `MOBILE_BASE_URL` is unset, the tests target the production site at `https:
 
 The connection is: **test runner inside Docker → Appium inside Docker → ADB inside Docker → phone over Wi-Fi → Chrome → FRSS**.
 
+The mobile test environment is configured separately from development. Copy `.env.mobile.example` to the ignored `.env.mobile`, replace `ANDROID_UDID` with the phone's current Wireless debugging **IP address & port**, and keep the deployed `MOBILE_BASE_URL` unless you intentionally need another test target. Load it with `--env-file .env.mobile` and use the dedicated Compose project name:
+
+```powershell
+Copy-Item .env.mobile.example .env.mobile
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml up -d
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile
+```
+
+Before the test command, connect ADB inside the container with the same `ANDROID_UDID` address from `.env.mobile`:
+
+```powershell
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb connect 192.168.1.50:40567
+```
+
+Replace the sample address. Compose passes both values from `.env.mobile` into the container for the test command.
+
+On Windows, use the helper below to start the container, wait for Appium,
+connect ADB, verify the phone, and run the tests in the correct order:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/mobile/run-docker-tests.ps1
+```
+
+The helper reads `ANDROID_UDID` from `.env.mobile`. Android may assign a new
+debugging port, so you can override the saved value for one run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests/mobile/run-docker-tests.ps1 -DeviceAddress '192.168.1.16:34621'
+```
+
+Replace `34621` with the digits displayed on the phone. Do not type
+`CURRENT_PORT` or `DEBUGGING_PORT` literally. If the saved or supplied value is
+a placeholder, the helper asks for the current numeric address interactively.
+
+Do not run `up --force-recreate` after `adb connect`. Recreating or restarting
+the container ends its active ADB TCP connection. The Docker volume preserves
+the pairing key, but you must run `adb connect` again after a restart using the
+current address on Android's main Wireless debugging screen. The pairing-dialog
+port is separate and temporary.
+
 Use the root `compose.mobile.yml` for this guide. Include `-f compose.mobile.yml` in every command shown below. The obsolete `docker-compose.yml` setup has been removed because its site mount did not match this repository and its Appium service enabled privileged USB access by default.
 
 ## 2A. Windows: install and start Docker Desktop
@@ -167,6 +207,17 @@ Chrome should visit FRSS pages and toggle password visibility. The terminal shou
 The image enables UiAutomator2's Chromedriver download feature. It does not need a Google Client Secret, Supabase secret key or the project's `.env`. The Dockerfile-specific ignore file limits the build context to package manifests and mobile test files.
 
 ## 8. Inspect results and troubleshoot
+
+Chrome opens after Appium creates its browser session. The first session may
+take several minutes while Appium downloads a Chromedriver matching the phone's
+Chrome version. The client allows up to ten minutes for session creation. Once
+Chrome is ready, the runner opens `MOBILE_BASE_URL`, then runs the page checks.
+Docker saves downloaded drivers in the `mobile-chromedrivers` volume for reuse.
+If startup still fails, inspect the Appium logs for download/network errors;
+an ADB connection alone does not confirm that the Chrome session is ready.
+
+The Windows helper builds updated test files before connecting ADB, so rerunning
+it applies changes without requiring a separate recreation after connection.
 
 Immediately after the test command, inspect its exit code:
 

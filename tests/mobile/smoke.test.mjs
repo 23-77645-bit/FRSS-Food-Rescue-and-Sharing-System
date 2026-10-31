@@ -6,7 +6,12 @@ import { mobileConfig } from './config.mjs';
 const { baseUrl, options } = mobileConfig();
 console.log(`Mobile smoke target: ${baseUrl.href}`);
 let browser;
-before(async () => { browser = await remote(options); }, { timeout: 180000 });
+before(async () => {
+  console.log('Starting Chrome through Appium (the first Chromedriver download may take several minutes)...');
+  browser = await remote(options);
+  console.log(`Chrome is ready. Opening ${baseUrl.href}`);
+  await browser.url(baseUrl.href);
+}, { timeout: 660000 });
 after(async () => { if (browser) await browser.deleteSession(); }, { timeout: 30000 });
 
 async function openPage(path, selector) {
