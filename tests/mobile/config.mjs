@@ -9,6 +9,8 @@ export function mobileConfig(env = process.env) {
       hostname: '127.0.0.1', port: 4723, path: '/',
       logLevel: 'error', connectionRetryCount: 0, connectionRetryTimeout: 600000,
       capabilities: {
+        // UiAutomator2 does not implement BiDi browsingContext.navigate.
+        'wdio:enforceWebDriverClassic': true,
         platformName: 'Android', browserName: 'Chrome',
         'appium:automationName': 'UiAutomator2',
         'appium:udid': env.ANDROID_UDID,

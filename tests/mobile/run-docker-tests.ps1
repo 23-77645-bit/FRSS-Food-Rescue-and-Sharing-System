@@ -85,6 +85,5 @@ if ($devices -notmatch "(?m)^$escapedDevice\s+device(?:\s|$)") {
 Write-Host "Running read-only mobile smoke tests against $DeviceAddress..."
 & docker @composeArgs exec -T -e "ANDROID_UDID=$DeviceAddress" mobile npm run test:mobile
 if ($LASTEXITCODE -ne 0) {
-    & docker @composeArgs logs --tail 120 mobile
-    throw "The mobile smoke tests failed. Check the Appium log above for Chrome or Chromedriver startup errors."
+    throw "The mobile smoke tests failed. Review the test output above for the failing assertion or session error. For Appium diagnostics, run: docker compose -f compose.mobile.yml logs --tail 120 mobile"
 }
