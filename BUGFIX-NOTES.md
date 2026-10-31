@@ -4,6 +4,8 @@
 
 Replace the website files with the files in this ZIP, preserving your own Supabase configuration in `js/config.js` if it differs.
 
+The placeholder credentials are documented in `.env.example`; this static site reads `js/config.js`, not environment files.
+
 - Existing FRSS database: run the updated `supabase-bug-fixes.sql` once in Supabase SQL Editor. The patch creates missing identity-verification objects and applies the final function grants and split public/authenticated listing policies. Use this smaller patch instead of replaying historical migrations.
 - New database: run the corrected `supabase-all-in-one.sql` instead. Do not run both files for a fresh setup.
 - The SQL was reviewed statically and was not executed against a live Supabase project. Applying the updated patch and checking it with anon, authenticated, and admin sessions is still required.

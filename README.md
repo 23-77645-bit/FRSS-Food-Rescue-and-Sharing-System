@@ -36,7 +36,7 @@ Configure Supabase Auth's site URL and redirect allowlist for your deployment's 
 
 For registration and Google sign-in:
 
-- Copy the URL and publishable key from your active Supabase project's Connect dialog into `js/config.js`. `_env.example` is documentation; this static site does not load environment files.
+- Copy the URL and publishable key from your active Supabase project's Connect dialog into `js/config.js`. `.env.example` is documentation; this static site does not load environment files.
 - Enable email sign-up in Authentication. When email confirmation is enabled, users must open their confirmation email before logging in.
 - Enable Google under Authentication > Sign In / Providers and save your Google OAuth client ID and secret there. Keep the secret out of website files. In Google Cloud, add `https://YOUR_PROJECT_REF.supabase.co/auth/v1/callback` as an authorized redirect URI.
 - Under Authentication > URL Configuration, allow `/pages/login.html` (Google return), `/pages/dashboard.html` (email confirmation), and `/pages/resetpassword.html` on each site origin. For Live Server, include both `http://127.0.0.1:5500` and `http://localhost:5500` if you use both. Preserve any deployment subdirectory in these URLs.
