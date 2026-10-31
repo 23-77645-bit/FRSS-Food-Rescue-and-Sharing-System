@@ -18,7 +18,7 @@ The four starter tests check login controls, password visibility, registration n
 
 The connection is: **test runner inside Docker → Appium inside Docker → ADB inside Docker → phone over Wi-Fi → Chrome → FRSS**.
 
-Use the new root `compose.mobile.yml` for this guide. The older `docker-compose.yml` uses Linux USB mounts and host networking; it is a separate setup and does not provide Windows USB access. Include `-f compose.mobile.yml` in every command shown below.
+Use the root `compose.mobile.yml` for this guide. Include `-f compose.mobile.yml` in every command shown below. The obsolete `docker-compose.yml` setup has been removed because its site mount did not match this repository and its Appium service enabled privileged USB access by default.
 
 ## 2A. Windows: install and start Docker Desktop
 
