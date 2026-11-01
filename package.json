@@ -2,7 +2,10 @@
   "scripts": {
     "mobile:server": "appium server --address 127.0.0.1 --port 4723 --allow-insecure uiautomator2:chromedriver_autodownload",
     "mobile:doctor": "appium driver doctor uiautomator2",
-    "test:mobile": "node --test --test-concurrency=1 tests/mobile/smoke.test.mjs"
+    "test:mobile": "node --test --test-concurrency=1 tests/mobile/smoke.test.mjs",
+    "test:mobile:parallel": "node tests/mobile/run-parallel.mjs",
+    "test:mobile:cases": "node tests/mobile/run-cases.mjs",
+    "test:mobile:cases:list": "node tests/mobile/run-cases.mjs --collect-only -q"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0"

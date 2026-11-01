@@ -23,6 +23,12 @@ RUN npm ci
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libxcb1 \
     && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+COPY tests/mobile/cases/requirements.txt /tmp/mobile-case-requirements.txt
+RUN python3 -m venv /app/.venv \
+    && /app/.venv/bin/python -m pip install --no-cache-dir -r /tmp/mobile-case-requirements.txt
 COPY tests/mobile ./tests/mobile
 
 EXPOSE 4723

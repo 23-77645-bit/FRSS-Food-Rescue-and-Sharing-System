@@ -16,6 +16,7 @@ services:
     volumes:
       - mobile-adb-keys:/root/.android
       - mobile-chromedrivers:/opt/chromedrivers
+      - ./tests/mobile/cases/reports:/app/tests/mobile/cases/reports
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4723/status').then(r=>r.json()).then(s=>process.exit(s.value?.ready?0:1)).catch(()=>process.exit(1))"]
       interval: 10s

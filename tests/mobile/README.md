@@ -24,7 +24,6 @@ The mobile test environment is configured separately from development. Copy `.en
 
 ```powershell
 Copy-Item .env.mobile.example .env.mobile
-docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml up -d
 docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile
 ```
 
@@ -205,6 +204,50 @@ During the first run, Appium may install Android helper apps and download a Chro
 Chrome should visit FRSS pages and toggle password visibility. The terminal should eventually report four passing tests and zero failures. The runner closes its Appium session afterward. These are expected results, not a claim that tests already passed on your phone.
 
 The image enables UiAutomator2's Chromedriver download feature. It does not need a Google Client Secret, Supabase secret key or the project's `.env`. The Dockerfile-specific ignore file limits the build context to package manifests and mobile test files.
+
+## Run on multiple phones simultaneously
+
+Connect every phone to the same reachable network, such as the PC's Windows Mobile hotspot. Enable Wireless debugging on each phone. Pair each phone with **ADB inside the existing `mobile` container** using its own pairing-dialog IP, port, and code; then connect with that phone's separate main-screen IP and port. Keep the container running while pairing the other phones. Do not run `up --build` after connecting them, because recreating the container drops active ADB connections.
+
+For a second phone in Windows PowerShell, after the mobile container has been built and started:
+
+```powershell
+$pairAddress = Read-Host 'Second phone pairing-dialog IP address and port'
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb pair $pairAddress
+$debugAddress = Read-Host 'Second phone MAIN Wireless debugging IP address and port'
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb connect $debugAddress
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb devices -l
+```
+
+Enter the six-digit pairing code at the prompt. Confirm that **both** phones show `device` in `adb devices -l`, then start the parallel suite:
+
+```powershell
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile:parallel
+```
+
+The command discovers all online ADB devices and starts one independent smoke-test process per phone. Output is prefixed by device address, and the command fails if any phone's tests fail. To select only certain connected phones, pass their exact identifiers from `adb devices -l` after `--`:
+
+```powershell
+$phone1 = Read-Host 'First phone main-screen IP address and port'
+$phone2 = Read-Host 'Second phone main-screen IP address and port'
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile:parallel -- $phone1 $phone2
+```
+
+The runner assigns each session a different UiAutomator2 system port and ChromeDriver port on the shared Appium server. The existing `npm run test:mobile` command still tests one phone selected by `ANDROID_UDID`. Pairing keys are stored in the `mobile-adb-keys` volume, but Android can change the main debugging port after reconnecting to Wi-Fi; reconnect each phone using its current address before rerunning tests.
+
+## Run the imported acceptance cases
+
+The Python Appium acceptance suite from `FRSS_Integrated_Appium` uses this same container and ADB connection. After the phone appears as `device` in `adb devices -l`, run:
+
+```powershell
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile:cases -- -v
+```
+
+The separate `npm run test:mobile:cases:list` command lists collected cases without opening Appium sessions. Account-dependent cases require a dedicated verified regular account in `.env.mobile`. See [cases/README.md](cases/README.md) for coverage and reports. This acceptance suite is serial on one phone; use `test:mobile:parallel` for simultaneous smoke tests across phones.
+
+### Windows hotspot has no DNS on the phone
+
+A phone can connect to the PC hotspot and ADB while Chrome still cannot open a domain name. If an Appium test reports `net::ERR_NAME_NOT_RESOLVED`, turn off mobile data temporarily and try the FRSS URL in phone Chrome. If it fails, check the phone's hotspot Wi-Fi details: an empty DNS server list means the hotspot did not provide DNS even if the phone can reach an internet IP address. On Android, search Settings for **Private DNS**, choose **Private DNS provider hostname**, enter `dns.google`, and save. Reconnect hotspot Wi-Fi if needed, then confirm the FRSS URL loads with mobile data off. Wireless debugging may assign a new main-screen port after Wi-Fi reconnects; use that new address with `adb connect`.
 
 ## 8. Inspect results and troubleshoot
 
