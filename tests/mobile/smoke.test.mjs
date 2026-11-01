@@ -6,6 +6,10 @@ import { mobileConfig } from './config.mjs';
 const { baseUrl, options } = mobileConfig();
 console.log(`Mobile smoke target: ${baseUrl.href}`);
 let browser;
+
+function pagePath(url) {
+  return new URL(url, baseUrl).pathname.replace(/\.html$/, '');
+}
 before(async () => {
   console.log('Starting Chrome through Appium (the first Chromedriver download may take several minutes)...');
   browser = await remote(options);
@@ -27,7 +31,7 @@ async function openPage(path, selector) {
   });
   await browser.url(new URL(path, baseUrl).href);
   await browser.$(selector).waitForDisplayed({ timeout: 30000 });
-  assert.equal(new URL(await browser.getUrl()).pathname, new URL(path, baseUrl).pathname);
+  assert.equal(pagePath(await browser.getUrl()), pagePath(path));
 }
 
 async function followLink(label, destination, form) {
@@ -35,7 +39,7 @@ async function followLink(label, destination, form) {
   await link.waitForClickable({ timeout: 30000 });
   await link.click();
   await browser.$(form).waitForDisplayed({ timeout: 30000 });
-  assert.equal(new URL(await browser.getUrl()).pathname, new URL(destination, baseUrl).pathname);
+  assert.equal(pagePath(await browser.getUrl()), pagePath(destination));
 }
 
 test('Login page displays email, password and Google sign-in', { timeout: 60000 }, async () => {
@@ -57,8 +61,8 @@ test('Password visibility can be toggled without submitting', { timeout: 60000 }
 test('Create account link opens the registration form', { timeout: 60000 }, async () => {
   await openPage('pages/login.html', '#loginForm');
   await followLink('Create an account', 'pages/register.html', '#registerForm');
-  assert.equal(await browser.$('[name="fullName"]').isDisplayed(), true);
-  assert.equal(await browser.$('[name="terms"]').isSelected(), false);
+  assert.equal(await browser.$('#registerForm [name="fullName"]').isDisplayed(), true);
+  assert.equal(await browser.$('#registerForm [name="terms"]').isSelected(), false);
 });
 
 test('Forgot password link opens recovery and returns to login', { timeout: 60000 }, async () => {

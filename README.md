@@ -76,6 +76,58 @@ python tests/check_project.py
 
 Run `npm run test:mobile` for the read-only Appium smoke tests. They require a physical Android device with Chrome, a running Appium server, and `ANDROID_UDID` set to the device serial shown by `adb devices -l`. The Docker and native setup steps are in [tests/mobile/README.md](tests/mobile/README.md).
 
+### Windows wireless ADB quick start
+
+If `adb connect` reports `Connection refused`, first check the **IP address & port on the main Wireless debugging screen**. The port under **Pair device with pairing code** is temporary and is only for `adb pair`. Android can change either port after Wireless debugging restarts.
+
+The PC and phone must be able to reach each other locally. Being on the same Wi-Fi band or SSID does not guarantee this: guest networks or router client isolation can block device-to-device traffic. In the verified Windows setup, the Converge Wi-Fi path could not reach the phone even though both devices used the same SSID. Connecting the phone to the PC's **Windows Mobile hotspot** fixed the network path. After changing networks, reopen Wireless debugging and use its new addresses.
+
+From PowerShell in the repository root, create `.env.mobile` from `.env.mobile.example` if needed, then set `ANDROID_UDID` in `.env.mobile` to the **main-screen** address. Keep the phone unlocked and the pairing dialog open while pairing:
+
+```powershell
+if (!(Test-Path .env.mobile)) { Copy-Item .env.mobile.example .env.mobile }
+notepad .env.mobile
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml up -d --build
+$pairAddress = Read-Host 'Pairing-dialog IP address and port'
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb pair $pairAddress
+$debugAddress = Read-Host 'Main Wireless debugging IP address and port'
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb connect $debugAddress
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile adb devices -l
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec -e "ANDROID_UDID=$debugAddress" mobile npm run test:mobile
+```
+
+Enter the six-digit code when `adb pair` prompts. Continue only when `adb devices -l` shows the phone as `device`. A container rebuild ends its active ADB connection, so repeat `adb connect` afterward; the `mobile-adb-keys` volume keeps the pairing files. If the phone rejects a reconnect after a rebuild, reopen the pairing dialog and pair again.
+
+If pairing or connecting still fails, test the current phone address from **Windows PowerShell** before retrying Docker:
+
+```powershell
+$debugAddress = Read-Host 'Current main Wireless debugging IP address and port'
+$phoneIp, $phonePort = $debugAddress.Split(':')
+Test-NetConnection -ComputerName $phoneIp -Port ([int]$phonePort)
+```
+
+Use the phone's **current main-screen** values. `TcpTestSucceeded : False` means Windows cannot open that port; check the current address, phone Wi-Fi, guest-network/client-isolation settings, or use Windows Mobile hotspot. Check `TcpTestSucceeded` even if the ping result is false. When `TcpTestSucceeded : True` but `adb connect` fails, confirm the container was paired using the current pairing-dialog port and code. See the [full mobile guide](tests/mobile/README.md) for Linux, USB, and additional troubleshooting.
+
+### Parallel Android testing
+
+For two or more phones on the same reachable hotspot, pair and connect each phone inside the `mobile` container, confirm they all appear as `device` in `adb devices -l`, then run:
+
+```powershell
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile:parallel
+```
+
+The runner starts a separate Appium session per phone with unique UiAutomator2 and ChromeDriver ports. See [multi-phone setup](tests/mobile/README.md#run-on-multiple-phones-simultaneously) for pairing commands and device selection.
+
+### Acceptance cases from FRSS_Integrated_Appium
+
+The imported Python Appium suite keeps the 106 source case IDs and runs the 13 implemented browser checks (16 test instances). The other cases are explicitly skipped; they are not counted as passed. It uses the same Docker Appium server and connected Android phone as the smoke tests. After connecting the phone, run:
+
+```powershell
+docker compose --env-file .env.mobile -p frss-mobile-test -f compose.mobile.yml exec mobile npm run test:mobile:cases -- -v
+```
+
+Tests requiring a real account need `FRSS_EMAIL` and `FRSS_PASSWORD` for a dedicated verified regular test account in `.env.mobile`; `FRSS_UNKNOWN_EMAIL` enables the unregistered-email check. Recreate the container after changing that file, then reconnect the phone. Reports appear in `tests/mobile/cases/reports`. See the [acceptance suite guide](tests/mobile/cases/README.md) for setup and case coverage. Run acceptance cases on one phone at a time; `test:mobile:parallel` runs the separate smoke suite across multiple phones.
+
 ## Audit and validation
 
 Android Chrome automation on a physical phone is documented step by step in [tests/mobile/README.md](tests/mobile/README.md). Windows Docker Desktop and Linux Docker Engine use `compose.mobile.yml` for Wireless debugging, with PowerShell and Bash examples for pairing, tests, logs and troubleshooting. Native Linux Docker USB testing uses the additional `compose.mobile.linux-usb.yml` override. The guide also includes a Windows-native USB alternative using `npm.cmd run mobile:server` and `npm.cmd run test:mobile`.

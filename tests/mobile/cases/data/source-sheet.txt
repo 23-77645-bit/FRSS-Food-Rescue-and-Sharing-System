@@ -1,0 +1,326 @@
+,FOOD RESCUE AND SHARING SYSTEM (FRSS) - TEST CASES,Unnamed: 1
+0,,
+1,Prepared by,"Urcia, Leinard; Creencia, Eloisa Joyce; Templa, Apple Mae; Montaño, Lea Marie; Condicion, Jomhar; Asuncion, Micford"
+2,Based on,"FRSS Business Requirement (BR, FR, NFR, BRU IDs), Development Plan, Process Flow, and Test Plan dated Sept 24, 2026"
+3,Testing schedule,"System / Integration Testing: Oct 26 - Nov 06, 2026 | UAT: Nov 02 - Nov 08, 2026 (per Test Plan)"
+4,Test approach,Manual testing in a web browser against the Supabase backend; Postman for backend checks; every test case traces to a requirement ID
+5,,
+6,HOW TO USE,
+7,Test Cases sheet,"Fill in 'Actual Result', 'Status', 'Defect Severity' (if Fail), 'Tester' and 'Date Tested'. Only the grey-headed columns K-P are for the tester."
+8,Summary sheet,"Calculates run rate, pass rate and the sign-off checks automatically from the Status column."
+9,Traceability sheet,Shows which test cases cover each BR / FR / NFR / BRU and flags any requirement without a test.
+10,,
+11,STATUS VALUES,Not Run | Pass | Fail | Blocked
+12,PRIORITY,High = Must Have requirement | Medium = Should Have or non-critical behavior | Low = cosmetic / edge case
+13,DEFECT SEVERITY,"Critical: blocks a Must Have, no workaround | High: Must Have impaired, workaround exists | Medium: Should Have / non-critical | Low: cosmetic (per Test Plan 2.3)"
+14,,
+15,ASSUMPTIONS & NOTES,
+16,Test data,"Emails, names and quantities in 'Test Data' are sample values; replace with the accounts prepared by the Backend developer."
+17,Password policy,Not defined in the BRD. AUTH-05 should be adjusted once the rule is confirmed.
+18,BR-10 vs BRU-09,"BR-10 says users complete pickup of claimed food, while BRU-09 says only the donor updates pickup status. Test cases follow BRU-09; please confirm with the team."
+19,Cancelled claims,FR-09 lists a Cancelled status but no rule says whether quantity is returned. CLM-13 needs a decision.
+20,Numbering gap,The BRD has no NFR-06 (it jumps from NFR-05 to NFR-07).
+21,Profile management,"Listed as in scope in the BRD but has no FR ID, so the Profile cases are marked 'In scope' instead of an ID."
+22,NFR-07,"Maintainability (modular architecture) is verified by design review, not a black-box test case."
+,TC ID,Module,Requirement ID(s),Test Type,Test Scenario,Preconditions,Test Steps,Test Data,Expected Result,Priority,Actual Result,Status,Defect Severity,Tester,Date Tested,Remarks
+0,TC-AUTH-01,Authentication,"BR-01, FR-01",Functional,Register with valid details,User is on the Sign Up page; email not yet registered.,"1. Open the Sign Up page
+2. Enter full name, valid email and a valid password
+3. Submit the form","Name: Juan Dela Cruz
+Email: juan.test01@mail.com
+Password: Test@1234",Account is created and stored in Supabase; user is told to verify email / is directed to Login. No error is shown.,High,,Not Run,,,,
+1,TC-AUTH-02,Authentication,"BR-01, FR-01",Functional,Register with an already-registered email,An account with juan.test01@mail.com exists.,"1. Open Sign Up
+2. Enter the existing email with any valid password
+3. Submit",Email: juan.test01@mail.com,Registration is rejected with a clear 'email already registered' message; no duplicate account is created.,High,,Not Run,,,,
+2,TC-AUTH-03,Authentication,"BR-01, FR-01",Functional,Register with invalid email format,On Sign Up page.,"1. Enter an email without '@' or domain
+2. Fill other fields validly
+3. Submit",Email: juan.test01mail,Validation message is shown; form is not submitted.,High,,Not Run,,,,
+3,TC-AUTH-04,Authentication,"BR-01, FR-01",Functional,Register with required fields left blank,On Sign Up page.,"1. Leave one or more required fields empty
+2. Submit",Blank name / email / password,Each missing required field is flagged; no account is created.,High,,Not Run,,,,
+4,TC-AUTH-05,Authentication,"BR-01, FR-01, NFR-04",Functional,Register with weak / too-short password,On Sign Up page.,"1. Enter valid name and email
+2. Enter a password that violates the password policy
+3. Submit",Password: 123,Registration is rejected and the password requirement is displayed. (Confirm the exact policy with the Backend developer.),High,,Not Run,,,,
+5,TC-AUTH-06,Authentication,"BR-01, FR-01, FR-02",Functional,Login with valid credentials,Verified user account exists.,"1. Open Login page
+2. Enter registered email and password
+3. Click Login",juan.test01@mail.com / Test@1234,User is authenticated and redirected to the User Dashboard.,High,,Not Run,,,,
+6,TC-AUTH-07,Authentication,"FR-01, NFR-04",Functional,Login with wrong password,Verified user account exists.,"1. Enter registered email with an incorrect password
+2. Click Login",Password: Wrong@999,Login is denied with an error message; no session is created; message does not reveal which field was wrong.,High,,Not Run,,,,
+7,TC-AUTH-08,Authentication,FR-01,Functional,Login with unregistered email,Email is not in the system.,"1. Enter an unregistered email and any password
+2. Click Login",nobody@mail.com,Login is denied with an error message; no dashboard access.,High,,Not Run,,,,
+8,TC-AUTH-09,Authentication,FR-01,Functional,Login with blank fields,On Login page.,"1. Leave email and/or password blank
+2. Click Login",Blank,Validation messages are displayed; no request succeeds.,High,,Not Run,,,,
+9,TC-AUTH-10,Authentication,BRU-01,Functional,Unverified account cannot post or claim food,Account registered but email not verified.,"1. Try to log in with the unverified account
+2. If login is allowed, try to post food and claim food",Unverified account,User is blocked from logging in or from posting/claiming until the account is verified.,High,,Not Run,,,,
+10,TC-AUTH-11,Authentication,"FR-01, NFR-04",Functional,Logout ends the session,User is logged in.,"1. Click Logout
+2. Press the browser Back button
+3. Try to open the dashboard URL directly",-,Session is ended; protected pages redirect to Login.,High,,Not Run,,,,
+11,TC-AUTH-12,Authentication,"BR-01, NFR-04",Functional,Password is not stored in plain text,A test account exists.,"1. Open the Supabase auth user record for the test account
+2. Inspect the stored password field",-,Only a hashed password is stored; the plain password is not visible anywhere in the database or in network responses.,High,,Not Run,,,,
+12,TC-AUTH-13,Authentication,FR-16,Functional,Admin login with valid credentials,Authorized admin account exists.,"1. Open Admin Login
+2. Enter admin email and password
+3. Click Login",admin@frss.test / Admin@1234,Admin is authenticated and redirected to the Admin Dashboard.,High,,Not Run,,,,
+13,TC-AUTH-14,Authentication,"FR-16, BRU-11, NFR-04",Functional,Admin login with invalid credentials,-,"1. Enter wrong admin password
+2. Click Login",Password: Wrong@999,Login is denied; no admin access is granted.,High,,Not Run,,,,
+14,TC-AUTH-15,Authentication,"BRU-11, NFR-04",Functional,Regular user cannot log in to Admin side,Regular user account exists.,"1. Open Admin Login
+2. Enter the regular user's credentials",juan.test01@mail.com,Access is denied; user is not shown the Admin Dashboard.,High,,Not Run,,,,
+15,TC-DASH-01,User Dashboard,"FR-02, FR-03",Functional,Dashboard shows Find Food and Donate Food options,User is logged in.,"1. Log in as a regular user
+2. Observe the User Dashboard",-,Dashboard loads and clearly presents both 'Find Food' and 'Donate Food' options.,High,,Not Run,,,,
+16,TC-DASH-02,User Dashboard,FR-03,Functional,Find Food option opens available food list,User is on the Dashboard.,1. Click 'Find Food',-,Available Food list page is displayed.,High,,Not Run,,,,
+17,TC-DASH-03,User Dashboard,FR-03,Functional,Donate Food option opens the food posting form,User is on the Dashboard.,1. Click 'Donate Food',-,Post Food form is displayed.,High,,Not Run,,,,
+18,TC-DASH-04,User Dashboard,BRU-02,Functional,Same account can both post and claim food,User A is logged in; User B has an available post.,"1. As User A, post a food item
+2. As User A, claim User B's food",-,Both actions succeed with the same account without switching roles.,High,,Not Run,,,,
+19,TC-DASH-05,User Dashboard,"FR-02, NFR-04",Functional,Unauthenticated user cannot open the dashboard,User is logged out.,1. Paste the User Dashboard URL into the browser,-,User is redirected to Login; no dashboard data is shown.,High,,Not Run,,,,
+20,TC-FIND-01,Find Food,"BR-05, FR-04",Functional,Browse available food posts,At least 3 published posts with remaining quantity exist from other users.,"1. Log in
+2. Click Find Food",3 sample posts,"All available posts are listed with key info (name, category, quantity, expiry, location).",High,,Not Run,,,,
+21,TC-FIND-02,Find Food,"BR-06, FR-05",Functional,View complete food details,Available post exists.,"1. From the list, click a food post",-,"Details page shows name, description, category, remaining quantity, unit, expiration date/time, pickup location and instructions, and donor.",High,,Not Run,,,,
+22,TC-FIND-03,Find Food,BRU-08,Functional,Expired posts are not shown as available,A post whose expiration date/time has passed exists.,"1. Open Find Food
+2. Look for the expired post",Post expired 1 hour ago,Expired post is not listed as available (or is clearly marked and cannot be claimed).,High,,Not Run,,,,
+23,TC-FIND-04,Find Food,BRU-07,Functional,Posts with zero remaining quantity are not available,A post with 0 remaining quantity exists.,"1. Open Find Food
+2. Look for the fully-claimed post",Remaining qty = 0,Post is not listed as available for claiming.,High,,Not Run,,,,
+24,TC-FIND-05,Find Food,"BR-05, FR-04",Functional,Empty state when no food is available,No available posts exist.,1. Open Find Food,-,A friendly 'no food available' message is shown; no errors or blank broken layout.,Medium,,Not Run,,,,
+25,TC-CLM-01,Claim Food,"BR-07, BR-08, FR-06, FR-07",Functional,Claim available food with valid quantity,User B logged in; User A's post has 10 portions remaining.,"1. Open the post details
+2. Enter a quantity within the remaining amount
+3. Click Claim",Qty to claim: 3,Claim is created and a confirmation is displayed (Claim Confirmation screen).,High,,Not Run,,,,
+26,TC-CLM-02,Claim Food,BRU-06,Functional,Remaining quantity updates after claim,Continuing from the previous claim.,"1. Re-open the post details
+2. Check remaining quantity in Find Food and in Supabase",Expected remaining: 7,Remaining quantity decreased by the claimed amount in the UI and the database.,High,,Not Run,,,,
+27,TC-CLM-03,Claim Food,"BR-15, BRU-04",Functional,User cannot claim their own food post,User A has a published post.,"1. Log in as User A
+2. Open own post in Find Food (if listed)
+3. Try to claim it; also attempt via direct URL / API call",-,Claim is blocked (button hidden/disabled or error shown) and no claim record is created.,High,,Not Run,,,,
+28,TC-CLM-04,Claim Food,"BR-16, BRU-05",Functional,Claim quantity greater than remaining is rejected,Post has 5 portions remaining.,"1. Open the post
+2. Enter a quantity above the remaining amount
+3. Click Claim",Qty: 6 (remaining 5),Claim is rejected with an error; remaining quantity unchanged.,High,,Not Run,,,,
+29,TC-CLM-05,Claim Food,"BRU-05, BRU-07",Functional,Claim exactly the remaining quantity,Post has 5 portions remaining.,1. Claim exactly the remaining quantity,Qty: 5,Claim succeeds; remaining quantity becomes 0 and the post is no longer available to others.,High,,Not Run,,,,
+30,TC-CLM-06,Claim Food,BR-16,Functional,Invalid claim quantities are rejected,Available post exists.,"1. Try to claim with 0
+2. Try a negative number
+3. Try non-numeric text
+4. Try an empty value","0, -2, 'abc', blank",Each invalid value is rejected with a validation message; no claim is created.,High,,Not Run,,,,
+31,TC-CLM-07,Claim Food,"BRU-03, BRU-08",Functional,Cannot claim a post that expired,A post expires while its details page is open.,"1. Open the post before expiry
+2. Wait until after the expiry time
+3. Click Claim",Post expiring in 2 minutes,Claim is rejected because the post is expired; no claim is created.,High,,Not Run,,,,
+32,TC-CLM-08,Claim Food,"BRU-03, BRU-05",Functional,Stale page claim after post becomes unavailable,User B has a post page open; User C claims all remaining quantity.,"1. User C claims the full remaining quantity
+2. User B (stale page) tries to claim",-,User B's claim is rejected with a message; no over-claim occurs.,High,,Not Run,,,,
+33,TC-CLM-09,Claim Food,"BR-08, FR-07",Functional,Claim confirmation shows claim details,A successful claim was made.,1. Review the Claim Confirmation screen,-,"Confirmation displays food name, quantity claimed, and pickup details; the claim appears in My Claims.",High,,Not Run,,,,
+34,TC-CLM-10,Claim Food,FR-08,Functional,View pickup information for a claimed food,User has a claim.,"1. Open My Claims
+2. Open the claim",-,"Pickup location, instructions, and donor details are displayed.",High,,Not Run,,,,
+35,TC-CLM-11,Claim Food,"BR-09, FR-09",Functional,View claim status in My Claims,User has claims in different states.,"1. Open My Claims
+2. Check the status shown for each claim","Claims in Pending, Ready for Pickup, Picked Up, Completed",Each claim shows its correct status and only the user's own claims are listed.,High,,Not Run,,,,
+36,TC-CLM-12,Claim Food,FR-09,Functional,Cancel a claim,User has an active claim not yet picked up.,"1. Open My Claims
+2. Cancel the claim
+3. Check the post's remaining quantity",-,Claim status becomes Cancelled. Verify with the team whether quantity is returned to the post (rule not defined in BRD).,Medium,,Not Run,,,,
+37,TC-CLM-13,Claim Food,BRU-09,Functional,Claimer cannot change the pickup status of the donor's post,User B has a claim on User A's post.,"1. As User B, try to set status to Picked Up/Completed via UI or direct request",-,Action is not available or is rejected; only the donor can update pickup status. (See BRD note: BR-10 vs BRU-09.),High,,Not Run,,,,
+38,TC-DON-01,Donate Food,"BR-02, BR-03, FR-10, FR-11",Functional,Post food with all valid details,User logged in; categories exist.,"1. Click Donate Food
+2. Fill in all fields
+3. Submit the form","Name: Pandesal
+Description: Freshly baked
+Category: Bakery
+Qty: 20 pcs
+Expiry: tomorrow 6:00 PM
+Pickup: Brgy. Hall
+Instructions: Ask for Ana",Post is saved with all entered details.,High,,Not Run,,,,
+39,TC-DON-02,Donate Food,"BR-04, FR-12",Functional,Publish a food post,A saved post exists.,"1. Click Publish
+2. Log in as another user
+3. Open Find Food",-,Post becomes Available and is visible to other users.,High,,Not Run,,,,
+40,TC-DON-03,Donate Food,"FR-11, FR-12",Functional,Required fields blank when posting,On Post Food form.,"1. Leave required fields empty (name, category, quantity, expiry, pickup location)
+2. Submit",Blank,Validation messages appear per field; post is not created or published.,High,,Not Run,,,,
+41,TC-DON-04,Donate Food,BRU-08,Functional,Expiration date/time in the past is rejected,On Post Food form.,"1. Enter an expiration earlier than the current date/time
+2. Submit",Expiry: yesterday,Post is rejected with an error about the expiration.,High,,Not Run,,,,
+42,TC-DON-05,Donate Food,"BR-03, FR-11",Functional,Invalid quantity values are rejected,On Post Food form.,"1. Enter 0, a negative number, and text in Quantity
+2. Submit each","0, -5, 'abc'",Each invalid value is rejected with a validation message.,High,,Not Run,,,,
+43,TC-DON-06,Donate Food,"FR-11, FR-21",Functional,Category dropdown lists admin-managed categories,Admin has created categories.,"1. Open the Post Food form
+2. Open the Category field",-,All active categories created by the admin are selectable.,High,,Not Run,,,,
+44,TC-DON-07,Donate Food,"BR-03, FR-11",Functional,Pickup location and instructions are shown to claimers,A published post with pickup details exists.,"1. As another user, open the post details",-,Pickup location and instructions match what the donor entered.,High,,Not Run,,,,
+45,TC-DON-08,Donate Food,FR-14,Functional,New published post starts as Available,User just published a post.,1. Open My Donations,-,The post shows status 'Available'.,High,,Not Run,,,,
+46,TC-DON-09,Donate Food,NFR-04,Functional,Special characters / script input is handled safely,On Post Food form.,"1. Enter <script>alert(1)</script> in name and description
+2. Publish and view the post as another user",<script>alert(1)</script>,Input is saved/escaped safely; no script runs; page does not break.,Medium,,Not Run,,,,
+47,TC-OWN-01,Manage Own Posts / Claims,"BR-09, FR-13, FR-14",Functional,My Donations lists only the user's own posts with status,User has several posts.,1. Open My Donations,-,"Only the user's own posts are shown with correct statuses (Available, Claimed, Picked Up, Completed).",High,,Not Run,,,,
+48,TC-OWN-02,Manage Own Posts / Claims,FR-13,Functional,Edit own food post,User has an Available post with no claims.,"1. Open the post in My Donations
+2. Edit quantity/description
+3. Save",New qty: 25,Changes are saved and reflected in Find Food.,High,,Not Run,,,,
+49,TC-OWN-03,Manage Own Posts / Claims,FR-13,Functional,Remove / cancel own food post,User has an Available post.,"1. Open My Donations
+2. Remove or cancel the post",-,Post is no longer available to claimers; record is handled per system design.,Medium,,Not Run,,,,
+50,TC-OWN-04,Manage Own Posts / Claims,"FR-14, BRU-06",Functional,Post status changes when someone claims,Own post is Available.,"1. Another user claims the post
+2. Refresh My Donations",-,Status updates to claimed and the claim appears with the claimer's details.,High,,Not Run,,,,
+51,TC-OWN-05,Manage Own Posts / Claims,"FR-15, BRU-09",Functional,Donor sets status to Ready for Pickup,Own post has a claim.,"1. Open My Donations
+2. Update status to Ready for Pickup",-,Status changes to Ready for Pickup and the claimer sees the same status.,High,,Not Run,,,,
+52,TC-OWN-06,Manage Own Posts / Claims,"BR-10, FR-15",Functional,Donor sets Picked Up then Completed,Post is Ready for Pickup.,"1. Update status to Picked Up
+2. Update status to Completed",-,Statuses update in order; the claim becomes Completed.,High,,Not Run,,,,
+53,TC-OWN-07,Manage Own Posts / Claims,"BR-13, BRU-10",Functional,Completed transaction is recorded as Food Rescued,Post has been completed.,"1. Check My Donations / My Claims
+2. Check the transaction record in Supabase",-,Completed transaction is retained and labeled as Food Rescued; not deleted.,High,,Not Run,,,,
+54,TC-OWN-08,Manage Own Posts / Claims,FR-15,Functional,Status cannot skip steps or go backward,Post is Available / Completed.,"1. Try to set Available straight to Completed
+2. Try to move a Completed post back",-,Invalid transitions are blocked.,Medium,,Not Run,,,,
+55,TC-OWN-09,Manage Own Posts / Claims,"BRU-09, NFR-04",Functional,Non-owner cannot update another user's post status,User B knows the post ID of User A's post.,"1. As User B, send a status update for User A's post (UI/URL/Postman)",-,Request is rejected (not authorized); status is unchanged.,High,,Not Run,,,,
+56,TC-OWN-10,Manage Own Posts / Claims,"BR-09, NFR-04",Functional,Users cannot see another user's claims,Two users each have claims.,"1. As User A open My Claims
+2. Try opening User B's claim by URL/ID",-,Only own claims are visible; other user's data is not accessible.,High,,Not Run,,,,
+57,TC-PRF-01,User Profile,In scope: Profile management,Functional,View user profile,User logged in.,1. Open Profile,-,Profile shows the user's registered details.,Medium,,Not Run,,,,
+58,TC-PRF-02,User Profile,In scope: Profile management,Functional,Update profile information,User on Profile page.,"1. Edit name/contact
+2. Save
+3. Reload page",New name: Juan D. Cruz,Updates are saved and persist after reload; invalid input is rejected.,Medium,,Not Run,,,,
+59,TC-ADB-01,Admin: Dashboard,FR-17,Functional,Admin dashboard displays system statistics,Admin logged in; sample data exists.,1. Open Admin Dashboard,-,"Dashboard shows monitoring info and statistics (e.g., users, food posts, claims, rescued).",High,,Not Run,,,,
+60,TC-ADB-02,Admin: Dashboard,"FR-17, NFR-08",Functional,Dashboard figures match the database,Known data in Supabase.,1. Compare each dashboard count to records in Supabase,-,All numbers match the stored data.,High,,Not Run,,,,
+61,TC-ADB-03,Admin: Dashboard,FR-17,Functional,Dashboard navigation to modules works,Admin on dashboard.,"1. Click Users, Food, Claims, Categories, and Reports in turn",-,Each link opens the correct Admin module without errors.,Medium,,Not Run,,,,
+62,TC-ADB-04,Admin: Dashboard,"BRU-11, NFR-04",Functional,Regular user cannot open Admin pages by URL,Regular user logged in.,1. Paste an Admin Dashboard URL in the browser,-,Access is denied or redirected; no admin data is shown.,High,,Not Run,,,,
+63,TC-AUM-01,Admin: User Management,"FR-18, BR-11",Functional,View list of users,Admin logged in.,1. Open User Management,-,All registered users are listed with key details and account status.,High,,Not Run,,,,
+64,TC-AUM-02,Admin: User Management,FR-18,Functional,Search for a user,Several users exist.,"1. Search by name
+2. Search by email",'juan',Matching users are displayed; non-matching users are excluded.,High,,Not Run,,,,
+65,TC-AUM-03,Admin: User Management,FR-18,Functional,Search with no matches,-,1. Search for a non-existent user,'zzzzz',A 'no results' message is displayed.,Medium,,Not Run,,,,
+66,TC-AUM-04,Admin: User Management,"FR-18, BR-11",Functional,Deactivate/suspend a user account,Active user exists.,"1. Select user
+2. Deactivate/suspend
+3. Try logging in as that user",-,Status updates; suspended user cannot log in or transact.,High,,Not Run,,,,
+67,TC-AUM-05,Admin: User Management,"FR-18, BR-11",Functional,Reactivate a user account,User is suspended.,"1. Reactivate the user
+2. Log in as that user",-,User can log in and use the system again.,Medium,,Not Run,,,,
+68,TC-AUM-06,Admin: User Management,BRU-11,Functional,Only admins can manage users (API level),Regular-user token available.,1. Call the admin user-management endpoint with a regular-user token (Postman),-,Request is rejected (401/403).,High,,Not Run,,,,
+69,TC-AFM-01,Admin: Food Monitoring,"BR-12, FR-19",Functional,View all food posts and statuses,Posts in multiple statuses exist.,1. Open Food Post Monitoring,-,"All posts are listed with donor, category, quantity, and current status.",High,,Not Run,,,,
+70,TC-AFM-02,Admin: Food Monitoring,FR-19,Functional,Filter / search food posts by status,Posts in multiple statuses exist.,"1. Filter by Available, Claimed, Completed",-,Only posts matching the filter are displayed.,Medium,,Not Run,,,,
+71,TC-AFM-03,Admin: Food Monitoring,FR-19,Functional,Status changes by users are reflected,Donor changes a post's status.,"1. Donor sets Ready for Pickup
+2. Refresh Admin Food Monitoring",-,Admin view shows the updated status.,High,,Not Run,,,,
+72,TC-ACM-01,Admin: Claims Monitoring,"BR-12, FR-20",Functional,View all claims and statuses,Claims exist.,1. Open Claims Monitoring,-,"All claims are listed with claimer, food, quantity, and status.",High,,Not Run,,,,
+73,TC-ACM-02,Admin: Claims Monitoring,"FR-20, BRU-06",Functional,New claim appears in Admin monitoring,-,"1. User claims a food item
+2. Refresh Admin Claims Monitoring",-,New claim appears with correct data and status.,High,,Not Run,,,,
+74,TC-ACM-03,Admin: Claims Monitoring,FR-20,Functional,Filter / search claims,Claims exist.,1. Filter or search by status or claimer,-,Results match the criteria.,Medium,,Not Run,,,,
+75,TC-ACT-01,Admin: Category Management,"BR-11, FR-21",Functional,Add a new category,Admin logged in.,"1. Open Category Management
+2. Click Add
+3. Enter a name and save",Name: Canned Goods,Category is created and listed.,High,,Not Run,,,,
+76,TC-ACT-02,Admin: Category Management,FR-21,Functional,Duplicate category is rejected,'Canned Goods' exists.,1. Add a category with the same name,Canned Goods,Error shown; no duplicate created.,Medium,,Not Run,,,,
+77,TC-ACT-03,Admin: Category Management,FR-21,Functional,Blank category name is rejected,-,1. Try to save a category with no name,Blank,Validation message; nothing saved.,Medium,,Not Run,,,,
+78,TC-ACT-04,Admin: Category Management,FR-21,Functional,Edit an existing category,Category exists.,"1. Edit the name
+2. Save",Canned Goods → Canned & Packed,Name is updated everywhere it is displayed.,High,,Not Run,,,,
+79,TC-ACT-05,Admin: Category Management,"FR-21, FR-11",Functional,New category appears in the Post Food form,New category was added.,"1. As a user open Post Food
+2. Open the Category dropdown",-,New category is selectable.,High,,Not Run,,,,
+80,TC-ACT-06,Admin: Category Management,FR-21,Functional,Disable/delete a category already used by posts,Category is used by existing posts.,"1. Disable or delete the category
+2. Check existing posts",-,Existing posts keep valid data; no broken or orphan records; the category is no longer offered for new posts.,High,,Not Run,,,,
+81,TC-ACT-07,Admin: Category Management,BRU-11,Functional,Regular user cannot manage categories,Regular-user token.,1. Attempt to add a category via UI/URL/Postman,-,Request is rejected.,High,,Not Run,,,,
+82,TC-ARP-01,Admin: Reports & Statistics,"BR-14, FR-22",Functional,View reports and statistics,Admin logged in; data exists.,1. Open Reports & Statistics,-,"Reports show totals for posts, claims, and completed (Food Rescued) transactions.",Medium,,Not Run,,,,
+83,TC-ARP-02,Admin: Reports & Statistics,"BR-14, FR-22",Functional,Report figures are accurate,Known data in Supabase.,1. Compare report totals with database records,-,Report figures match the data exactly.,Medium,,Not Run,,,,
+84,TC-ARP-03,Admin: Reports & Statistics,"FR-22, BRU-10",Functional,Completed transactions are counted as Food Rescued,A transaction was just completed.,"1. Complete a claim
+2. Refresh the report",-,Food Rescued count increases by one.,Medium,,Not Run,,,,
+85,TC-ARP-04,Admin: Reports & Statistics,FR-22,Functional,Report with no data,Empty test dataset.,1. Open Reports,-,Zero values or a 'no data' message is shown without errors.,Low,,Not Run,,,,
+86,TC-NFR-01,Non-Functional,NFR-01,Performance,Response time of standard actions,Normal load; browser DevTools open.,"1. Measure login, browse, post, claim, dashboard load (20 samples each)
+2. Record response times",20 samples/action,At least 95% of requests complete within 10 seconds.,High,,Not Run,,,,
+87,TC-NFR-02,Non-Functional,NFR-02,Availability,System availability during test period,Hosted environment.,"1. Check the site at regular intervals during the testing window
+2. Log any downtime",-,Uptime is at least 99% during scheduled operating periods.,Medium,,Not Run,,,,
+88,TC-NFR-03,Non-Functional,NFR-03,Usability,First-time user can post food unaided,A tester who has never used FRSS.,"1. Ask tester to post food without help
+2. Observe and note issues",-,Tester completes posting without assistance.,High,,Not Run,,,,
+89,TC-NFR-04,Non-Functional,NFR-03,Usability,First-time user can claim food unaided,A tester who has never used FRSS.,"1. Ask tester to find and claim food without help
+2. Observe",-,Tester completes claim without assistance.,High,,Not Run,,,,
+90,TC-NFR-05,Non-Functional,NFR-09,Compatibility,Responsive layout at 360px width,DevTools mobile viewport.,"1. Set viewport to 360px
+2. Walk through key pages",360x640,All pages are readable and usable; no horizontal scrolling or overlapping.,High,,Not Run,,,,
+91,TC-NFR-06,Non-Functional,NFR-09,Compatibility,Layout on tablet and desktop,-,1. Test at 768px and 1366px widths,"768px, 1366px",Layouts adapt properly and remain readable.,Medium,,Not Run,,,,
+92,TC-NFR-07,Non-Functional,NFR-09,Compatibility,"Works on Chrome, Firefox and Edge",Test devices ready.,"1. Run the core flow (login, post, claim) in each browser","Latest Chrome, Firefox, Edge",Core flow works identically in all three browsers.,Medium,,Not Run,,,,
+93,TC-NFR-08,Non-Functional,NFR-08,Auditability,Food post creation is logged,-,"1. Create a post
+2. Check the Supabase record",-,"Record has the user, timestamp, and action.",High,,Not Run,,,,
+94,TC-NFR-09,Non-Functional,NFR-08,Auditability,Claims and status changes are logged,-,"1. Claim food
+2. Change pickup status
+3. Check records",-,"Each event is recorded with user, timestamp, and action; 100% traceable.",High,,Not Run,,,,
+95,TC-NFR-10,Non-Functional,"NFR-04, BRU-11",Security,Role-based access enforced at API level,User and admin tokens.,1. Call admin endpoints using a regular user's token (Postman),-,Calls are rejected; data isn't returned.,High,,Not Run,,,,
+96,TC-NFR-11,Non-Functional,NFR-04,Security,User can't read other users' personal data,Two users exist.,"1. As User A, request User B's profile data (Postman)",-,Request is rejected / returns no personal data.,High,,Not Run,,,,
+97,TC-NFR-12,Non-Functional,NFR-04,Security,Injection resistance on inputs,-,"1. Enter SQL/JS payloads in text fields (login, post form, search)",' OR '1'='1,Input is handled safely; no data leak or error.,Medium,,Not Run,,,,
+98,TC-NFR-13,Non-Functional,NFR-05,Scalability,Large dataset performance,Seed ~500 posts and ~1000 claims.,"1. Open Find Food and Admin lists
+2. Measure load time",500 posts,Pages remain responsive without major degradation.,Medium,,Not Run,,,,
+99,TC-INT-01,Integration / End-to-End,"BR-01, BR-02, BR-04, BR-07, BR-08, BR-10, BR-13, BRU-10",System,"Full flow: donate, claim, pickup, complete",Two user accounts and an admin.,"1. Donor registers/logs in and posts then publishes food
+2. Claimer finds and claims it
+3. Donor sets Ready for Pickup, Picked Up, Completed
+4. Admin checks the claim and report","Donor: donor@test.com
+Claimer: claimer@test.com","Every step succeeds, statuses stay in sync for both users, and the transaction is recorded as Food Rescued and visible to Admin.",High,,Not Run,,,,
+100,TC-INT-02,Integration / End-to-End,"FR-06, BRU-06, FR-19, FR-20",Integration,Claim updates user and admin views,-,"1. Claim food
+2. Check My Claims, donor's My Donations, Admin Food and Claims monitoring",-,Quantity and status are consistent in all four places.,High,,Not Run,,,,
+101,TC-INT-03,Integration / End-to-End,"BRU-05, BRU-06, BRU-07",Integration,Multiple partial claims until quantity is zero,Post with 10 portions.,"1. User B claims 4
+2. User C claims 4
+3. User D claims 2
+4. User E tries to claim",4 + 4 + 2 = 10,"Each claim reduces quantity; after the third, post is unavailable and User E is blocked.",High,,Not Run,,,,
+102,TC-INT-04,Integration / End-to-End,BRU-05,Integration,Two users claim the last portions at the same time,Post with 1 portion; two browsers.,"1. Both users open the post
+2. Both click Claim at the same time",Qty 1 each,Only one claim succeeds; the other gets an error; quantity never goes below 0.,High,,Not Run,,,,
+103,TC-INT-05,Integration / End-to-End,BRU-08,Integration,Post becomes unavailable after expiry,Published post expiring soon.,"1. Wait for expiry
+2. Check Find Food and try to claim",Expiry in 5 min,Post is no longer available; claim is blocked.,High,,Not Run,,,,
+104,TC-INT-06,Integration / End-to-End,"FR-21, FR-19",Integration,Category rename reflects on existing posts,Posts use the category.,"1. Admin renames category
+2. Check posts in Find Food and Admin Food Monitoring",-,Updated category name appears consistently.,Medium,,Not Run,,,,
+105,TC-INT-07,Integration / End-to-End,"BRU-10, FR-22",Integration,Completed records stay after later activity,Completed transactions exist.,"1. Perform new posts/claims
+2. Check history and reports",-,Completed records are retained and still included in reports.,Medium,,Not Run,,,,
+,TEST EXECUTION SUMMARY,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7
+0,,,,,,,,
+1,Module,Total,Pass,Fail,Blocked,Not Run,Run Rate,Pass Rate
+2,Authentication,15,0,0,0,15,0,0
+3,User Dashboard,5,0,0,0,5,0,0
+4,Find Food,5,0,0,0,5,0,0
+5,Claim Food,13,0,0,0,13,0,0
+6,Donate Food,9,0,0,0,9,0,0
+7,Manage Own Posts / Claims,10,0,0,0,10,0,0
+8,User Profile,2,0,0,0,2,0,0
+9,Admin: Dashboard,4,0,0,0,4,0,0
+10,Admin: User Management,6,0,0,0,6,0,0
+11,Admin: Food Monitoring,3,0,0,0,3,0,0
+12,Admin: Claims Monitoring,3,0,0,0,3,0,0
+13,Admin: Category Management,7,0,0,0,7,0,0
+14,Admin: Reports & Statistics,4,0,0,0,4,0,0
+15,Non-Functional,13,0,0,0,13,0,0
+16,Integration / End-to-End,7,0,0,0,7,0,0
+17,TOTAL,106,0,0,0,106,0,0
+18,,,,,,,,
+19,SIGN-OFF CHECKS (from Test Plan 2.5),,,,,,,
+20,Criterion,Target,Actual,Result,,,,
+21,Run rate - High priority (Must Have) cases,100%,0,NOT MET,,,,
+22,Pass rate across executed cases,>= 95%,0,NOT MET,,,,
+23,Open Critical defects,0,0,MET,,,,
+24,Open High defects,0,0,MET,,,,
+25,Suspension check: any module with >= 30% failed,,0,OK,,,,
+26,,,,,,,,
+27,"Note: Run = Pass + Fail. Checks show NOT MET until testing is executed. Also manually confirm BRU-04, BRU-05 and BRU-11 were verified, and that sign-off is given by Urcia (Project Lead) and Templa (QA). NFR-07 (maintainability) is verified by design review.",,,,,,,
+,Requirement ID,Requirement,Priority,No. of Test Cases,Coverage,Test Case IDs
+0,BR-01,The system shall allow users to create an account and log in securely,Must,8,Covered,"TC-AUTH-01, TC-AUTH-02, TC-AUTH-03, TC-AUTH-04, TC-AUTH-05, TC-AUTH-06, TC-AUTH-12, TC-INT-01"
+1,BR-02,Allow users to post extra food that is still safe to consume,Must,2,Covered,"TC-DON-01, TC-INT-01"
+2,BR-03,"Provide food info: name, description, category, quantity, expiration, pickup details",Must,3,Covered,"TC-DON-01, TC-DON-05, TC-DON-07"
+3,BR-04,Allow users to publish food posts,Must,2,Covered,"TC-DON-02, TC-INT-01"
+4,BR-05,Allow users to browse and view available food posts,Must,2,Covered,"TC-FIND-01, TC-FIND-05"
+5,BR-06,View complete details of food before claiming,Must,1,Covered,TC-FIND-02
+6,BR-07,Allow users to claim available food,Must,2,Covered,"TC-CLM-01, TC-INT-01"
+7,BR-08,Provide confirmation after a successful claim,Must,3,Covered,"TC-CLM-01, TC-CLM-09, TC-INT-01"
+8,BR-09,Monitor status of own food posts and claims,Must,3,Covered,"TC-CLM-11, TC-OWN-01, TC-OWN-10"
+9,BR-10,Complete the pickup process for claimed food,Must,2,Covered,"TC-OWN-06, TC-INT-01"
+10,BR-11,Admins manage users and food categories,Must,4,Covered,"TC-AUM-01, TC-AUM-04, TC-AUM-05, TC-ACT-01"
+11,BR-12,Admins monitor food posts and claims,Must,2,Covered,"TC-AFM-01, TC-ACM-01"
+12,BR-13,"Maintain records of posts, claims, pickups and completed rescues",Must,2,Covered,"TC-OWN-07, TC-INT-01"
+13,BR-14,"Reports and statistics on posts, claims and completed rescues",Should,2,Covered,"TC-ARP-01, TC-ARP-02"
+14,BR-15,Prevent users from claiming their own food posts,Must,1,Covered,TC-CLM-03
+15,BR-16,Prevent claiming more than available quantity,Must,2,Covered,"TC-CLM-04, TC-CLM-06"
+16,FR-01,Register and log in with email and password,Must,10,Covered,"TC-AUTH-01, TC-AUTH-02, TC-AUTH-03, TC-AUTH-04, TC-AUTH-05, TC-AUTH-06, TC-AUTH-07, TC-AUTH-08, TC-AUTH-09, TC-AUTH-11"
+17,FR-02,Access dashboard after login,Must,3,Covered,"TC-AUTH-06, TC-DASH-01, TC-DASH-05"
+18,FR-03,Choose Find Food or Donate Food from dashboard,Must,3,Covered,"TC-DASH-01, TC-DASH-02, TC-DASH-03"
+19,FR-04,Browse available food posts,Must,2,Covered,"TC-FIND-01, TC-FIND-05"
+20,FR-05,View complete details of a food post,Must,1,Covered,TC-FIND-02
+21,FR-06,Claim food posted by another user,Must,2,Covered,"TC-CLM-01, TC-INT-02"
+22,FR-07,Receive confirmation after claiming,Must,2,Covered,"TC-CLM-01, TC-CLM-09"
+23,FR-08,View pickup information for claimed food,Must,1,Covered,TC-CLM-10
+24,FR-09,"View claim status (Pending, Confirmed, Ready for Pickup, Picked Up, Completed, Cancelled)",Must,2,Covered,"TC-CLM-11, TC-CLM-12"
+25,FR-10,Post extra food through a form,Must,1,Covered,TC-DON-01
+26,FR-11,"Provide food name, description, category, quantity, unit, expiry, pickup location/instructions",Must,6,Covered,"TC-DON-01, TC-DON-03, TC-DON-05, TC-DON-06, TC-DON-07, TC-ACT-05"
+27,FR-12,Publish food posts,Must,2,Covered,"TC-DON-02, TC-DON-03"
+28,FR-13,View and manage own food posts,Must,3,Covered,"TC-OWN-01, TC-OWN-02, TC-OWN-03"
+29,FR-14,"Monitor own post status (available, claimed, picked up, completed)",Must,3,Covered,"TC-DON-08, TC-OWN-01, TC-OWN-04"
+30,FR-15,Update pickup status of own food post,Must,3,Covered,"TC-OWN-05, TC-OWN-06, TC-OWN-08"
+31,FR-16,Admin login,Must,2,Covered,"TC-AUTH-13, TC-AUTH-14"
+32,FR-17,Admin dashboard with statistics,Must,3,Covered,"TC-ADB-01, TC-ADB-02, TC-ADB-03"
+33,FR-18,"Admin search, view and manage users",Must,5,Covered,"TC-AUM-01, TC-AUM-02, TC-AUM-03, TC-AUM-04, TC-AUM-05"
+34,FR-19,Admin monitor food posts and status,Must,5,Covered,"TC-AFM-01, TC-AFM-02, TC-AFM-03, TC-INT-02, TC-INT-06"
+35,FR-20,Admin monitor claims and status,Must,4,Covered,"TC-ACM-01, TC-ACM-02, TC-ACM-03, TC-INT-02"
+36,FR-21,"Admin add, edit and manage categories",Must,8,Covered,"TC-DON-06, TC-ACT-01, TC-ACT-02, TC-ACT-03, TC-ACT-04, TC-ACT-05, TC-ACT-06, TC-INT-06"
+37,FR-22,Admin view reports and statistics,Should,5,Covered,"TC-ARP-01, TC-ARP-02, TC-ARP-03, TC-ARP-04, TC-INT-07"
+38,NFR-01,Performance: standard actions within 10 sec for 95% of requests,Must,1,Covered,TC-NFR-01
+39,NFR-02,Availability: at least 99% uptime,Must,1,Covered,TC-NFR-02
+40,NFR-03,Usability: new user posts/claims without assistance,Must,2,Covered,"TC-NFR-03, TC-NFR-04"
+41,NFR-04,"Security: password protection, authenticated and role-based access",Must,14,Covered,"TC-AUTH-05, TC-AUTH-07, TC-AUTH-11, TC-AUTH-12, TC-AUTH-14, TC-AUTH-15, TC-DASH-05, TC-DON-09, TC-OWN-09, TC-OWN-10, TC-ADB-04, TC-NFR-10, TC-NFR-11, TC-NFR-12"
+42,NFR-05,Scalability: handle growing records,Must,1,Covered,TC-NFR-13
+43,NFR-07,Maintainability: modular components (design review),Must,0,NOT COVERED,-
+44,NFR-08,"Auditability: record user, timestamp, action",Must,3,Covered,"TC-ADB-02, TC-NFR-08, TC-NFR-09"
+45,NFR-09,"Accessibility: responsive, screens 360px and wider",Must,3,Covered,"TC-NFR-05, TC-NFR-06, TC-NFR-07"
+46,BRU-01,Registered and verified account required to post or claim,Must,1,Covered,TC-AUTH-10
+47,BRU-02,One account can both post and claim,Must,1,Covered,TC-DASH-04
+48,BRU-03,Only currently available food can be claimed,Must,2,Covered,"TC-CLM-07, TC-CLM-08"
+49,BRU-04,Cannot claim own food post,Must,1,Covered,TC-CLM-03
+50,BRU-05,Claim cannot exceed remaining quantity,Must,5,Covered,"TC-CLM-04, TC-CLM-05, TC-CLM-08, TC-INT-03, TC-INT-04"
+51,BRU-06,Remaining quantity updated after claim,Must,5,Covered,"TC-CLM-02, TC-OWN-04, TC-ACM-02, TC-INT-02, TC-INT-03"
+52,BRU-07,Zero-quantity posts are not claimable,Must,3,Covered,"TC-FIND-04, TC-CLM-05, TC-INT-03"
+53,BRU-08,Expired posts are not claimable,Must,4,Covered,"TC-FIND-03, TC-CLM-07, TC-DON-04, TC-INT-05"
+54,BRU-09,Only the poster can update pickup status,Must,3,Covered,"TC-CLM-13, TC-OWN-05, TC-OWN-09"
+55,BRU-10,Completed claims and posts retained as records,Must,4,Covered,"TC-OWN-07, TC-ARP-03, TC-INT-01, TC-INT-07"
+56,BRU-11,"Only admins manage users, categories, monitoring",Must,6,Covered,"TC-AUTH-14, TC-AUTH-15, TC-ADB-04, TC-AUM-06, TC-ACT-07, TC-NFR-10"
+57,,,,,,
+58,Requirements covered:,,,56 / 57,,
+
